@@ -29,6 +29,11 @@ public class SearchBar extends WebPanel {
         add(search);
     }
 
+    /**
+     * 获取输入的文字 key为类型 value为输入的文字
+     *
+     * @return 输入的文字
+     */
     public Map<String, String> getInput() {
         Map<String, String> ret = new HashMap<>();
         for (String s : map.keySet()) {
@@ -37,6 +42,11 @@ public class SearchBar extends WebPanel {
         return ret;
     }
 
+    /**
+     * 添加点击search按钮的事件
+     *
+     * @param actionListener 事件
+     */
     public void addActionListener(ActionListener actionListener) {
         search.addActionListener(actionListener);
     }

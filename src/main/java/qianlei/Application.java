@@ -1,11 +1,14 @@
 package qianlei;
 
 import com.alee.laf.WebLookAndFeel;
+import com.alibaba.fastjson.JSON;
 import qianlei.utils.DaoUtil;
+import qianlei.utils.ViewUtil;
 import qianlei.view.LoginFrame;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.*;
 
 /**
  * 启动类
@@ -14,13 +17,35 @@ import java.awt.*;
  */
 public class Application {
     public static void main(String[] args) throws InterruptedException {
-        Thread t = new Thread(() -> WebLookAndFeel.install());
+        Thread t = new Thread(WebLookAndFeel::install);
         t.start();
-        setFont(new Font("微软雅黑", Font.PLAIN, 20));
+        ViewUtil.setFont(getFont());
+        setFont(ViewUtil.getFont());
         DaoUtil.init();
         t.join();
         new LoginFrame().setVisible(true);
     }
+
+    @SuppressWarnings("all")
+    private static Font getFont() {
+        Font font;
+        try (BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(new File("config.json")))) {
+            byte[] bytes = new byte[inputStream.available()];
+            inputStream.read(bytes);
+            font = JSON.parseObject(bytes, Font.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+            font = new Font("微软雅黑", Font.PLAIN, 20);
+        }
+        try (BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(new File("config.json")))) {
+            String s = JSON.toJSONString(font);
+            outputStream.write(s.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return font;
+    }
+
 
     private static void setFont(Font font) {
         UIManager.put("ToolTip.font", font);

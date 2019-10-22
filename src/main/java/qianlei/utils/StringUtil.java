@@ -1,11 +1,16 @@
 package qianlei.utils;
 
+/**
+ * 字符串工具类
+ *
+ * @author qianlei
+ */
 public class StringUtil {
-    public static boolean isBigDecimal(String s) {
+    public static boolean isNotBigDecimal(String s) {
         if (s == null) {
-            return false;
+            return true;
         }
-        return s.matches("^\\d+\\.?\\d*$");
+        return !s.matches("^\\d+\\.?\\d*$");
     }
 
     public static boolean containsBlank(String s) {

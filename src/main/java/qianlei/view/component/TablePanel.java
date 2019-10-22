@@ -1,9 +1,5 @@
 package qianlei.view.component;
 
-import com.alee.laf.panel.WebPanel;
-import com.alee.laf.scroll.WebScrollPane;
-import com.alee.laf.table.WebTable;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -12,8 +8,8 @@ import java.awt.event.MouseListener;
 /**
  * @author qianlei
  */
-public class TablePanel extends WebPanel {
-    private WebTable table;
+public class TablePanel extends JPanel {
+    private JTable table;
     private Object[][] data;
 
     public TablePanel(Object[][] data, Object[] columnNames) {
@@ -25,9 +21,9 @@ public class TablePanel extends WebPanel {
         removeAll();
         this.data = data;
         ExtendTableModel model = new ExtendTableModel(data, columnNames);
-        table = new WebTable(model);
+        table = new JTable(model);
         table.setRowHeight(30);
-        WebScrollPane scrollPane = new WebScrollPane(table);
+        JScrollPane scrollPane = new JScrollPane(table);
         table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         add(scrollPane);
         repaint();

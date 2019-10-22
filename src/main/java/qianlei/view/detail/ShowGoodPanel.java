@@ -1,11 +1,11 @@
 package qianlei.view.detail;
 
-import com.alee.laf.panel.WebPanel;
 import qianlei.entity.Good;
 import qianlei.service.GoodService;
 import qianlei.view.component.SearchBar;
 import qianlei.view.component.TablePanel;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -18,7 +18,7 @@ import java.util.Map;
  *
  * @author qianlei
  */
-public class ShowGoodPanel extends WebPanel {
+public class ShowGoodPanel extends JPanel {
     private SearchBar searchBar = new SearchBar(Arrays.asList("编号", "名称"));
     private TablePanel tablePanel;
     private GoodService goodService = new GoodService();
@@ -27,8 +27,11 @@ public class ShowGoodPanel extends WebPanel {
         @Override
         public void mouseClicked(MouseEvent e) {
             if (e.getClickCount() >= 2) {
-                //TODO 修改界面
-                System.out.println(tablePanel.getRowFirst(e.getPoint()));
+                String id = (String) tablePanel.getRowFirst(e.getPoint());
+                removeAll();
+                add(new UpdateGoodPanel(id));
+                repaint();
+                setVisible(true);
             }
         }
     };
@@ -66,11 +69,11 @@ public class ShowGoodPanel extends WebPanel {
         setVisible(true);
     }
 
-    public void removeMouseListener() {
+    void removeMouseListener() {
         tablePanel.removeMouseListener(mouseAdapter);
     }
 
-    public String getSelectedRow() {
+    String getSelectedRow() {
         return (String) tablePanel.getSelectedId();
     }
 }

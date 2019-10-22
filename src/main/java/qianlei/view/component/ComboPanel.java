@@ -1,8 +1,7 @@
 package qianlei.view.component;
 
 import com.alee.laf.combobox.WebComboBox;
-import com.alee.laf.label.WebLabel;
-import com.alee.laf.panel.WebPanel;
+import qianlei.utils.ViewUtil;
 
 import javax.swing.*;
 import java.util.List;
@@ -10,19 +9,24 @@ import java.util.List;
 /**
  * @author qianlei
  */
-public class ComboPanel<T> extends WebPanel {
-    private WebComboBox webComboBox;
+public class ComboPanel<T> extends JPanel {
+    private JComboBox webComboBox;
 
     public ComboPanel(String title, List<T> items) {
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-        add(Box.createHorizontalStrut(80));
-        add(Box.createHorizontalStrut(80 - title.length() * 20));
+        //右对齐，根据字体大小调节
+        add(Box.createHorizontalStrut(ViewUtil.getFont().getSize() * 4));
+        add(Box.createHorizontalStrut(ViewUtil.getFont().getSize() * (4 - title.length())));
         add(Box.createHorizontalBox());
-        WebLabel label = new WebLabel(title);
+        JLabel label = new JLabel(title);
         add(label);
         webComboBox = new WebComboBox(items);
         add(webComboBox);
-        add(Box.createHorizontalStrut(80));
+        add(Box.createHorizontalStrut(ViewUtil.getFont().getSize() * 4));
+    }
+
+    public void setSelectItem(T t) {
+        webComboBox.setSelectedItem(t);
     }
 
     @SuppressWarnings("unchecked")

@@ -17,12 +17,12 @@ import java.util.List;
 public class GoodDao {
 
     public void addGood(Good good) {
-        Connection connection = null;
-        PreparedStatement statement = null;
-        try {
-            connection = DaoUtil.getConnection();
-            statement = connection.prepareStatement("INSERT INTO good(id, name, maker, createTime, price, discount, remain, introduction, remarks,status)" +
-                    " VALUES (?,?,?,?,?,?,?,?,?,?)");
+
+        try (
+                Connection connection = DaoUtil.getConnection();
+                PreparedStatement statement = connection.prepareStatement("INSERT INTO good(id, name, maker, createTime, " +
+                        "price, discount, remain, introduction, remarks,status) VALUES (?,?,?,?,?,?,?,?,?,?)")
+        ) {
             statement.setString(1, good.getId());
             statement.setString(2, good.getName());
             statement.setString(3, good.getMaker());
@@ -36,18 +36,16 @@ public class GoodDao {
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            DaoUtil.close(connection, statement);
         }
     }
 
     public Good selectGoodById(String id) {
-        Connection connection = null;
-        PreparedStatement statement = null;
         ResultSet resultSet = null;
-        try {
-            connection = DaoUtil.getConnection();
-            statement = connection.prepareStatement("SELECT name, maker, createtime, price, discount, remain, introduction, remarks,status FROM good WHERE id = ?");
+        try (
+                Connection connection = DaoUtil.getConnection();
+                PreparedStatement statement = connection.prepareStatement("SELECT name, maker, createtime, " +
+                        "price, discount, remain, introduction, remarks,status FROM good WHERE id = ?")
+        ) {
             statement.setString(1, id);
             resultSet = statement.executeQuery();
             if (resultSet.next()) {
@@ -65,20 +63,19 @@ public class GoodDao {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            DaoUtil.close(connection, statement, resultSet);
+            DaoUtil.close(resultSet);
         }
         return null;
     }
 
     public List<Good> selectAll() {
-        Connection connection = null;
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
         List<Good> goodList = new LinkedList<>();
-        try {
-            connection = DaoUtil.getConnection();
-            statement = connection.prepareStatement("SELECT id,name, maker, createtime, price, discount, remain, introduction, remarks,status FROM good");
-            resultSet = statement.executeQuery();
+        try (
+                Connection connection = DaoUtil.getConnection();
+                PreparedStatement statement = connection.prepareStatement("SELECT id,name, maker, createtime, " +
+                        "price, discount, remain, introduction, remarks,status FROM good");
+                ResultSet resultSet = statement.executeQuery()
+        ) {
             while (resultSet.next()) {
                 String id = resultSet.getString("id");
                 String name = resultSet.getString("name");
@@ -94,9 +91,42 @@ public class GoodDao {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            DaoUtil.close(connection, statement, resultSet);
         }
         return goodList;
+    }
+
+    public void deleteById(String id) {
+
+
+        try (
+                Connection connection = DaoUtil.getConnection();
+                PreparedStatement statement = connection.prepareStatement("UPDATE good SET status = ? WHERE id = ?")
+        ) {
+            statement.setInt(1, StatusEnum.Deleted.getId());
+            statement.setString(2, id);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateGood(Good good) {
+        try (
+                Connection connection = DaoUtil.getConnection();
+                PreparedStatement statement = connection.prepareStatement("UPDATE good SET name = ?,maker = ?,price=?,discount=? ," +
+                        "remain=?, introduction=?, remarks=?WHERE id = ?")
+        ) {
+            statement.setString(1, good.getName());
+            statement.setString(2, good.getMaker());
+            statement.setBigDecimal(3, good.getPrice());
+            statement.setDouble(4, good.getDiscount());
+            statement.setLong(5, good.getRemain());
+            statement.setString(6, good.getIntroduction());
+            statement.setString(7, good.getRemarks());
+            statement.setString(8, good.getId());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

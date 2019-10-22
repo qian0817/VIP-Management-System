@@ -10,6 +10,9 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * @author qianlei
+ */
 public class VipService {
     private VipDao vipDao = new VipDao();
 
@@ -37,5 +40,21 @@ public class VipService {
             }
         }
         return ans;
+    }
+
+    public Vip getAllById(String id) {
+        return vipDao.selectVipById(id);
+    }
+
+    public void deleteById(String id) {
+        vipDao.deleteById(id);
+    }
+
+    public void updateVip(String id, String name, String sex, String phone, String address, String postcode) throws WrongDataException {
+        if (StringUtil.isBigInteger(postcode) && postcode.length() != 6) {
+            throw new WrongDataException("邮编" + postcode + "只能包含数字且只有6位");
+        }
+        Vip vip = new Vip(id, name, sex, phone, address, Integer.parseInt(postcode));
+        vipDao.updateVip(vip);
     }
 }

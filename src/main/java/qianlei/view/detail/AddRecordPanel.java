@@ -1,12 +1,9 @@
 package qianlei.view.detail;
 
-import com.alee.laf.button.WebButton;
-import com.alee.laf.label.WebLabel;
-import com.alee.laf.optionpane.WebOptionPane;
-import com.alee.laf.panel.WebPanel;
 import qianlei.exception.WrongDataException;
 import qianlei.service.RecordService;
 
+import javax.swing.*;
 import java.awt.*;
 
 /**
@@ -14,40 +11,48 @@ import java.awt.*;
  *
  * @author qianlei
  */
-public class AddRecordPanel extends WebPanel {
+public class AddRecordPanel extends JPanel {
     private ShowGoodPanel showGoodPanel = new ShowGoodPanel();
     private ShowVipPanel showVipPanel = new ShowVipPanel();
+    private JButton check = new JButton("确认");
 
     public AddRecordPanel() {
         setLayout(new BorderLayout());
         showGoodPanel.removeMouseListener();
         showVipPanel.removeMouseListener();
 
-        WebPanel center = new WebPanel(new GridLayout(2, 1));
-
-        WebPanel chooseGoodPanel = new WebPanel(new BorderLayout());
-        chooseGoodPanel.add(new WebLabel("请选择商品", WebLabel.CENTER), BorderLayout.NORTH);
-        chooseGoodPanel.add(showGoodPanel);
-        center.add(chooseGoodPanel);
-
-        WebPanel chooseVipPanel = new WebPanel(new BorderLayout());
-        chooseVipPanel.add(new WebLabel("请选择VIP用户", WebLabel.CENTER), BorderLayout.NORTH);
-        chooseVipPanel.add(showVipPanel);
-        center.add(chooseVipPanel);
-
-        add(center);
-        WebButton check = new WebButton("确认");
-        add(check, BorderLayout.SOUTH);
         check.addActionListener((e) -> {
             RecordService recordService = new RecordService();
             String goodId = showGoodPanel.getSelectedRow();
             String vipId = showVipPanel.getSelectedRow();
             try {
                 recordService.addRecord(goodId, vipId);
-                WebOptionPane.showMessageDialog(AddRecordPanel.this, "添加成功", "添加成功", WebOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(AddRecordPanel.this, "添加成功", "添加成功", JOptionPane.INFORMATION_MESSAGE);
+                init();
             } catch (WrongDataException ex) {
-                WebOptionPane.showMessageDialog(AddRecordPanel.this, ex.getMessage(), "添加失败", WebOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(AddRecordPanel.this, ex.getMessage(), "添加失败", JOptionPane.INFORMATION_MESSAGE);
             }
         });
+        init();
+    }
+
+    public void init() {
+        removeAll();
+        JPanel center = new JPanel(new GridLayout(2, 1));
+
+        JPanel chooseGoodPanel = new JPanel(new BorderLayout());
+        chooseGoodPanel.add(new JLabel("请选择商品", JLabel.CENTER), BorderLayout.NORTH);
+        chooseGoodPanel.add(showGoodPanel);
+        center.add(chooseGoodPanel);
+
+        JPanel chooseVipPanel = new JPanel(new BorderLayout());
+        chooseVipPanel.add(new JLabel("请选择VIP用户", JLabel.CENTER), BorderLayout.NORTH);
+        chooseVipPanel.add(showVipPanel);
+        center.add(chooseVipPanel);
+
+        add(center);
+        add(check, BorderLayout.SOUTH);
+        repaint();
+        setVisible(true);
     }
 }

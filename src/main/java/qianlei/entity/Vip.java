@@ -33,6 +33,15 @@ public class Vip {
         this.status = status;
     }
 
+    public Vip(String id, String name, String sex, String phone, String address, int postcode) {
+        this.id = id;
+        this.name = name;
+        this.sex = sex;
+        this.phone = phone;
+        this.address = address;
+        this.postcode = postcode;
+    }
+
     public String getId() {
         return id;
     }

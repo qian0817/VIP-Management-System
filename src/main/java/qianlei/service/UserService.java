@@ -12,6 +12,7 @@ import qianlei.utils.StringUtil;
  */
 public class UserService {
     private static User curUser;
+    private UserDao userDao = new UserDao();
 
     public User getCurUser() {
         return curUser;
@@ -20,8 +21,6 @@ public class UserService {
     public void setCurUser(User user) {
         UserService.curUser = user;
     }
-
-    private UserDao userDao = new UserDao();
 
     public User login(String name, String password) {
         User user = userDao.getUserByName(name);

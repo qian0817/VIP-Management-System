@@ -1,11 +1,11 @@
 package qianlei.view.detail;
 
-import com.alee.laf.panel.WebPanel;
 import qianlei.entity.Vip;
 import qianlei.service.VipService;
 import qianlei.view.component.SearchBar;
 import qianlei.view.component.TablePanel;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -13,7 +13,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-public class ShowVipPanel extends WebPanel {
+/**
+ * 展示vip信息界面
+ *
+ * @author qianlei
+ */
+public class ShowVipPanel extends JPanel {
     private SearchBar searchBar = new SearchBar(Arrays.asList("姓名", "证件号", "手机号"));
     private TablePanel tablePanel;
     private VipService vipService = new VipService();
@@ -21,8 +26,11 @@ public class ShowVipPanel extends WebPanel {
         @Override
         public void mouseClicked(MouseEvent e) {
             if (e.getClickCount() >= 2) {
-                //TODO 修改界面
-                System.out.println(tablePanel.getRowFirst(e.getPoint()));
+                String id = (String) tablePanel.getRowFirst(e.getPoint());
+                removeAll();
+                add(new UpdateVipPanel(id));
+                repaint();
+                setVisible(true);
             }
         }
     };
@@ -58,11 +66,11 @@ public class ShowVipPanel extends WebPanel {
         setVisible(true);
     }
 
-    public void removeMouseListener() {
+    void removeMouseListener() {
         tablePanel.removeMouseListener(mouseAdapter);
     }
 
-    public String getSelectedRow() {
+    String getSelectedRow() {
         return (String) tablePanel.getSelectedId();
     }
 }

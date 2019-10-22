@@ -15,53 +15,47 @@ import java.sql.SQLException;
  */
 public class UserDao {
     public User getUserByName(String name) {
-        Connection connection = null;
-        PreparedStatement statement = null;
-        User user;
-        try {
-            connection = DaoUtil.getConnection();
-            statement = connection.prepareStatement("SELECT username,password FROM user  WHERE username = ?");
+        User user = null;
+        try (
+                Connection connection = DaoUtil.getConnection();
+                PreparedStatement statement = connection.prepareStatement("SELECT username,password FROM user  WHERE username = ?")
+        ) {
             statement.setString(1, name);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 String password = resultSet.getString("password");
                 user = new User(name, password);
-                return user;
             }
-        } catch (SQLException ignored) {
-        } finally {
-            DaoUtil.close(connection, statement);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        return null;
+        return user;
     }
 
     public void addUser(User user) {
-        Connection connection = null;
-        PreparedStatement statement = null;
-        try {
-            connection = DaoUtil.getConnection();
-            statement = connection.prepareStatement("INSERT INTO user (username,password) VALUES (?,?)");
+
+        try (
+                Connection connection = DaoUtil.getConnection();
+                PreparedStatement statement = connection.prepareStatement("INSERT INTO user (username,password) VALUES (?,?)")
+        ) {
             statement.setString(1, user.getUsername());
             statement.setString(2, user.getPassword());
             statement.executeUpdate();
-        } catch (SQLException ignored) {
-        } finally {
-            DaoUtil.close(connection, statement);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
     public void updateUser(User user) {
-        Connection connection = null;
-        PreparedStatement statement = null;
-        try {
-            connection = DaoUtil.getConnection();
-            statement = connection.prepareStatement("UPDATE user SET password = ? WHERE username = ?");
+        try (
+                Connection connection = DaoUtil.getConnection();
+                PreparedStatement statement = connection.prepareStatement("UPDATE user SET password = ? WHERE username = ?")
+        ) {
             statement.setString(1, user.getPassword());
             statement.setString(2, user.getUsername());
             statement.executeUpdate();
-        } catch (SQLException ignored) {
-        } finally {
-            DaoUtil.close(connection, statement);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }

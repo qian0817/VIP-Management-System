@@ -1,15 +1,13 @@
 package qianlei.view;
 
+import com.alee.extended.svg.SvgIcon;
 import com.alee.laf.button.WebButton;
-import com.alee.laf.label.WebLabel;
-import com.alee.laf.optionpane.WebOptionPane;
-import com.alee.laf.panel.WebPanel;
-import com.alee.laf.window.WebFrame;
 import qianlei.entity.User;
 import qianlei.service.UserService;
 import qianlei.view.component.InputPanel;
 import qianlei.view.component.PasswordPanel;
 
+import javax.swing.*;
 import java.awt.*;
 
 /**
@@ -17,22 +15,24 @@ import java.awt.*;
  *
  * @author qianlei
  */
-public class LoginFrame extends WebFrame {
+public class LoginFrame extends JFrame {
     public LoginFrame() {
-        setDefaultCloseOperation(WebFrame.EXIT_ON_CLOSE);
+        setIconImage(new SvgIcon(getClass().getClassLoader().getResource("icon.svg")).asBufferedImage());
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new GridLayout(8, 1));
-        add(new WebLabel());
-        add(new WebLabel("登陆界面", WebLabel.CENTER));
-        add(new WebLabel());
+        setTitle("登录界面");
+        add(new JLabel());
+        add(new JLabel("登陆界面", JLabel.CENTER));
+        add(new JLabel());
 
         InputPanel usernameInputPanel = new InputPanel("用户名", "请输入用户名");
         add(usernameInputPanel);
-        add(new WebLabel());
+        add(new JLabel());
 
         PasswordPanel passwordInputPanel = new PasswordPanel("密码", "请输入密码");
         add(passwordInputPanel);
-        add(new WebLabel());
-        WebPanel loginAndRegister = new WebPanel();
+        add(new JLabel());
+        JPanel loginAndRegister = new JPanel();
         WebButton loginButton = new WebButton("登录");
         loginButton.addHotkey(10);
         loginButton.addActionListener((e) -> {
@@ -42,16 +42,16 @@ public class LoginFrame extends WebFrame {
             User user;
             user = userService.login(name, password);
             if (user == null) {
-                WebOptionPane.showMessageDialog(LoginFrame.this, "用户名或密码错误", "登陆失败", WebOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(LoginFrame.this, "用户名或密码错误", "登陆失败", JOptionPane.INFORMATION_MESSAGE);
             } else {
-                WebOptionPane.showMessageDialog(LoginFrame.this, "登陆成功", "登陆成功", WebOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(LoginFrame.this, "登陆成功", "登陆成功", JOptionPane.INFORMATION_MESSAGE);
                 MainFrame mainFrame = new MainFrame();
                 userService.setCurUser(user);
                 mainFrame.setVisible(true);
                 LoginFrame.this.dispose();
             }
         });
-        WebButton registerButton = new WebButton("注册");
+        JButton registerButton = new JButton("注册");
         registerButton.addActionListener((e) -> new RegisterFrame().setVisible(true));
         loginAndRegister.add(loginButton);
         loginAndRegister.add(registerButton);
@@ -61,8 +61,7 @@ public class LoginFrame extends WebFrame {
         // 设置窗口居中显示
         int windowWidth = getWidth();
         int windowHeight = getHeight();
-        Toolkit kit = Toolkit.getDefaultToolkit();
-        Dimension screenSize = kit.getScreenSize();
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int screenWidth = screenSize.width;
         int screenHeight = screenSize.height;
         setLocation(screenWidth / 2 - windowWidth / 2, screenHeight / 2 - windowHeight / 2);

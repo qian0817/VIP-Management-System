@@ -1,10 +1,11 @@
 package qianlei.view;
 
+import com.alee.extended.svg.SvgIcon;
 import com.alee.laf.button.WebButton;
-import com.alee.laf.panel.WebPanel;
-import com.alee.laf.window.WebFrame;
+import qianlei.utils.ViewUtil;
 import qianlei.view.detail.*;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,12 +15,15 @@ import java.awt.event.ActionListener;
  *
  * @author qianlei
  */
-class MainFrame extends WebFrame {
+class MainFrame extends JFrame {
     private DetailPanel detailPanel = new DetailPanel();
 
     MainFrame() {
-        setExtendedState(WebFrame.MAXIMIZED_BOTH);
-        setDefaultCloseOperation(WebFrame.EXIT_ON_CLOSE);
+        setIconImage(new SvgIcon(getClass().getClassLoader().getResource("icon.svg")).asBufferedImage());
+        setTitle("Vip管理系统");
+        //最大化
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
         add(new MenuPanel(), BorderLayout.WEST);
         detailPanel.init(new AddGoodPanel());
@@ -27,27 +31,28 @@ class MainFrame extends WebFrame {
         pack();
     }
 
-    private static class DetailPanel extends WebPanel {
-        private AddGoodPanel addGoodPanel = new AddGoodPanel();
+    private static class DetailPanel extends JPanel {
 
-        void init(WebPanel panel) {
+        void init(JPanel panel) {
             removeAll();
+            setLayout(new BorderLayout());
             add(panel);
             repaint();
             setVisible(true);
         }
     }
 
-    private class MenuPanel extends WebPanel implements ActionListener {
-        private WebButton addGoodButton = new WebButton("商品信息录入");
-        private WebButton showGoodButton = new WebButton("商品信息查询");
-        private WebButton addVipButton = new WebButton("VIP信息录入");
-        private WebButton showVipButton = new WebButton("VIP信息查询");
-        private WebButton addRecordButton = new WebButton("VIP消费购物记录登记");
-        private WebButton showRecordButton = new WebButton("VIP消费记录查询");
-        private WebButton managerButton = new WebButton("登录密码修改");
-        private WebButton helpButton = new WebButton("系统帮助");
-        private WebButton quitButton = new WebButton("退出登录");
+    private class MenuPanel extends JPanel implements ActionListener {
+        private int size = ViewUtil.getFont().getSize() * 2;
+        private WebButton addGoodButton = new WebButton("商品录入", new SvgIcon(getClass().getClassLoader().getResource("add_good.svg"), size, size));
+        private WebButton showGoodButton = new WebButton("商品查询", new SvgIcon(getClass().getClassLoader().getResource("show_good.svg"), size, size));
+        private WebButton addVipButton = new WebButton("VIP录入", new SvgIcon(getClass().getClassLoader().getResource("add_vip.svg"), size, size));
+        private WebButton showVipButton = new WebButton("VIP查询", new SvgIcon(getClass().getClassLoader().getResource("show_vip.svg"), size, size));
+        private WebButton addRecordButton = new WebButton("消费记录登记", new SvgIcon(getClass().getClassLoader().getResource("add_record.svg"), size, size));
+        private WebButton showRecordButton = new WebButton("消费记录查询", new SvgIcon(getClass().getClassLoader().getResource("show_record.svg"), size, size));
+        private WebButton managerButton = new WebButton("密码修改", new SvgIcon(getClass().getClassLoader().getResource("password.svg"), size, size));
+        private WebButton helpButton = new WebButton("系统帮助", new SvgIcon(getClass().getClassLoader().getResource("help.svg"), size, size));
+        private WebButton quitButton = new WebButton("退出登录", new SvgIcon(getClass().getClassLoader().getResource("quit.svg"), size, size));
 
         MenuPanel() {
             setLayout(new GridLayout(9, 1));
@@ -78,25 +83,25 @@ class MainFrame extends WebFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             switch (e.getActionCommand()) {
-                case "商品信息录入":
+                case "商品录入":
                     MainFrame.this.detailPanel.init(new AddGoodPanel());
                     break;
-                case "商品信息查询":
+                case "商品查询":
                     MainFrame.this.detailPanel.init(new ShowGoodPanel());
                     break;
-                case "VIP信息录入":
+                case "VIP录入":
                     MainFrame.this.detailPanel.init(new AddVipPanel());
                     break;
-                case "VIP信息查询":
+                case "VIP查询":
                     MainFrame.this.detailPanel.init(new ShowVipPanel());
                     break;
-                case "VIP消费购物记录登记":
+                case "消费记录登记":
                     MainFrame.this.detailPanel.init(new AddRecordPanel());
                     break;
-                case "VIP消费记录查询":
+                case "消费记录查询":
                     MainFrame.this.detailPanel.init(new ShowRecordPanel());
                     break;
-                case "登录密码修改":
+                case "密码修改":
                     MainFrame.this.detailPanel.init(new ChangePasswordPanel());
                     break;
                 case "系统帮助":

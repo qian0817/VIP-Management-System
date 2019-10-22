@@ -1,11 +1,11 @@
 package qianlei.view.detail;
 
-import com.alee.laf.panel.WebPanel;
 import qianlei.entity.Record;
 import qianlei.service.RecordService;
 import qianlei.view.component.SearchBar;
 import qianlei.view.component.TablePanel;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
@@ -14,9 +14,8 @@ import java.util.Map;
 /**
  * @author qianlei
  */
-public class ShowRecordPanel extends WebPanel {
+public class ShowRecordPanel extends JPanel {
     private SearchBar searchBar = new SearchBar(Arrays.asList("姓名", "证件号", "手机号"));
-    private TablePanel tablePanel;
     private RecordService goodService = new RecordService();
 
     public ShowRecordPanel() {
@@ -46,7 +45,7 @@ public class ShowRecordPanel extends WebPanel {
             data[i][8] = record.getGood().getStatus().getMessage();
             data[i][9] = record.getCreateTime();
         }
-        tablePanel = new TablePanel(data, new String[]{"记录编号", "Vip证件号", "vip名称", "vip手机号", "vip状态",
+        TablePanel tablePanel = new TablePanel(data, new String[]{"记录编号", "Vip证件号", "vip名称", "vip手机号", "vip状态",
                 "商品编号", "商品名称", "商品价格", "商品状态", "创建日期"});
         add(tablePanel);
         repaint();

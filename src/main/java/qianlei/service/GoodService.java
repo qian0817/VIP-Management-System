@@ -20,7 +20,7 @@ public class GoodService {
     private GoodDao goodDao = new GoodDao();
 
     public void addGood(String id, String name, String maker, String price, Double discount, String remain, String introduction, String remark) throws WrongDataException {
-        if (!StringUtil.isBigDecimal(price)) {
+        if (StringUtil.isNotBigDecimal(price)) {
             throw new WrongDataException("价格：" + price + "格式错误");
         }
         if (!StringUtil.isBigInteger(remain)) {
@@ -42,5 +42,24 @@ public class GoodService {
             }
         }
         return ans;
+    }
+
+    public Good getGoodById(String id) {
+        return goodDao.selectGoodById(id);
+    }
+
+    public void deleteById(String id) {
+        goodDao.deleteById(id);
+    }
+
+    public void update(String id, String name, String maker, String price, Double discount, String remain, String introduction, String remark) throws WrongDataException {
+        if (StringUtil.isNotBigDecimal(price)) {
+            throw new WrongDataException("价格：" + price + "格式错误");
+        }
+        if (!StringUtil.isBigInteger(remain)) {
+            throw new WrongDataException("库存" + remain + "格式错误");
+        }
+        Good good = new Good(id, name, maker, new Date(), new BigDecimal(price), discount, Long.parseLong(remain), introduction, remark, StatusEnum.Normal);
+        goodDao.updateGood(good);
     }
 }

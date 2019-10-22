@@ -1,8 +1,7 @@
 package qianlei.view.component;
 
-import com.alee.laf.label.WebLabel;
-import com.alee.laf.panel.WebPanel;
 import com.alee.laf.text.WebTextField;
+import qianlei.utils.ViewUtil;
 
 import javax.swing.*;
 
@@ -11,24 +10,24 @@ import javax.swing.*;
  *
  * @author qianlei
  */
-public class InputPanel extends WebPanel {
-    private WebTextField field;
-    private WebLabel label;
+public class InputPanel extends JPanel {
+    private WebTextField field = new WebTextField(20);
 
     public InputPanel(String title, String hintText) {
-        this(title, hintText, 80);
+        this(title, hintText, ViewUtil.getFont().getSize() * 4);
     }
 
-    public InputPanel(String title, String hintText, int margin) {
+    InputPanel(String title, String hintText, int margin) {
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-        add(Box.createHorizontalStrut(80));
-        add(Box.createHorizontalStrut(margin - title.length() * 20));
+        //保证右对齐
+        add(Box.createHorizontalStrut(ViewUtil.getFont().getSize() * 4));
+        add(Box.createHorizontalStrut(margin - title.length() * ViewUtil.getFont().getSize()));
         add(Box.createHorizontalBox());
 
-        label = new WebLabel(title);
+        JLabel label = new JLabel(title);
         add(label);
 
-        field = new WebTextField(20);
+        //添加提示文字
         field.setInputPrompt(hintText);
         add(field);
 
@@ -41,5 +40,9 @@ public class InputPanel extends WebPanel {
 
     public void setText(String s) {
         field.setText(s);
+    }
+
+    public void setEditable(boolean editable) {
+        field.setEditable(editable);
     }
 }

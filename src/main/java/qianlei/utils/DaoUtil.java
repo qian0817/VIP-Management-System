@@ -2,6 +2,11 @@ package qianlei.utils;
 
 import java.sql.*;
 
+/**
+ * dao工具类
+ *
+ * @author qianlei
+ */
 public class DaoUtil {
     public static void init() {
         try {
@@ -9,11 +14,9 @@ public class DaoUtil {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        Connection connection = null;
-        Statement statement = null;
-        try {
-            connection = getConnection();
-            statement = connection.createStatement();
+
+        try (Connection connection = getConnection();
+             Statement statement = connection.createStatement()) {
             statement.execute("CREATE TABLE IF NOT EXISTS user(" +
                     "username VARCHAR(20) NOT NULL ," +
                     "password VARCHAR(20) NOT NULL " +
@@ -48,54 +51,24 @@ public class DaoUtil {
                     ")");
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            closeStatement(statement);
-            closeConnection(connection);
         }
-
-
     }
 
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection("jdbc:sqlite:main.db");
     }
 
-    public static void close(Connection connection, Statement statement) {
-        closeStatement(statement);
-        closeConnection(connection);
-    }
-
-    private static void closeStatement(Statement statement) {
-        if (statement != null) {
-            try {
-                statement.close();
-            } catch (SQLException ignored) {
-
-            }
-        }
-    }
-
-    private static void closeConnection(Connection connection) {
-        if (connection != null) {
-            try {
-                connection.close();
-            } catch (SQLException ignored) {
-
-            }
-        }
-    }
-
     private static void closeResultSet(ResultSet resultSet) {
         if (resultSet != null) {
             try {
                 resultSet.close();
-            } catch (SQLException ignored) {
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         }
     }
 
-    public static void close(Connection connection, PreparedStatement statement, ResultSet resultSet) {
-        DaoUtil.close(connection, statement);
+    public static void close(ResultSet resultSet) {
         DaoUtil.closeResultSet(resultSet);
     }
 }
