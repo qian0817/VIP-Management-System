@@ -20,6 +20,9 @@ public class GoodService {
     private GoodDao goodDao = new GoodDao();
 
     public void addGood(String id, String name, String maker, String price, Double discount, String remain, String introduction, String remark) throws WrongDataException {
+        if (StringUtil.containsBlank(id)) {
+            throw new WrongDataException("id" + id + "不能包含空格");
+        }
         if (StringUtil.isNotBigDecimal(price)) {
             throw new WrongDataException("价格：" + price + "格式错误");
         }

@@ -20,7 +20,10 @@ public class VipService {
         if (StringUtil.containsBlank(id)) {
             throw new WrongDataException("id" + id + "不能包含空格");
         }
-        if (StringUtil.isBigInteger(postcode) && postcode.length() != 6) {
+        if (!StringUtil.isBigInteger(phone)) {
+            throw new WrongDataException("电话号码" + phone + "只能包含数字");
+        }
+        if (!StringUtil.isBigInteger(postcode) || postcode.length() != 6) {
             throw new WrongDataException("邮编" + postcode + "只能包含数字且只有6位");
         }
         if (vipDao.selectVipById(id) != null) {
@@ -42,7 +45,7 @@ public class VipService {
         return ans;
     }
 
-    public Vip getAllById(String id) {
+    public Vip getVipById(String id) {
         return vipDao.selectVipById(id);
     }
 

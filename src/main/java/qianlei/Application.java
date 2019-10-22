@@ -21,7 +21,7 @@ public class Application {
         t.start();
         ViewUtil.setFont(getFont());
         setFont(ViewUtil.getFont());
-        DaoUtil.init();
+        DaoUtil.init("main.db");
         t.join();
         new LoginFrame().setVisible(true);
     }

@@ -23,7 +23,7 @@ class UpdateVipPanel extends JPanel {
         JButton deleteButton = new JButton("删除");
 
         //组件初始化
-        Vip vip = vipService.getAllById(id);
+        Vip vip = vipService.getVipById(id);
         setLayout(new GridLayout(8, 1));
         add(new JLabel("VIP信息修改", JLabel.CENTER));
         idInputPanel.setText(vip.getId());

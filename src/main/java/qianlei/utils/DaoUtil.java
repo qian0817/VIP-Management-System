@@ -8,13 +8,15 @@ import java.sql.*;
  * @author qianlei
  */
 public class DaoUtil {
-    public static void init() {
+    private static String fileName;
+
+    public static void init(String fileName) {
         try {
             Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-
+        DaoUtil.fileName = fileName;
         try (Connection connection = getConnection();
              Statement statement = connection.createStatement()) {
             statement.execute("CREATE TABLE IF NOT EXISTS user(" +
@@ -55,7 +57,7 @@ public class DaoUtil {
     }
 
     public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection("jdbc:sqlite:main.db");
+        return DriverManager.getConnection("jdbc:sqlite:" + fileName);
     }
 
     private static void closeResultSet(ResultSet resultSet) {
