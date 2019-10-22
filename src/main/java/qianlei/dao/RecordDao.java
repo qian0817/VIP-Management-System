@@ -15,7 +15,17 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * 记录的dao层
+ *
+ * @author qianlei
+ */
 public class RecordDao {
+    /**
+     * 选择所有记录
+     *
+     * @return 所有记录
+     */
     public List<Record> selectAllRecord() {
         ResultSet resultSet = null;
         List<Record> recordList = new LinkedList<>();
@@ -60,11 +70,16 @@ public class RecordDao {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            DaoUtil.close(resultSet);
+            DaoUtil.closeResultSet(resultSet);
         }
         return recordList;
     }
 
+    /**
+     * 添加记录
+     *
+     * @param record 需要添加的记录
+     */
     public void addRecord(Record record) {
         try (
                 Connection connection = DaoUtil.getConnection();

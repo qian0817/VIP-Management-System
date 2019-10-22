@@ -14,6 +14,12 @@ import java.sql.SQLException;
  * @author qianlei
  */
 public class UserDao {
+    /**
+     * 根据用户名获取名称
+     *
+     * @param name 用户名称
+     * @return 该名称的用户
+     */
     public User getUserByName(String name) {
         User user = null;
         try (
@@ -32,8 +38,12 @@ public class UserDao {
         return user;
     }
 
+    /**
+     * 添加用户
+     *
+     * @param user 需要添加的用户
+     */
     public void addUser(User user) {
-
         try (
                 Connection connection = DaoUtil.getConnection();
                 PreparedStatement statement = connection.prepareStatement("INSERT INTO user (username,password) VALUES (?,?)")

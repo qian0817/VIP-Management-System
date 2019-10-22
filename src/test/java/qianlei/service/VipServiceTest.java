@@ -27,7 +27,7 @@ class VipServiceTest {
     @Order(3)
     @Test
     void deleteById() {
-        Assertions.assertDoesNotThrow(() -> vipService.deleteById("test1"));
+        Assertions.assertDoesNotThrow(() -> vipService.deleteVipById("test1"));
     }
 
     @Order(2)

@@ -11,11 +11,24 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * vip的service层
+ *
  * @author qianlei
  */
 public class VipService {
     private VipDao vipDao = new VipDao();
 
+    /**
+     * 添加VIP
+     *
+     * @param id       vip的id
+     * @param name     vip名称
+     * @param sex      vip性别
+     * @param phone    vip电话号码
+     * @param address  vip地址
+     * @param postcode vip邮编
+     * @throws WrongDataException 给入的格式错误
+     */
     public void addVip(String id, String name, String sex, String phone, String address, String postcode) throws WrongDataException {
         if (StringUtil.containsBlank(id)) {
             throw new WrongDataException("id" + id + "不能包含空格");
@@ -33,6 +46,14 @@ public class VipService {
         vipDao.addVip(vip);
     }
 
+    /**
+     * 根据id name和phone迷糊查询正常状态的vip
+     *
+     * @param id    id
+     * @param name  名称
+     * @param phone 电话号码
+     * @return 符合条件的vip
+     */
     public List<Vip> getAllNormalVipByIdAndNameAndPhone(String id, String name, String phone) {
         List<Vip> vipList = vipDao.selectAll();
         List<Vip> ans = new LinkedList<>();
@@ -45,14 +66,35 @@ public class VipService {
         return ans;
     }
 
+    /**
+     * 根据id选择vip
+     *
+     * @param id id
+     * @return 该id的vip
+     */
     public Vip getVipById(String id) {
         return vipDao.selectVipById(id);
     }
 
-    public void deleteById(String id) {
+    /**
+     * 根据id删除VIP
+     *
+     * @param id id
+     */
+    public void deleteVipById(String id) {
         vipDao.deleteById(id);
     }
 
+    /**
+     * 修改VIP
+     * @param id 要修改的vip的id
+     * @param name 修改后的名称
+     * @param sex 修改后的性别
+     * @param phone 修改后的电话号码
+     * @param address 修改后的地址
+     * @param postcode 修改后的邮编
+     * @throws WrongDataException 输入的数据错误
+     */
     public void updateVip(String id, String name, String sex, String phone, String address, String postcode) throws WrongDataException {
         if (StringUtil.isBigInteger(postcode) && postcode.length() != 6) {
             throw new WrongDataException("邮编" + postcode + "只能包含数字且只有6位");

@@ -36,7 +36,6 @@ public class ShowGoodPanel extends JPanel {
         }
     };
 
-
     public ShowGoodPanel() {
         setLayout(new BorderLayout());
         searchBar.addActionListener((e) -> {

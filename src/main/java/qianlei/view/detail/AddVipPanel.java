@@ -42,6 +42,9 @@ public class AddVipPanel extends JPanel {
         init();
     }
 
+    /**
+     * 初始化界面
+     */
     public void init() {
         removeAll();
         setLayout(new GridLayout(8, 1));

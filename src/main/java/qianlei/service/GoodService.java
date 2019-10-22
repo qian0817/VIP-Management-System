@@ -12,13 +12,26 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * s
+ * 商品的service层
  *
  * @author qianlei
  */
 public class GoodService {
     private GoodDao goodDao = new GoodDao();
 
+    /**
+     * 添加商品
+     *
+     * @param id           商品id
+     * @param name         商品名称
+     * @param maker        商品制造商
+     * @param price        商品价格
+     * @param discount     商品折扣
+     * @param remain       商品库存
+     * @param introduction 商品介绍
+     * @param remark       商品备注
+     * @throws WrongDataException 输入的数据格式错误
+     */
     public void addGood(String id, String name, String maker, String price, Double discount, String remain, String introduction, String remark) throws WrongDataException {
         if (StringUtil.containsBlank(id)) {
             throw new WrongDataException("id" + id + "不能包含空格");
@@ -36,6 +49,13 @@ public class GoodService {
         goodDao.addGood(good);
     }
 
+    /**
+     * 根据id和name模糊查询商品
+     *
+     * @param id   商品id
+     * @param name 商品名称
+     * @return 符合条件的商品
+     */
     public List<Good> getAllNormalGoodByIdAndName(String id, String name) {
         List<Good> goodList = goodDao.selectAll();
         List<Good> ans = new LinkedList<>();
@@ -47,15 +67,39 @@ public class GoodService {
         return ans;
     }
 
+    /**
+     * 根据id选择商品
+     *
+     * @param id id
+     * @return 该id的商品
+     */
     public Good getGoodById(String id) {
         return goodDao.selectGoodById(id);
     }
 
-    public void deleteById(String id) {
+    /**
+     * 删除指定id的商品
+     *
+     * @param id id
+     */
+    public void deleteGoodById(String id) {
         goodDao.deleteById(id);
     }
 
-    public void update(String id, String name, String maker, String price, Double discount, String remain, String introduction, String remark) throws WrongDataException {
+    /**
+     * 修改商品信息
+     *
+     * @param id           商品id
+     * @param name         商品名称
+     * @param maker        商品制造商
+     * @param price        商品价格
+     * @param discount     商品折扣
+     * @param remain       商品库存
+     * @param introduction 商品介绍
+     * @param remark       商品备注
+     * @throws WrongDataException 输入的数据格式错误
+     */
+    public void updateGood(String id, String name, String maker, String price, Double discount, String remain, String introduction, String remark) throws WrongDataException {
         if (StringUtil.isNotBigDecimal(price)) {
             throw new WrongDataException("价格：" + price + "格式错误");
         }

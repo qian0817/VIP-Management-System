@@ -17,6 +17,12 @@ public class TablePanel extends JPanel {
         init(data, columnNames);
     }
 
+    /**
+     * 初始化
+     *
+     * @param data        数据
+     * @param columnNames 列表名称
+     */
     public void init(Object[][] data, Object[] columnNames) {
         removeAll();
         this.data = data;
@@ -30,10 +36,21 @@ public class TablePanel extends JPanel {
         setVisible(true);
     }
 
+    /**
+     * 获取指定点第一列的内容
+     *
+     * @param point 点
+     * @return 第一列的内容
+     */
     public Object getRowFirst(Point point) {
         return data[table.rowAtPoint(point)][0];
     }
 
+    /**
+     * 获取选择的内容
+     *
+     * @return 选择的内容 空返回null
+     */
     public Object getSelectedId() {
         if (table.getSelectedRow() == -1) {
             return null;

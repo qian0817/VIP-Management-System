@@ -48,13 +48,13 @@ class GoodServiceTest {
     @Order(4)
     @Test
     void deleteById() {
-        Assertions.assertDoesNotThrow(() -> goodService.deleteById("test1"));
+        Assertions.assertDoesNotThrow(() -> goodService.deleteGoodById("test1"));
     }
 
     @Order(2)
     @Test
     void update() {
-        Assertions.assertDoesNotThrow(() -> goodService.update("test1", "测试商品2", "测试制造商2",
+        Assertions.assertDoesNotThrow(() -> goodService.updateGood("test1", "测试商品2", "测试制造商2",
                 "123.45", 0.94, "1234", "测试简介2", "测试备注2"));
     }
 }

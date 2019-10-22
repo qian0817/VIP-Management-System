@@ -36,6 +36,9 @@ public class AddRecordPanel extends JPanel {
         init();
     }
 
+    /**
+     * 初始化界面
+     */
     public void init() {
         removeAll();
         JPanel center = new JPanel(new GridLayout(2, 1));

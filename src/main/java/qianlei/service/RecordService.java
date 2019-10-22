@@ -9,11 +9,21 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * 记录的service层
+ *
  * @author qianlei
  */
 public class RecordService {
     private RecordDao recordDao = new RecordDao();
 
+    /**
+     * 根据用户id姓名和电话号码模糊查询记录
+     *
+     * @param id    id
+     * @param name  姓名
+     * @param phone 电话号码
+     * @return 符合条件的用户
+     */
     public List<Record> getAllRecordByIdAndName(String id, String name, String phone) {
         List<Record> recordList = recordDao.selectAllRecord();
         List<Record> ans = new LinkedList<>();
@@ -25,6 +35,13 @@ public class RecordService {
         return ans;
     }
 
+    /**
+     * 添加记录
+     *
+     * @param goodId 消费的商品
+     * @param vipId  消费的vip
+     * @throws WrongDataException 给出的数据错误
+     */
     public void addRecord(String goodId, String vipId) throws WrongDataException {
         if (goodId == null) {
             throw new WrongDataException("请选择商品");

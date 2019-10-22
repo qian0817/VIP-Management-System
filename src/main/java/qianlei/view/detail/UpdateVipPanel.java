@@ -64,7 +64,7 @@ class UpdateVipPanel extends JPanel {
             }
         });
         deleteButton.addActionListener((e) -> {
-            vipService.deleteById(id);
+            vipService.deleteVipById(id);
             removeAll();
             setLayout(new BorderLayout());
             add(new ShowVipPanel());

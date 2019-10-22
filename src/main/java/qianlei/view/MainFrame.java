@@ -26,14 +26,19 @@ class MainFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
         add(new MenuPanel(), BorderLayout.WEST);
-        detailPanel.init(new AddGoodPanel());
+        detailPanel.change(new AddGoodPanel());
         add(detailPanel);
         pack();
     }
 
     private static class DetailPanel extends JPanel {
 
-        void init(JPanel panel) {
+        /**
+         * 修改显示内容
+         *
+         * @param panel 需要显示的内容
+         */
+        void change(JPanel panel) {
             removeAll();
             setLayout(new BorderLayout());
             add(panel);
@@ -43,7 +48,7 @@ class MainFrame extends JFrame {
     }
 
     private class MenuPanel extends JPanel implements ActionListener {
-        private int size = ViewUtil.getFont().getSize() * 2;
+        private int size = ViewUtil.getCurFont().getSize() * 2;
         private WebButton addGoodButton = new WebButton("商品录入", new SvgIcon(getClass().getClassLoader().getResource("add_good.svg"), size, size));
         private WebButton showGoodButton = new WebButton("商品查询", new SvgIcon(getClass().getClassLoader().getResource("show_good.svg"), size, size));
         private WebButton addVipButton = new WebButton("VIP录入", new SvgIcon(getClass().getClassLoader().getResource("add_vip.svg"), size, size));
@@ -68,6 +73,9 @@ class MainFrame extends JFrame {
             add(quitButton);
         }
 
+        /**
+         * 设置监听事件
+         */
         private void initListener() {
             addGoodButton.addActionListener(this);
             showGoodButton.addActionListener(this);
@@ -84,28 +92,28 @@ class MainFrame extends JFrame {
         public void actionPerformed(ActionEvent e) {
             switch (e.getActionCommand()) {
                 case "商品录入":
-                    MainFrame.this.detailPanel.init(new AddGoodPanel());
+                    MainFrame.this.detailPanel.change(new AddGoodPanel());
                     break;
                 case "商品查询":
-                    MainFrame.this.detailPanel.init(new ShowGoodPanel());
+                    MainFrame.this.detailPanel.change(new ShowGoodPanel());
                     break;
                 case "VIP录入":
-                    MainFrame.this.detailPanel.init(new AddVipPanel());
+                    MainFrame.this.detailPanel.change(new AddVipPanel());
                     break;
                 case "VIP查询":
-                    MainFrame.this.detailPanel.init(new ShowVipPanel());
+                    MainFrame.this.detailPanel.change(new ShowVipPanel());
                     break;
                 case "消费记录登记":
-                    MainFrame.this.detailPanel.init(new AddRecordPanel());
+                    MainFrame.this.detailPanel.change(new AddRecordPanel());
                     break;
                 case "消费记录查询":
-                    MainFrame.this.detailPanel.init(new ShowRecordPanel());
+                    MainFrame.this.detailPanel.change(new ShowRecordPanel());
                     break;
                 case "密码修改":
-                    MainFrame.this.detailPanel.init(new ChangePasswordPanel());
+                    MainFrame.this.detailPanel.change(new ChangePasswordPanel());
                     break;
                 case "系统帮助":
-                    MainFrame.this.detailPanel.init(new HelpPanel());
+                    MainFrame.this.detailPanel.change(new HelpPanel());
                     break;
                 case "退出登录":
                     MainFrame.this.dispose();

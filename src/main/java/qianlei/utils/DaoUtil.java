@@ -10,6 +10,11 @@ import java.sql.*;
 public class DaoUtil {
     private static String fileName;
 
+    /**
+     * 初始化数据库
+     *
+     * @param fileName 数据库文件名称
+     */
     public static void init(String fileName) {
         try {
             Class.forName("org.sqlite.JDBC");
@@ -56,11 +61,23 @@ public class DaoUtil {
         }
     }
 
+    /**
+     * 获取数据库连接
+     *
+     * @return 数据库连接
+     * @throws SQLException sql错误
+     */
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection("jdbc:sqlite:" + fileName);
     }
 
-    private static void closeResultSet(ResultSet resultSet) {
+
+    /**
+     * 关闭resultSet
+     *
+     * @param resultSet resultSet
+     */
+    public static void closeResultSet(ResultSet resultSet) {
         if (resultSet != null) {
             try {
                 resultSet.close();
@@ -68,9 +85,5 @@ public class DaoUtil {
                 e.printStackTrace();
             }
         }
-    }
-
-    public static void close(ResultSet resultSet) {
-        DaoUtil.closeResultSet(resultSet);
     }
 }

@@ -8,8 +8,18 @@ import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * vip的dao层
+ *
+ * @author qianlei
+ */
 public class VipDao {
 
+    /**
+     * 添加VIP用户
+     *
+     * @param vip 需要添加的VIP
+     */
     public void addVip(Vip vip) {
         try (
                 Connection connection = DaoUtil.getConnection();
@@ -30,6 +40,12 @@ public class VipDao {
         }
     }
 
+    /**
+     * 根据id选择VIP
+     *
+     * @param id id
+     * @return 该id的VIP
+     */
     public Vip selectVipById(String id) {
         ResultSet resultSet = null;
         try (
@@ -52,11 +68,16 @@ public class VipDao {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            DaoUtil.close(resultSet);
+            DaoUtil.closeResultSet(resultSet);
         }
         return null;
     }
 
+    /**
+     * 获取所有VIP
+     *
+     * @return 所有VIP
+     */
     public List<Vip> selectAll() {
         ResultSet resultSet = null;
         List<Vip> vipList = new LinkedList<>();
@@ -80,13 +101,16 @@ public class VipDao {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            DaoUtil.close(resultSet);
+            DaoUtil.closeResultSet(resultSet);
         }
         return vipList;
     }
 
+    /**
+     * 删除指定id的VIP
+     * @param id id
+     */
     public void deleteById(String id) {
-
         try (
                 Connection connection = DaoUtil.getConnection();
                 PreparedStatement statement = connection.prepareStatement("UPDATE vip SET status = ? WHERE id = ?")
@@ -99,6 +123,10 @@ public class VipDao {
         }
     }
 
+    /**
+     * 修改VIP信息
+     * @param vip 修改后的vip
+     */
     public void updateVip(Vip vip) {
         try (
                 Connection connection = DaoUtil.getConnection();

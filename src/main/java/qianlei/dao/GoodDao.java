@@ -16,8 +16,12 @@ import java.util.List;
  */
 public class GoodDao {
 
+    /**
+     * 添加商品
+     *
+     * @param good 需要添加的商品
+     */
     public void addGood(Good good) {
-
         try (
                 Connection connection = DaoUtil.getConnection();
                 PreparedStatement statement = connection.prepareStatement("INSERT INTO good(id, name, maker, createTime, " +
@@ -39,6 +43,12 @@ public class GoodDao {
         }
     }
 
+    /**
+     * 根据id选择商品
+     *
+     * @param id id
+     * @return 该id的商品
+     */
     public Good selectGoodById(String id) {
         ResultSet resultSet = null;
         try (
@@ -63,11 +73,16 @@ public class GoodDao {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            DaoUtil.close(resultSet);
+            DaoUtil.closeResultSet(resultSet);
         }
         return null;
     }
 
+    /**
+     * 选择所有商品
+     *
+     * @return 所有商品的列表
+     */
     public List<Good> selectAll() {
         List<Good> goodList = new LinkedList<>();
         try (
@@ -95,9 +110,11 @@ public class GoodDao {
         return goodList;
     }
 
+    /**
+     * 删除指定id的商品
+     * @param id 指定id
+     */
     public void deleteById(String id) {
-
-
         try (
                 Connection connection = DaoUtil.getConnection();
                 PreparedStatement statement = connection.prepareStatement("UPDATE good SET status = ? WHERE id = ?")
@@ -110,6 +127,10 @@ public class GoodDao {
         }
     }
 
+    /**
+     * 修改商品
+     * @param good 修改后的商品
+     */
     public void updateGood(Good good) {
         try (
                 Connection connection = DaoUtil.getConnection();

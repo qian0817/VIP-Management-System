@@ -61,7 +61,7 @@ class UpdateGoodPanel extends JPanel {
 
         //添加事件
         deleteButton.addActionListener((e) -> {
-            goodService.deleteById(id);
+            goodService.deleteGoodById(id);
             removeAll();
             setLayout(new BorderLayout());
             add(new ShowGoodPanel());
@@ -77,7 +77,7 @@ class UpdateGoodPanel extends JPanel {
             String introduction = introductionInputPanel.getText();
             String remark = remarkInputPanel.getText();
             try {
-                goodService.update(id, name, maker, price, discount, remain, introduction, remark);
+                goodService.updateGood(id, name, maker, price, discount, remain, introduction, remark);
                 JOptionPane.showMessageDialog(UpdateGoodPanel.this, "修改成功", "修改成功", JOptionPane.INFORMATION_MESSAGE);
                 removeAll();
                 setLayout(new BorderLayout());
