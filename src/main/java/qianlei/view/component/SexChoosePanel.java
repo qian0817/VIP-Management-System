@@ -12,8 +12,8 @@ import javax.swing.*;
  * @author qianlei
  */
 public class SexChoosePanel extends JPanel {
-    private WebToggleButton manButton = new WebToggleButton("                          男                          ", true);
-    private WebToggleButton womanButton = new WebToggleButton("                          女                          ");
+    private WebToggleButton manButton = new WebToggleButton("  男  ", true);
+    private WebToggleButton womanButton = new WebToggleButton("  女  ");
 
     public SexChoosePanel() {
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));

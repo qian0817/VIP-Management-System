@@ -24,24 +24,31 @@ class UpdateVipPanel extends JPanel {
 
         //组件初始化
         Vip vip = vipService.getVipById(id);
-        setLayout(new GridLayout(8, 1));
-        add(new JLabel("VIP信息修改", JLabel.CENTER));
+        setLayout(new GridLayout(14, 1));
         idInputPanel.setText(vip.getId());
         idInputPanel.setEditable(false);
-        add(idInputPanel);
         nameInputPanel.setText(vip.getName());
-        add(nameInputPanel);
         sexInputPanel.setSelect(vip.getSex());
-        add(sexInputPanel);
         phoneInputPanel.setText(vip.getPhone());
-        add(phoneInputPanel);
         addressInputPanel.setText(vip.getAddress());
-        add(addressInputPanel);
         postcodeInputPanel.setText(String.valueOf(vip.getPostcode()));
-        add(postcodeInputPanel);
         JPanel panel = new JPanel(new FlowLayout());
         panel.add(checkButton);
         panel.add(deleteButton);
+
+        add(new JLabel("VIP信息修改", JLabel.CENTER));
+        add(idInputPanel);
+        add(new JLabel());
+        add(nameInputPanel);
+        add(new JLabel());
+        add(sexInputPanel);
+        add(new JLabel());
+        add(phoneInputPanel);
+        add(new JLabel());
+        add(addressInputPanel);
+        add(new JLabel());
+        add(postcodeInputPanel);
+        add(new JLabel());
         add(panel);
 
         //添加事件

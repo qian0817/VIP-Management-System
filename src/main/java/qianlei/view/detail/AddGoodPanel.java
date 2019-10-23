@@ -55,26 +55,36 @@ public class AddGoodPanel extends JPanel {
 
     public void init() {
         removeAll();
-        setLayout(new GridLayout(10, 1));
-        add(new JLabel("商品信息录入", JLabel.CENTER));
+        setLayout(new GridLayout(19, 1));
+        //各组件赋初值
         idInputPanel.setText("");
-        add(idInputPanel);
         nameInputPanel.setText("");
-        add(nameInputPanel);
         makerInputPanel.setText("");
-        add(makerInputPanel);
         priceInputPanel.setText("");
-        add(priceInputPanel);
-        discountInputPanel = new ComboPanel<>("折扣", doubleList);
-        add(discountInputPanel);
         remainInputPanel.setText("");
-        add(remainInputPanel);
         introductionInputPanel.setText("");
-        add(introductionInputPanel);
         remarkInputPanel.setText("");
-        add(remarkInputPanel);
+        discountInputPanel = new ComboPanel<>("折扣", doubleList);
         JPanel panel = new JPanel(new FlowLayout());
         panel.add(button);
+        add(new JLabel("商品信息录入", JLabel.CENTER));
+        add(new JLabel());
+        add(idInputPanel);
+        add(new JLabel());
+        add(nameInputPanel);
+        add(new JLabel());
+        add(makerInputPanel);
+        add(new JLabel());
+        add(priceInputPanel);
+        add(new JLabel());
+        add(discountInputPanel);
+        add(new JLabel());
+        add(remainInputPanel);
+        add(new JLabel());
+        add(introductionInputPanel);
+        add(new JLabel());
+        add(remarkInputPanel);
+        add(new JLabel());
         add(panel);
         repaint();
         setVisible(true);

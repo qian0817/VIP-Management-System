@@ -32,33 +32,41 @@ class UpdateGoodPanel extends JPanel {
         GoodService goodService = new GoodService();
         JButton checkButton = new JButton("确认");
         JButton deleteButton = new JButton("删除");
-
         //各组件初始化
         Good good = goodService.getGoodById(id);
-        setLayout(new GridLayout(10, 1));
-        add(new JLabel("商品信息修改", JLabel.CENTER));
+        setLayout(new GridLayout(19, 1));
         idInputPanel.setText(good.getId());
         idInputPanel.setEditable(false);
-        add(idInputPanel);
         nameInputPanel.setText(good.getName());
-        add(nameInputPanel);
         makerInputPanel.setText(good.getMaker());
-        add(makerInputPanel);
         priceInputPanel.setText(good.getPrice().toString());
-        add(priceInputPanel);
         discountInputPanel.setSelectItem(good.getDiscount());
-        add(discountInputPanel);
         remainInputPanel.setText(String.valueOf(good.getRemain()));
-        add(remainInputPanel);
         introductionInputPanel.setText(good.getIntroduction());
-        add(introductionInputPanel);
         remarkInputPanel.setText(good.getRemarks());
-        add(remarkInputPanel);
         JPanel panel = new JPanel(new FlowLayout());
         panel.add(checkButton);
         panel.add(deleteButton);
+        //添加组件
+        add(new JLabel("商品信息修改", JLabel.CENTER));
+        add(new JLabel());
+        add(idInputPanel);
+        add(new JLabel());
+        add(nameInputPanel);
+        add(new JLabel());
+        add(makerInputPanel);
+        add(new JLabel());
+        add(priceInputPanel);
+        add(new JLabel());
+        add(discountInputPanel);
+        add(new JLabel());
+        add(remainInputPanel);
+        add(new JLabel());
+        add(introductionInputPanel);
+        add(new JLabel());
+        add(remarkInputPanel);
+        add(new JLabel());
         add(panel);
-
         //添加事件
         deleteButton.addActionListener((e) -> {
             goodService.deleteGoodById(id);

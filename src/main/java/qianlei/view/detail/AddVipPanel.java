@@ -47,22 +47,31 @@ public class AddVipPanel extends JPanel {
      */
     public void init() {
         removeAll();
-        setLayout(new GridLayout(8, 1));
-        add(new JLabel("VIP信息录入", JLabel.CENTER));
+        //重置界面
+        setLayout(new GridLayout(15, 1));
         idInputPanel.setText("");
-        add(idInputPanel);
         nameInputPanel.setText("");
-        add(nameInputPanel);
         sexInputPanel.setSelect("男");
-        add(sexInputPanel);
         phoneInputPanel.setText("");
-        add(phoneInputPanel);
         addressInputPanel.setText("");
-        add(addressInputPanel);
         postcodeInputPanel.setText("");
-        add(postcodeInputPanel);
         JPanel panel = new JPanel(new FlowLayout());
         panel.add(button);
+        //添加组件
+        add(new JLabel("VIP信息录入", JLabel.CENTER));
+        add(new JLabel());
+        add(idInputPanel);
+        add(new JLabel());
+        add(nameInputPanel);
+        add(new JLabel());
+        add(sexInputPanel);
+        add(new JLabel());
+        add(phoneInputPanel);
+        add(new JLabel());
+        add(addressInputPanel);
+        add(new JLabel());
+        add(postcodeInputPanel);
+        add(new JLabel());
         add(panel);
         repaint();
         setVisible(true);

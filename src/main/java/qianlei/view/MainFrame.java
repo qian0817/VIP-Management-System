@@ -3,6 +3,8 @@ package qianlei.view;
 import com.alee.extended.svg.SvgIcon;
 import com.alee.laf.button.WebButton;
 import com.alee.laf.combobox.WebComboBox;
+import com.alee.managers.notification.NotificationManager;
+import com.alee.managers.style.StyleId;
 import com.alee.managers.style.StyleManager;
 import com.alee.skin.dark.DarkSkin;
 import com.alee.skin.web.WebSkin;
@@ -31,8 +33,8 @@ import java.util.Arrays;
 public class MainFrame extends JFrame implements ItemListener {
     private DetailPanel detailPanel = new DetailPanel();
     private JPanel setFontPanel = new JPanel();
-    private WebComboBox fontFamilyChoosePanel = new WebComboBox(ViewUtil.getSupportedFont());
-    private WebComboBox fontSizeChoosePanel = new WebComboBox(Arrays.asList(8, 9, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 36, 48));
+    private WebComboBox fontFamilyChoosePanel = new WebComboBox(ViewUtil.getSupportedFont(), ViewUtil.getCurFont().getFontName());
+    private WebComboBox fontSizeChoosePanel = new WebComboBox(Arrays.asList(8, 9, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 36, 48), (Integer) ViewUtil.getCurFont().getSize());
     private WebComboBox styleChoosePanel = new WebComboBox(Arrays.asList("亮色主题", "黑色主题"));
 
     MainFrame() {
@@ -42,9 +44,10 @@ public class MainFrame extends JFrame implements ItemListener {
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         init();
+        fontFamilyChoosePanel.setStyleId(StyleId.comboboxUndecorated);
+        fontSizeChoosePanel.setStyleId(StyleId.comboboxUndecorated);
+        styleChoosePanel.setStyleId(StyleId.comboboxUndecorated);
         //设置字体标签
-        fontFamilyChoosePanel.setSelectedItem(ViewUtil.getCurFont().getFontName());
-        fontSizeChoosePanel.setSelectedItem(ViewUtil.getCurFont().getSize());
         styleChoosePanel.setSelectedItem("亮色主题");
         fontFamilyChoosePanel.addItemListener(this);
         fontSizeChoosePanel.addItemListener(this);
@@ -67,11 +70,18 @@ public class MainFrame extends JFrame implements ItemListener {
         setLayout(new BorderLayout());
         container.add(new MenuPanel(), BorderLayout.WEST);
         detailPanel.change(new AddGoodPanel());
-        setFontPanel.setLayout(new GridLayout(1, 6));
+        setFontPanel.setLayout(new GridLayout(1, 10));
         container.add(detailPanel);
         setFontPanel.add(fontFamilyChoosePanel);
         setFontPanel.add(fontSizeChoosePanel);
         setFontPanel.add(styleChoosePanel);
+        setFontPanel.add(new JLabel());
+        setFontPanel.add(new JLabel());
+        setFontPanel.add(new JLabel());
+        setFontPanel.add(new JLabel());
+        setFontPanel.add(new JLabel());
+        setFontPanel.add(new JLabel());
+        setFontPanel.add(new JLabel());
         container.add(setFontPanel, BorderLayout.NORTH);
         repaint();
         setVisible(true);
@@ -84,7 +94,7 @@ public class MainFrame extends JFrame implements ItemListener {
                 String fontFamily = (String) fontFamilyChoosePanel.getSelectedItem();
                 int fontSize = (int) fontSizeChoosePanel.getSelectedItem();
                 ViewUtil.changeFont(new Font(fontFamily, Font.PLAIN, fontSize));
-                MainFrame.this.init();
+                NotificationManager.showNotification("重启应用后完全生效更改");
             }
         });
     }
@@ -172,18 +182,20 @@ public class MainFrame extends JFrame implements ItemListener {
                     MainFrame.this.detailPanel.change(new ChangePasswordPanel());
                     break;
                 case "系统帮助":
-                    try (
-                            BufferedInputStream inputStream = new BufferedInputStream(getClass().getClassLoader().getResourceAsStream("help.html"));
-                            BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream("help.html"))
-                    ) {
-                        byte[] bytes = new byte[inputStream.available()];
-                        inputStream.read(bytes);
-                        outputStream.write(bytes);
-                        URI uri = new URI("help.html");
-                        Desktop.getDesktop().browse(uri);
-                    } catch (IOException | URISyntaxException ex) {
-                        ex.printStackTrace();
-                    }
+                    SwingUtilities.invokeLater(() -> {
+                        try (
+                                BufferedInputStream inputStream = new BufferedInputStream(getClass().getClassLoader().getResourceAsStream("help.html"));
+                                BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream("help.html"))
+                        ) {
+                            byte[] bytes = new byte[inputStream.available()];
+                            inputStream.read(bytes);
+                            outputStream.write(bytes);
+                            URI uri = new URI("help.html");
+                            Desktop.getDesktop().browse(uri);
+                        } catch (IOException | URISyntaxException ex) {
+                            ex.printStackTrace();
+                        }
+                    });
                     break;
                 case "退出登录":
                     MainFrame.this.dispose();
