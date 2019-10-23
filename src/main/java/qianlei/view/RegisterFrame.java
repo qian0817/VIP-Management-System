@@ -12,7 +12,7 @@ import java.awt.*;
 
 class RegisterFrame extends JFrame {
     RegisterFrame() {
-        setIconImage(new SvgIcon(getClass().getClassLoader().getResource("icon.svg")).asBufferedImage());
+        setIconImage(new SvgIcon(getClass().getClassLoader().getResource("icon/icon.svg")).asBufferedImage());
         setLayout(new GridLayout(8, 1));
         setTitle("注册界面");
         add(new JLabel());

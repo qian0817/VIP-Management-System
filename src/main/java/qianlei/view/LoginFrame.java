@@ -17,7 +17,7 @@ import java.awt.*;
  */
 public class LoginFrame extends JFrame {
     public LoginFrame() {
-        setIconImage(new SvgIcon(getClass().getClassLoader().getResource("icon.svg")).asBufferedImage());
+        setIconImage(new SvgIcon(getClass().getClassLoader().getResource("icon/icon.svg")).asBufferedImage());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new GridLayout(8, 1));
         setTitle("登录界面");
@@ -45,7 +45,7 @@ public class LoginFrame extends JFrame {
                 JOptionPane.showMessageDialog(LoginFrame.this, "用户名或密码错误", "登陆失败", JOptionPane.INFORMATION_MESSAGE);
             } else {
                 JOptionPane.showMessageDialog(LoginFrame.this, "登陆成功", "登陆成功", JOptionPane.INFORMATION_MESSAGE);
-                MainFrame mainFrame = new MainFrame();
+                MainFrame mainFrame = MainFrame.getMainFrame();
                 userService.setCurUser(user);
                 mainFrame.setVisible(true);
                 LoginFrame.this.dispose();

@@ -5,6 +5,8 @@ import com.alibaba.fastjson.JSON;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * 界面的工具类
@@ -18,6 +20,11 @@ public class ViewUtil {
         return curFont;
     }
 
+    /**
+     * 加载字体配置文件
+     *
+     * @param configPath 字体配置文件路径
+     */
     @SuppressWarnings("all")
     public static void loadFont(String configPath) {
         Font font;
@@ -26,19 +33,48 @@ public class ViewUtil {
             inputStream.read(bytes);
             font = JSON.parseObject(bytes, Font.class);
         } catch (Exception e) {
-            e.printStackTrace();
-            font = new Font("微软雅黑", Font.PLAIN, 20);
+            font = new Font(getSupportedFont().get(0), Font.PLAIN, 20);
         }
+        if (font == null) {
+            font = new Font(getSupportedFont().get(0), Font.PLAIN, 20);
+        }
+        changeFont(font);
+    }
+
+    /**
+     * 写入字体配置文件
+     */
+    private static void writeFontConfig() {
         try (BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(new File("config.json")))) {
-            String s = JSON.toJSONString(font);
+            String s = JSON.toJSONString(curFont);
             outputStream.write(s.getBytes());
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 修改字体
+     *
+     * @param font 修改后的字体
+     */
+    public static void changeFont(Font font) {
         curFont = font;
+        writeFontConfig();
         setViewFont();
     }
 
+    public static List<String> getSupportedFont() {
+        List<String> ret = new LinkedList<>();
+        String[] fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+        for (String s : fonts) {
+            Font f = new Font(s, Font.PLAIN, 20);
+            if (f.canDisplay('认')) {
+                ret.add(s);
+            }
+        }
+        return ret;
+    }
     /**
      * 设置界面的字体
      */

@@ -15,11 +15,12 @@ import java.awt.event.ActionListener;
  *
  * @author qianlei
  */
-class MainFrame extends JFrame {
+public class MainFrame extends JFrame {
+    private static MainFrame mainFrame = new MainFrame();
     private DetailPanel detailPanel = new DetailPanel();
 
-    MainFrame() {
-        setIconImage(new SvgIcon(getClass().getClassLoader().getResource("icon.svg")).asBufferedImage());
+    private MainFrame() {
+        setIconImage(new SvgIcon(getClass().getClassLoader().getResource("icon/icon.svg")).asBufferedImage());
         setTitle("Vip管理系统");
         //最大化
         setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -29,6 +30,14 @@ class MainFrame extends JFrame {
         detailPanel.change(new AddGoodPanel());
         add(detailPanel);
         pack();
+    }
+
+    public static MainFrame getMainFrame() {
+        return mainFrame;
+    }
+
+    public void init() {
+        mainFrame = new MainFrame();
     }
 
     private static class DetailPanel extends JPanel {
@@ -49,15 +58,15 @@ class MainFrame extends JFrame {
 
     private class MenuPanel extends JPanel implements ActionListener {
         private int size = ViewUtil.getCurFont().getSize() * 2;
-        private WebButton addGoodButton = new WebButton("商品录入", new SvgIcon(getClass().getClassLoader().getResource("add_good.svg"), size, size));
-        private WebButton showGoodButton = new WebButton("商品查询", new SvgIcon(getClass().getClassLoader().getResource("show_good.svg"), size, size));
-        private WebButton addVipButton = new WebButton("VIP录入", new SvgIcon(getClass().getClassLoader().getResource("add_vip.svg"), size, size));
-        private WebButton showVipButton = new WebButton("VIP查询", new SvgIcon(getClass().getClassLoader().getResource("show_vip.svg"), size, size));
-        private WebButton addRecordButton = new WebButton("消费记录登记", new SvgIcon(getClass().getClassLoader().getResource("add_record.svg"), size, size));
-        private WebButton showRecordButton = new WebButton("消费记录查询", new SvgIcon(getClass().getClassLoader().getResource("show_record.svg"), size, size));
-        private WebButton managerButton = new WebButton("密码修改", new SvgIcon(getClass().getClassLoader().getResource("password.svg"), size, size));
-        private WebButton helpButton = new WebButton("系统帮助", new SvgIcon(getClass().getClassLoader().getResource("help.svg"), size, size));
-        private WebButton quitButton = new WebButton("退出登录", new SvgIcon(getClass().getClassLoader().getResource("quit.svg"), size, size));
+        private WebButton addGoodButton = new WebButton("商品录入", new SvgIcon(getClass().getClassLoader().getResource("icon/add_good.svg"), size, size));
+        private WebButton showGoodButton = new WebButton("商品查询", new SvgIcon(getClass().getClassLoader().getResource("icon/show_good.svg"), size, size));
+        private WebButton addVipButton = new WebButton("VIP录入", new SvgIcon(getClass().getClassLoader().getResource("icon/add_vip.svg"), size, size));
+        private WebButton showVipButton = new WebButton("VIP查询", new SvgIcon(getClass().getClassLoader().getResource("icon/show_vip.svg"), size, size));
+        private WebButton addRecordButton = new WebButton("消费记录登记", new SvgIcon(getClass().getClassLoader().getResource("icon/add_record.svg"), size, size));
+        private WebButton showRecordButton = new WebButton("消费记录查询", new SvgIcon(getClass().getClassLoader().getResource("icon/show_record.svg"), size, size));
+        private WebButton managerButton = new WebButton("密码修改", new SvgIcon(getClass().getClassLoader().getResource("icon/password.svg"), size, size));
+        private WebButton helpButton = new WebButton("系统帮助", new SvgIcon(getClass().getClassLoader().getResource("icon/help.svg"), size, size));
+        private WebButton quitButton = new WebButton("退出登录", new SvgIcon(getClass().getClassLoader().getResource("icon/quit.svg"), size, size));
 
         MenuPanel() {
             setLayout(new GridLayout(9, 1));
