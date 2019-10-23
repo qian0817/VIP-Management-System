@@ -2,6 +2,10 @@ package qianlei.view;
 
 import com.alee.extended.svg.SvgIcon;
 import com.alee.laf.button.WebButton;
+import com.alee.laf.combobox.WebComboBox;
+import com.alee.managers.style.StyleManager;
+import com.alee.skin.dark.DarkSkin;
+import com.alee.skin.web.WebSkin;
 import qianlei.utils.ViewUtil;
 import qianlei.view.detail.*;
 
@@ -9,35 +13,80 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Arrays;
 
 /**
  * 主界面
  *
  * @author qianlei
  */
-public class MainFrame extends JFrame {
-    private static MainFrame mainFrame = new MainFrame();
+public class MainFrame extends JFrame implements ItemListener {
     private DetailPanel detailPanel = new DetailPanel();
+    private JPanel setFontPanel = new JPanel();
+    private WebComboBox fontFamilyChoosePanel = new WebComboBox(ViewUtil.getSupportedFont());
+    private WebComboBox fontSizeChoosePanel = new WebComboBox(Arrays.asList(8, 9, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 36, 48));
+    private WebComboBox styleChoosePanel = new WebComboBox(Arrays.asList("亮色主题", "黑色主题"));
 
-    private MainFrame() {
+    MainFrame() {
         setIconImage(new SvgIcon(getClass().getClassLoader().getResource("icon/icon.svg")).asBufferedImage());
         setTitle("Vip管理系统");
         //最大化
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new BorderLayout());
-        add(new MenuPanel(), BorderLayout.WEST);
-        detailPanel.change(new AddGoodPanel());
-        add(detailPanel);
-        pack();
-    }
-
-    public static MainFrame getMainFrame() {
-        return mainFrame;
+        init();
+        //设置字体标签
+        fontFamilyChoosePanel.setSelectedItem(ViewUtil.getCurFont().getFontName());
+        fontSizeChoosePanel.setSelectedItem(ViewUtil.getCurFont().getSize());
+        styleChoosePanel.setSelectedItem("亮色主题");
+        fontFamilyChoosePanel.addItemListener(this);
+        fontSizeChoosePanel.addItemListener(this);
+        styleChoosePanel.addItemListener(e ->
+                SwingUtilities.invokeLater(() -> {
+                    if (e.getStateChange() == ItemEvent.SELECTED) {
+                        if (e.getItem().equals("黑色主题")) {
+                            StyleManager.setSkin(new DarkSkin());
+                        } else {
+                            StyleManager.setSkin(new WebSkin());
+                        }
+                    }
+                })
+        );
     }
 
     public void init() {
-        mainFrame = new MainFrame();
+        Container container = getContentPane();
+        container.removeAll();
+        setLayout(new BorderLayout());
+        container.add(new MenuPanel(), BorderLayout.WEST);
+        detailPanel.change(new AddGoodPanel());
+        setFontPanel.setLayout(new GridLayout(1, 6));
+        container.add(detailPanel);
+        setFontPanel.add(fontFamilyChoosePanel);
+        setFontPanel.add(fontSizeChoosePanel);
+        setFontPanel.add(styleChoosePanel);
+        container.add(setFontPanel, BorderLayout.NORTH);
+        repaint();
+        setVisible(true);
+    }
+
+    @Override
+    public void itemStateChanged(ItemEvent e) {
+        SwingUtilities.invokeLater(() -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                String fontFamily = (String) fontFamilyChoosePanel.getSelectedItem();
+                int fontSize = (int) fontSizeChoosePanel.getSelectedItem();
+                ViewUtil.changeFont(new Font(fontFamily, Font.PLAIN, fontSize));
+                MainFrame.this.init();
+            }
+        });
     }
 
     private static class DetailPanel extends JPanel {
@@ -97,6 +146,7 @@ public class MainFrame extends JFrame {
             quitButton.addActionListener(this);
         }
 
+        @SuppressWarnings("all")
         @Override
         public void actionPerformed(ActionEvent e) {
             switch (e.getActionCommand()) {
@@ -122,7 +172,18 @@ public class MainFrame extends JFrame {
                     MainFrame.this.detailPanel.change(new ChangePasswordPanel());
                     break;
                 case "系统帮助":
-                    MainFrame.this.detailPanel.change(new HelpPanel());
+                    try (
+                            BufferedInputStream inputStream = new BufferedInputStream(getClass().getClassLoader().getResourceAsStream("help.html"));
+                            BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream("help.html"))
+                    ) {
+                        byte[] bytes = new byte[inputStream.available()];
+                        inputStream.read(bytes);
+                        outputStream.write(bytes);
+                        URI uri = new URI("help.html");
+                        Desktop.getDesktop().browse(uri);
+                    } catch (IOException | URISyntaxException ex) {
+                        ex.printStackTrace();
+                    }
                     break;
                 case "退出登录":
                     MainFrame.this.dispose();

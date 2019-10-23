@@ -43,4 +43,5 @@ public class ComboPanel<T> extends JPanel {
     public T getSelect() {
         return (T) webComboBox.getSelectedItem();
     }
+
 }

@@ -45,9 +45,9 @@ public class LoginFrame extends JFrame {
                 JOptionPane.showMessageDialog(LoginFrame.this, "用户名或密码错误", "登陆失败", JOptionPane.INFORMATION_MESSAGE);
             } else {
                 JOptionPane.showMessageDialog(LoginFrame.this, "登陆成功", "登陆成功", JOptionPane.INFORMATION_MESSAGE);
-                MainFrame mainFrame = MainFrame.getMainFrame();
+
                 userService.setCurUser(user);
-                mainFrame.setVisible(true);
+                new MainFrame().setVisible(true);
                 LoginFrame.this.dispose();
             }
         });

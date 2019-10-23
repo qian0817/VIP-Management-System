@@ -60,7 +60,7 @@ public class ViewUtil {
      */
     public static void changeFont(Font font) {
         curFont = font;
-        writeFontConfig();
+        new Thread(ViewUtil::writeFontConfig).start();
         setViewFont();
     }
 
