@@ -18,6 +18,7 @@ public class ChangePasswordPanel extends JPanel {
 
     public ChangePasswordPanel() {
         InputPanel nameInputPanel = new InputPanel("用户名", "");
+        nameInputPanel.setEditable(false);
         PasswordPanel passwordPanel = new PasswordPanel("密码", "请输入修改后密码");
         JButton check = new JButton("确认");
         nameInputPanel.setText(userService.getCurUser().getUsername());
