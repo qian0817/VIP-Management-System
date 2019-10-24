@@ -3,7 +3,6 @@ package qianlei.view;
 import com.alee.extended.svg.SvgIcon;
 import com.alee.laf.button.WebButton;
 import com.alee.laf.combobox.WebComboBox;
-import com.alee.managers.notification.NotificationManager;
 import com.alee.managers.style.StyleId;
 import com.alee.managers.style.StyleManager;
 import com.alee.skin.dark.DarkSkin;
@@ -40,8 +39,6 @@ public class MainFrame extends JFrame implements ItemListener {
     MainFrame() {
         setIconImage(new SvgIcon(getClass().getClassLoader().getResource("icon/icon.svg")).asBufferedImage());
         setTitle("Vip管理系统");
-        //最大化
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         init();
         fontFamilyChoosePanel.setStyleId(StyleId.comboboxUndecorated);
@@ -62,6 +59,9 @@ public class MainFrame extends JFrame implements ItemListener {
                     }
                 })
         );
+        pack();
+        //最大化
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
     public void init() {
@@ -94,7 +94,8 @@ public class MainFrame extends JFrame implements ItemListener {
                 String fontFamily = (String) fontFamilyChoosePanel.getSelectedItem();
                 int fontSize = (int) fontSizeChoosePanel.getSelectedItem();
                 ViewUtil.changeFont(new Font(fontFamily, Font.PLAIN, fontSize));
-                NotificationManager.showNotification("重启应用后完全生效更改");
+                MainFrame.this.dispose();
+                new MainFrame().setVisible(true);
             }
         });
     }

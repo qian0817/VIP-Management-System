@@ -18,8 +18,7 @@ public class AddRecordPanel extends JPanel {
 
     public AddRecordPanel() {
         setLayout(new BorderLayout());
-        showGoodPanel.removeMouseListener();
-        showVipPanel.removeMouseListener();
+
 
         check.addActionListener((e) -> {
             RecordService recordService = new RecordService();
@@ -42,6 +41,8 @@ public class AddRecordPanel extends JPanel {
     public void init() {
         removeAll();
         JPanel center = new JPanel(new GridLayout(2, 1));
+        showGoodPanel.init("", "");
+        showVipPanel.init("", "", "");
 
         JPanel chooseGoodPanel = new JPanel(new BorderLayout());
         chooseGoodPanel.add(new JLabel("请选择商品", JLabel.CENTER), BorderLayout.NORTH);
@@ -55,6 +56,8 @@ public class AddRecordPanel extends JPanel {
 
         add(center);
         add(check, BorderLayout.SOUTH);
+        showGoodPanel.removeMouseListener();
+        showVipPanel.removeMouseListener();
         repaint();
         setVisible(true);
     }
