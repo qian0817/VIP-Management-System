@@ -3,11 +3,13 @@ package qianlei.view.detail;
 import qianlei.exception.WrongDataException;
 import qianlei.service.GoodService;
 import qianlei.view.component.ComboPanel;
+import qianlei.view.component.DateChoosePanel;
 import qianlei.view.component.InputPanel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,6 +28,7 @@ public class AddGoodPanel extends JPanel {
     private InputPanel remarkInputPanel = new InputPanel("备注", "请输入备注");
     private JButton button = new JButton("确认");
     private List<Double> doubleList = new ArrayList<>();
+    private DateChoosePanel dateChoosePanel = new DateChoosePanel("生产日期");
 
     public AddGoodPanel() {
         for (int i = 100; i > 0; i--) {
@@ -42,8 +45,9 @@ public class AddGoodPanel extends JPanel {
             String remain = remainInputPanel.getText();
             String introduction = introductionInputPanel.getText();
             String remark = remarkInputPanel.getText();
+            Date createTime = dateChoosePanel.getSelectDate();
             try {
-                goodService.addGood(id, name, maker, price, discount, remain, introduction, remark);
+                goodService.addGood(id, name, maker, createTime, price, discount, remain, introduction, remark);
                 JOptionPane.showMessageDialog(AddGoodPanel.this, "添加成功", "添加成功", JOptionPane.INFORMATION_MESSAGE);
                 init();
             } catch (WrongDataException ex) {
@@ -55,7 +59,7 @@ public class AddGoodPanel extends JPanel {
 
     public void init() {
         removeAll();
-        setLayout(new GridLayout(19, 1));
+        setLayout(new GridLayout(21, 1));
         //各组件赋初值
         idInputPanel.setText("");
         nameInputPanel.setText("");
@@ -74,6 +78,8 @@ public class AddGoodPanel extends JPanel {
         add(nameInputPanel);
         add(new JLabel());
         add(makerInputPanel);
+        add(new JLabel());
+        add(dateChoosePanel);
         add(new JLabel());
         add(priceInputPanel);
         add(new JLabel());

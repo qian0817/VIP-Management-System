@@ -5,6 +5,8 @@ import qianlei.TestHelper;
 import qianlei.exception.WrongDataException;
 import qianlei.utils.DaoUtil;
 
+import java.util.Date;
+
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class GoodServiceTest {
     static {
@@ -17,17 +19,17 @@ class GoodServiceTest {
     @Order(1)
     @Test
     void addGood() {
-        Assertions.assertDoesNotThrow(() -> goodService.addGood("test1", "测试商品", "测试制造商",
+        Assertions.assertDoesNotThrow(() -> goodService.addGood("test1", "测试商品", "测试制造商", new Date(),
                 "123.45", 0.94, "1234", "测试简介1", "测试备注1"));
-        Assertions.assertThrows(WrongDataException.class, () -> goodService.addGood("test1", "测试商品", "测试制造商",
+        Assertions.assertThrows(WrongDataException.class, () -> goodService.addGood("test1", "测试商品", "测试制造商", new Date(),
                 "123.45", 0.94, "1234", "测试简介1", "测试备注1"));
-        Assertions.assertThrows(WrongDataException.class, () -> goodService.addGood("test2", "测试商品2", "测试制造商2",
+        Assertions.assertThrows(WrongDataException.class, () -> goodService.addGood("test2", "测试商品2", "测试制造商2", new Date(),
                 "123.45", 0.94, "1234dw", "测试简介2", "测试备注2"));
-        Assertions.assertThrows(WrongDataException.class, () -> goodService.addGood("test2", "测试商品3", "测试制造商3",
+        Assertions.assertThrows(WrongDataException.class, () -> goodService.addGood("test2", "测试商品3", "测试制造商3", new Date(),
                 "123.45d", 0.94, "1234", "测试简介3", "测试备注3"));
-        Assertions.assertThrows(WrongDataException.class, () -> goodService.addGood("te st2", "测试商品4", "测试制造商4",
+        Assertions.assertThrows(WrongDataException.class, () -> goodService.addGood("te st2", "测试商品4", "测试制造商4", new Date(),
                 "123.45", 0.94, "1234", "测试简介4", "测试备注4"));
-        Assertions.assertDoesNotThrow(() -> goodService.addGood("test2", "测试商品2", "测试制造商2",
+        Assertions.assertDoesNotThrow(() -> goodService.addGood("test2", "测试商品2", "测试制造商2", new Date(),
                 "123.45", 0.94, "1234", "测试简介2", "测试备注2"));
     }
 

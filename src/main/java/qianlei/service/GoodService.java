@@ -32,7 +32,7 @@ public class GoodService {
      * @param remark       商品备注
      * @throws WrongDataException 输入的数据格式错误
      */
-    public void addGood(String id, String name, String maker, String price, Double discount, String remain, String introduction, String remark) throws WrongDataException {
+    public void addGood(String id, String name, String maker, Date createTime, String price, Double discount, String remain, String introduction, String remark) throws WrongDataException {
         if (StringUtil.containsBlank(id)) {
             throw new WrongDataException("id" + id + "不能包含空格");
         }
@@ -45,7 +45,7 @@ public class GoodService {
         if (goodDao.selectGoodById(id) != null) {
             throw new WrongDataException("id" + id + "已被注册");
         }
-        Good good = new Good(id, name, maker, new Date(), new BigDecimal(price), discount, Long.parseLong(remain), introduction, remark, StatusEnum.Normal);
+        Good good = new Good(id, name, maker, createTime, new BigDecimal(price), discount, Long.parseLong(remain), introduction, remark, StatusEnum.Normal);
         goodDao.addGood(good);
     }
 
