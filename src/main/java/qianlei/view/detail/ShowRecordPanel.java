@@ -41,12 +41,12 @@ public class ShowRecordPanel extends JPanel {
             data[i][4] = record.getVip().getStatus().getMessage();
             data[i][5] = record.getGoodId();
             data[i][6] = record.getGood().getName();
-            data[i][7] = record.getGood().getPrice();
+            data[i][7] = record.getPrice();
             data[i][8] = record.getGood().getStatus().getMessage();
             data[i][9] = record.getCreateTime();
         }
-        TablePanel tablePanel = new TablePanel(data, new String[]{"记录编号", "Vip证件号", "vip名称", "vip手机号", "vip状态",
-                "商品编号", "商品名称", "商品价格", "商品状态", "创建日期"});
+        TablePanel tablePanel = new TablePanel(data, new String[]{"记录编号", "VIP证件号", "VIP名称", "VIP手机号", "VIP状态",
+                "商品编号", "商品名称", "购买时价格", "商品状态", "创建日期"});
         add(tablePanel);
         repaint();
         setVisible(true);

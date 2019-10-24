@@ -5,6 +5,7 @@ import qianlei.TestHelper;
 import qianlei.entity.Record;
 import qianlei.utils.DaoUtil;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -25,6 +26,6 @@ class RecordDaoTest {
     @Order(1)
     @Test
     void addRecord() {
-        recordDao.addRecord(new Record(1, "1", "1", new Date()));
+        recordDao.addRecord(new Record(1, "1", "1", new Date(), BigDecimal.valueOf(1L)));
     }
 }

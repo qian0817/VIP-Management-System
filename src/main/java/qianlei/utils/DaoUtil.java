@@ -54,7 +54,8 @@ public class DaoUtil {
                     "id INTEGER NOT NULL PRIMARY KEY, " +
                     "userId VARCHAR(20) NOT NULL ," +
                     "goodId VARCHAR(20) NOT NULL ," +
-                    "createTime DATE NOT NULL" +
+                    "createTime DATE NOT NULL ," +
+                    "price DECIMAL NOT NULL " +
                     ")");
         } catch (SQLException e) {
             e.printStackTrace();

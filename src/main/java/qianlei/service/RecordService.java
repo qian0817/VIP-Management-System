@@ -1,9 +1,12 @@
 package qianlei.service;
 
+import qianlei.dao.GoodDao;
 import qianlei.dao.RecordDao;
+import qianlei.entity.Good;
 import qianlei.entity.Record;
 import qianlei.exception.WrongDataException;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,7 +18,7 @@ import java.util.List;
  */
 public class RecordService {
     private RecordDao recordDao = new RecordDao();
-
+    private GoodDao goodDao = new GoodDao();
     /**
      * 根据用户id姓名和电话号码模糊查询记录
      *
@@ -53,6 +56,8 @@ public class RecordService {
         record.setVipId(vipId);
         record.setGoodId(goodId);
         record.setCreateTime(new Date());
+        Good good = goodDao.selectGoodById(goodId);
+        record.setPrice(BigDecimal.valueOf(good.getDiscount() * good.getPrice().doubleValue()));
         recordDao.addRecord(record);
     }
 }

@@ -1,5 +1,6 @@
 package qianlei.entity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -14,15 +15,17 @@ public class Record {
     private Date createTime;
     private Good good;
     private Vip vip;
+    private BigDecimal price;
 
     public Record() {
     }
 
-    public Record(Integer id, String goodId, String vipId, Date createTime) {
+    public Record(Integer id, String goodId, String vipId, Date createTime, BigDecimal buyPrice) {
         this.id = id;
         this.goodId = goodId;
         this.vipId = vipId;
         this.createTime = createTime;
+        this.price = buyPrice;
     }
 
     public Integer getId() {
@@ -73,13 +76,24 @@ public class Record {
         this.vip = vip;
     }
 
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
     @Override
     public String toString() {
         return "Record{" +
-                "id='" + id + '\'' +
+                "id=" + id +
                 ", goodId='" + goodId + '\'' +
                 ", vipId='" + vipId + '\'' +
                 ", createTime=" + createTime +
+                ", good=" + good +
+                ", vip=" + vip +
+                ", buyPrice=" + price +
                 '}';
     }
 }
