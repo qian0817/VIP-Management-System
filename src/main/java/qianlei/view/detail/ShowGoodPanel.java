@@ -27,7 +27,7 @@ public class ShowGoodPanel extends JPanel {
         @Override
         public void mouseClicked(MouseEvent e) {
             if (e.getClickCount() >= 2) {
-                String id = (String) tablePanel.getRowFirst(e.getPoint());
+                String id = (String) tablePanel.getRowByIndex(e.getPoint(), 0);
                 removeAll();
                 add(new UpdateGoodPanel(id));
                 repaint();

@@ -112,6 +112,8 @@ public class MainFrame extends JFrame implements ItemListener {
             setLayout(new BorderLayout());
             add(panel);
             repaint();
+            validate();
+            updateUI();
             setVisible(true);
         }
     }

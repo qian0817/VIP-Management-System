@@ -71,8 +71,8 @@ public class TablePanel extends JPanel {
      * @param point 点
      * @return 第一列的内容
      */
-    public Object getRowFirst(Point point) {
-        return data[table.rowAtPoint(point)][0];
+    public Object getRowByIndex(Point point, int index) {
+        return data[table.rowAtPoint(point)][index];
     }
 
     /**

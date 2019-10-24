@@ -12,6 +12,7 @@ public class VerifyCodeUtil {
         try (OutputStream outputStream = new FileOutputStream("verifyCode.png")) {
             Captcha captcha = new SpecCaptcha(ViewUtil.getCurFont().getSize() * 6, ViewUtil.getCurFont().getSize() * 2, 4);
             captcha.out(outputStream);
+            outputStream.flush();
             return captcha.text();
         } catch (IOException e) {
             e.printStackTrace();
