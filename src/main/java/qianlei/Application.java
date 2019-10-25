@@ -13,13 +13,12 @@ import javax.swing.*;
  * @author qianlei
  */
 public class Application {
-    public static void main(String[] args) {
-        WebLookAndFeel.setForceSingleEventsThread(true);
-        SwingUtilities.invokeLater(() -> {
-            WebLookAndFeel.install();
-            new LoginFrame().setVisible(true);
-        });
+    public static void main(String[] args) throws InterruptedException {
+        Thread t = new Thread(WebLookAndFeel::install);
+        t.start();
         ViewUtil.loadFont("config.json");
         DaoUtil.init("main.db");
+        t.join();
+        new LoginFrame().setVisible(true);
     }
 }

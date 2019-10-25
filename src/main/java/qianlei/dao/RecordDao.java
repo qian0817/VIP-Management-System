@@ -67,7 +67,6 @@ public class RecordDao {
                 record.getVip().setName(vipName);
                 record.setPrice(price);
                 recordList.add(record);
-                System.out.println(record);
             }
         } catch (SQLException e) {
             e.printStackTrace();

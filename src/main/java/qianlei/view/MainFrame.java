@@ -16,13 +16,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * 主界面
@@ -51,7 +49,7 @@ public class MainFrame extends JFrame implements ItemListener {
         styleChoosePanel.addItemListener(e ->
                 SwingUtilities.invokeLater(() -> {
                     if (e.getStateChange() == ItemEvent.SELECTED) {
-                        if (e.getItem().equals("黑色主题")) {
+                        if ("暗色主题".equals(e.getItem())) {
                             StyleManager.setSkin(new DarkSkin());
                         } else {
                             StyleManager.setSkin(new WebSkin());
@@ -75,7 +73,6 @@ public class MainFrame extends JFrame implements ItemListener {
         setFontPanel.add(fontFamilyChoosePanel);
         setFontPanel.add(fontSizeChoosePanel);
         setFontPanel.add(styleChoosePanel);
-        setFontPanel.add(new JLabel());
         setFontPanel.add(new JLabel());
         setFontPanel.add(new JLabel());
         setFontPanel.add(new JLabel());
@@ -159,7 +156,6 @@ public class MainFrame extends JFrame implements ItemListener {
             quitButton.addActionListener(this);
         }
 
-        @SuppressWarnings("all")
         @Override
         public void actionPerformed(ActionEvent e) {
             switch (e.getActionCommand()) {
@@ -187,12 +183,14 @@ public class MainFrame extends JFrame implements ItemListener {
                 case "系统帮助":
                     SwingUtilities.invokeLater(() -> {
                         try (
-                                BufferedInputStream inputStream = new BufferedInputStream(getClass().getClassLoader().getResourceAsStream("help.html"));
+                                InputStream html = getClass().getClassLoader().getResourceAsStream("help.html");
+                                BufferedInputStream inputStream = new BufferedInputStream(Objects.requireNonNull(html));
                                 BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream("help.html"))
                         ) {
-                            byte[] bytes = new byte[inputStream.available()];
-                            inputStream.read(bytes);
-                            outputStream.write(bytes);
+                            byte[] bytes = new byte[1024];
+                            while (inputStream.read(bytes) == 1024) {
+                                outputStream.write(bytes);
+                            }
                             URI uri = new URI("help.html");
                             Desktop.getDesktop().browse(uri);
                         } catch (IOException | URISyntaxException ex) {

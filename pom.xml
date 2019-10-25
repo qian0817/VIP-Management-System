@@ -5,30 +5,34 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>qianlei</groupId>
-    <artifactId>java-course-design</artifactId>
+    <artifactId>vip-manager-system</artifactId>
     <version>1.0-SNAPSHOT</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>
+        <!--数据库连接-->
         <!-- https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc -->
         <dependency>
             <groupId>org.xerial</groupId>
             <artifactId>sqlite-jdbc</artifactId>
             <version>3.28.0</version>
         </dependency>
+        <!--json解析-->
         <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
             <version>1.2.62</version>
         </dependency>
+        <!--ui-->
         <!-- https://mvnrepository.com/artifact/com.weblookandfeel/weblaf-ui -->
         <dependency>
             <groupId>com.weblookandfeel</groupId>
             <artifactId>weblaf-ui</artifactId>
             <version>1.2.10</version>
         </dependency>
+        <!--测试-->
         <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -36,6 +40,8 @@
             <version>5.5.2</version>
             <scope>test</scope>
         </dependency>
+        <!--验证码-->
+        <!-- https://mvnrepository.com/artifact/com.github.whvcse/easy-captcha -->
         <dependency>
             <groupId>com.github.whvcse</groupId>
             <artifactId>easy-captcha</artifactId>

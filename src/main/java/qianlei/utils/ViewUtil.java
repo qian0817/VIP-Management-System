@@ -25,13 +25,10 @@ public class ViewUtil {
      *
      * @param configPath 字体配置文件路径
      */
-    @SuppressWarnings("all")
     public static void loadFont(String configPath) {
         Font font;
-        try (BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(new File("config.json")))) {
-            byte[] bytes = new byte[inputStream.available()];
-            inputStream.read(bytes);
-            font = JSON.parseObject(bytes, Font.class);
+        try (BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(new File(configPath)))) {
+            font = JSON.parseObject(inputStream, Font.class);
         } catch (Exception e) {
             font = new Font(getSupportedFont().get(0), Font.PLAIN, 20);
         }
