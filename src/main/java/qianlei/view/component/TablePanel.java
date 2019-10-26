@@ -29,7 +29,7 @@ public class TablePanel extends JPanel {
         this.data = data;
         ExtendTableModel model = new ExtendTableModel(data, columnNames);
         table = new JTable(model);
-        table.setRowHeight(ViewUtil.getCurFont().getSize() * 2);
+        table.setRowHeight(ViewUtil.getCurConfig().getFont().getSize() * 2);
         JScrollPane scrollPane = new JScrollPane(table);
         table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         add(scrollPane);

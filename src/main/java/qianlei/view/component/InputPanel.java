@@ -14,14 +14,14 @@ public class InputPanel extends JPanel {
     private WebTextField field = new WebTextField(20);
 
     public InputPanel(String title, String hintText) {
-        this(title, hintText, ViewUtil.getCurFont().getSize() * 4);
+        this(title, hintText, ViewUtil.getCurConfig().getFont().getSize() * 4);
     }
 
     InputPanel(String title, String hintText, int margin) {
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         //保证右对齐
-        add(Box.createHorizontalStrut(ViewUtil.getCurFont().getSize() * 4));
-        add(Box.createHorizontalStrut(margin - title.length() * ViewUtil.getCurFont().getSize()));
+        add(Box.createHorizontalStrut(ViewUtil.getCurConfig().getFont().getSize() * 4));
+        add(Box.createHorizontalStrut(margin - title.length() * ViewUtil.getCurConfig().getFont().getSize()));
         add(Box.createHorizontalBox());
 
         JLabel label = new JLabel(title);

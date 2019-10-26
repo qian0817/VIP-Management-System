@@ -6,9 +6,6 @@ import com.alee.laf.button.WebButton;
 import com.alee.laf.combobox.WebComboBox;
 import com.alee.laf.label.WebLabel;
 import com.alee.managers.style.StyleId;
-import com.alee.managers.style.StyleManager;
-import com.alee.skin.dark.DarkSkin;
-import com.alee.skin.web.WebSkin;
 import qianlei.utils.ViewUtil;
 import qianlei.view.detail.*;
 
@@ -31,9 +28,9 @@ import java.util.Objects;
  */
 public class MainFrame extends JFrame implements ItemListener {
     private DetailPanel detailPanel = new DetailPanel();
-    private JPanel setFontPanel = new JPanel();
-    private WebComboBox fontFamilyChoosePanel = new WebComboBox(StyleId.comboboxUndecorated, ViewUtil.getSupportedFont(), ViewUtil.getCurFont().getFontName());
-    private WebComboBox fontSizeChoosePanel = new WebComboBox(StyleId.comboboxUndecorated, Arrays.asList(8, 9, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 36, 48), (Integer) ViewUtil.getCurFont().getSize());
+    private JPanel topPanel = new JPanel();
+    private WebComboBox fontFamilyChoosePanel = new WebComboBox(StyleId.comboboxUndecorated, ViewUtil.getSupportedFont(), ViewUtil.getCurConfig().getFont().getFontName());
+    private WebComboBox fontSizeChoosePanel = new WebComboBox(StyleId.comboboxUndecorated, Arrays.asList(8, 9, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 36, 48), (Integer) ViewUtil.getCurConfig().getFont().getSize());
     private WebComboBox styleChoosePanel = new WebComboBox(StyleId.comboboxUndecorated, Arrays.asList("亮色主题", "暗色主题"));
     private WebButton minButton = new WebButton(StyleId.buttonHover, new SvgIcon(getClass().getClassLoader().getResource("icon/min.svg")));
     private WebButton closeButton = new WebButton(StyleId.buttonHover, new SvgIcon(getClass().getClassLoader().getResource("icon/close.svg")));
@@ -48,17 +45,13 @@ public class MainFrame extends JFrame implements ItemListener {
         init();
         //设置字体标签
         titleLabel.setForeground(Color.gray);
-        styleChoosePanel.setSelectedItem("亮色主题");
+        styleChoosePanel.setSelectedItem(ViewUtil.getCurConfig().getSkin());
         fontFamilyChoosePanel.addItemListener(this);
         fontSizeChoosePanel.addItemListener(this);
         styleChoosePanel.addItemListener(e ->
                 SwingUtilities.invokeLater(() -> {
                     if (e.getStateChange() == ItemEvent.SELECTED) {
-                        if ("暗色主题".equals(e.getItem())) {
-                            StyleManager.setSkin(new DarkSkin());
-                        } else {
-                            StyleManager.setSkin(new WebSkin());
-                        }
+                        ViewUtil.changeSkin((String) e.getItem());
                     }
                 })
         );
@@ -74,21 +67,21 @@ public class MainFrame extends JFrame implements ItemListener {
         setLayout(new BorderLayout());
         container.add(new MenuPanel(), BorderLayout.WEST);
         detailPanel.change(new AddGoodPanel());
-        setFontPanel.setLayout(new BoxLayout(setFontPanel, BoxLayout.X_AXIS));
+        topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
         container.add(detailPanel);
-        setFontPanel.add(Box.createHorizontalStrut(10));
-        setFontPanel.add(new WebImage(new SvgIcon(getClass().getClassLoader().getResource("icon/icon.svg"))));
-        setFontPanel.add(Box.createHorizontalStrut(10));
-        setFontPanel.add(fontFamilyChoosePanel);
-        setFontPanel.add(fontSizeChoosePanel);
-        setFontPanel.add(styleChoosePanel);
-        setFontPanel.add(Box.createHorizontalStrut(50));
-        setFontPanel.add(titleLabel);
-        setFontPanel.add(Box.createHorizontalStrut(1000));
-        setFontPanel.add(minButton);
-        setFontPanel.add(Box.createHorizontalStrut(20));
-        setFontPanel.add(closeButton);
-        container.add(setFontPanel, BorderLayout.NORTH);
+        topPanel.add(Box.createHorizontalStrut(10));
+        topPanel.add(new WebImage(new SvgIcon(getClass().getClassLoader().getResource("icon/icon.svg"))));
+        topPanel.add(Box.createHorizontalStrut(10));
+        topPanel.add(fontFamilyChoosePanel);
+        topPanel.add(fontSizeChoosePanel);
+        topPanel.add(styleChoosePanel);
+        topPanel.add(Box.createHorizontalStrut(50));
+        topPanel.add(titleLabel);
+        topPanel.add(Box.createHorizontalStrut(1000));
+        topPanel.add(minButton);
+        topPanel.add(Box.createHorizontalStrut(20));
+        topPanel.add(closeButton);
+        container.add(topPanel, BorderLayout.NORTH);
         repaint();
         setVisible(true);
     }
@@ -125,7 +118,7 @@ public class MainFrame extends JFrame implements ItemListener {
     }
 
     private class MenuPanel extends JPanel implements ActionListener {
-        private int size = ViewUtil.getCurFont().getSize() * 2;
+        private int size = ViewUtil.getCurConfig().getFont().getSize() * 2;
         private WebButton addGoodButton = new WebButton(StyleId.buttonHover, "商品录入", new SvgIcon(getClass().getClassLoader().getResource("icon/add_good.svg"), size, size));
         private WebButton showGoodButton = new WebButton(StyleId.buttonHover, "商品查询", new SvgIcon(getClass().getClassLoader().getResource("icon/show_good.svg"), size, size));
         private WebButton addVipButton = new WebButton(StyleId.buttonHover, "VIP录入", new SvgIcon(getClass().getClassLoader().getResource("icon/add_vip.svg"), size, size));

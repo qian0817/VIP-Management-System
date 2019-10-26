@@ -14,14 +14,14 @@ public class PasswordPanel extends JPanel {
     private WebPasswordField field;
 
     public PasswordPanel(String title, String hintText) {
-        this(title, hintText, ViewUtil.getCurFont().getSize() * 4);
+        this(title, hintText, ViewUtil.getCurConfig().getFont().getSize() * 4);
     }
 
     private PasswordPanel(String title, String hintText, int margin) {
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         //保证右对齐，根据字体大小调节
-        add(Box.createHorizontalStrut(ViewUtil.getCurFont().getSize() * 4));
-        add(Box.createHorizontalStrut(margin - title.length() * ViewUtil.getCurFont().getSize()));
+        add(Box.createHorizontalStrut(ViewUtil.getCurConfig().getFont().getSize() * 4));
+        add(Box.createHorizontalStrut(margin - title.length() * ViewUtil.getCurConfig().getFont().getSize()));
         add(Box.createHorizontalBox());
 
         JLabel label = new JLabel(title);

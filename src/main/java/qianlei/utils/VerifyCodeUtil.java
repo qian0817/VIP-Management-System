@@ -5,6 +5,11 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
+/**
+ * 验证码辅助类
+ *
+ * @author qianlei
+ */
 public class VerifyCodeUtil {
     private static final String VERIFY_CODES = "23456789abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ";
     private static Random random = new Random();
@@ -36,7 +41,6 @@ public class VerifyCodeUtil {
             graphics.setColor(new Color(random.nextInt(255), random.nextInt(255), random.nextInt(255)));
             graphics.drawString(String.valueOf(c), i * width / 4, random.nextInt(height / 2) + height / 2);
         }
-        System.out.println(verifyCode);
         return new ImageIcon(image, verifyCode.toString());
     }
 }
