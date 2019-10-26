@@ -12,11 +12,11 @@ import java.util.Random;
  */
 public class VerifyCodeUtil {
     private static final String VERIFY_CODES = "23456789abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ";
-    private static Random random = new Random();
+    private static final int NUMBER_OF_INTERFERING_LINE = 30;
+    private static final int NUMBER_OF_CHAR_LENGTH = 4;
 
     public static ImageIcon createVerifyCode(int width, int height) {
-        int numberOfInterferingLine = 30;
-        int numberOfCharLength = 4;
+        Random random = new Random();
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         Graphics graphics = image.getGraphics();
         //背景填充为白色
@@ -26,20 +26,20 @@ public class VerifyCodeUtil {
         Font font = new Font(ViewUtil.getSupportedFont().get(random.nextInt(ViewUtil.getSupportedFont().size())), Font.BOLD, height / 2);
         graphics.setFont(font);
         //生成干扰线
-        for (int i = 0; i < numberOfInterferingLine; i++) {
+        for (int i = 0; i < NUMBER_OF_INTERFERING_LINE; i++) {
+            // 产生随机的颜色分量来构造颜色值
             graphics.setColor(new Color(random.nextInt(255), random.nextInt(255), random.nextInt(255)));
             int x = random.nextInt(width);
             int y = random.nextInt(height);
-            int xl = random.nextInt(10);
-            int yl = random.nextInt(10);
+            int xl = random.nextInt(40) - 20;
+            int yl = random.nextInt(40) - 20;
             graphics.drawLine(x, y, xl + x, yl + y);
         }
         StringBuilder verifyCode = new StringBuilder();
-        for (int i = 0; i < numberOfCharLength; i++) {
+        for (int i = 0; i < NUMBER_OF_CHAR_LENGTH; i++) {
             char c = VERIFY_CODES.charAt(random.nextInt(VERIFY_CODES.length()));
             // 得到随机产生的验证码数字。
             verifyCode.append(c);
-            // 产生随机的颜色分量来构造颜色值，这样输出的每位数字的颜色值都将不同。
             graphics.setColor(new Color(random.nextInt(255), random.nextInt(255), random.nextInt(255)));
             graphics.drawString(String.valueOf(c), i * width / 4, random.nextInt(height / 2) + height / 2);
         }
