@@ -22,15 +22,18 @@ public class AddRecordPanel extends JPanel {
     public AddRecordPanel() {
         setLayout(new BorderLayout());
         check.addActionListener((e) -> {
-            RecordService recordService = new RecordService();
-            String goodId = showGoodPanel.getSelectedRow();
-            String vipId = showVipPanel.getSelectedRow();
-            try {
-                recordService.addRecord(goodId, vipId);
-                JOptionPane.showMessageDialog(AddRecordPanel.this, "添加成功", "添加成功", JOptionPane.INFORMATION_MESSAGE);
-                init();
-            } catch (WrongDataException ex) {
-                JOptionPane.showMessageDialog(AddRecordPanel.this, ex.getMessage(), "添加失败", JOptionPane.INFORMATION_MESSAGE);
+            int a = JOptionPane.showConfirmDialog(AddRecordPanel.this, "是否添加该记录");
+            if (a == JOptionPane.YES_OPTION) {
+                RecordService recordService = new RecordService();
+                String goodId = showGoodPanel.getSelectedRow();
+                String vipId = showVipPanel.getSelectedRow();
+                try {
+                    recordService.addRecord(goodId, vipId);
+                    JOptionPane.showMessageDialog(AddRecordPanel.this, "添加成功", "添加成功", JOptionPane.INFORMATION_MESSAGE);
+                    init();
+                } catch (WrongDataException ex) {
+                    JOptionPane.showMessageDialog(AddRecordPanel.this, ex.getMessage(), "添加失败", JOptionPane.INFORMATION_MESSAGE);
+                }
             }
         });
         init();

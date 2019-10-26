@@ -27,6 +27,8 @@ public class SearchBar extends WebPanel {
             add(map.get(item));
         }
         add(search);
+        //快捷键
+        search.addHotkey(10);
     }
 
     /**

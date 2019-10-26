@@ -24,19 +24,22 @@ public class AddVipPanel extends JPanel {
 
     public AddVipPanel() {
         button.addActionListener((e) -> {
-            VipService vipService = new VipService();
-            String id = idInputPanel.getText();
-            String name = nameInputPanel.getText();
-            String sex = sexInputPanel.getSelect();
-            String phone = phoneInputPanel.getText();
-            String address = addressInputPanel.getText();
-            String postcode = postcodeInputPanel.getText();
-            try {
-                vipService.addVip(id, name, sex, phone, address, postcode);
-                JOptionPane.showMessageDialog(AddVipPanel.this, "添加成功", "添加成功", JOptionPane.INFORMATION_MESSAGE);
-                init();
-            } catch (WrongDataException ex) {
-                JOptionPane.showMessageDialog(AddVipPanel.this, ex.getMessage(), "添加失败", JOptionPane.INFORMATION_MESSAGE);
+            int a = JOptionPane.showConfirmDialog(AddVipPanel.this, "是否添加该VIP");
+            if (a == JOptionPane.YES_OPTION) {
+                VipService vipService = new VipService();
+                String id = idInputPanel.getText();
+                String name = nameInputPanel.getText();
+                String sex = sexInputPanel.getSelect();
+                String phone = phoneInputPanel.getText();
+                String address = addressInputPanel.getText();
+                String postcode = postcodeInputPanel.getText();
+                try {
+                    vipService.addVip(id, name, sex, phone, address, postcode);
+                    JOptionPane.showMessageDialog(AddVipPanel.this, "添加成功", "添加成功", JOptionPane.INFORMATION_MESSAGE);
+                    init();
+                } catch (WrongDataException ex) {
+                    JOptionPane.showMessageDialog(AddVipPanel.this, ex.getMessage(), "添加失败", JOptionPane.INFORMATION_MESSAGE);
+                }
             }
         });
         init();

@@ -54,30 +54,36 @@ class UpdateVipPanel extends JPanel {
 
         //添加事件
         checkButton.addActionListener((e) -> {
-            String name = nameInputPanel.getText();
-            String sex = sexInputPanel.getSelect();
-            String phone = phoneInputPanel.getText();
-            String address = addressInputPanel.getText();
-            String postcode = postcodeInputPanel.getText();
-            try {
-                vipService.updateVip(id, name, sex, phone, address, postcode);
-                JOptionPane.showMessageDialog(UpdateVipPanel.this, "修改成功", "修改成功", JOptionPane.INFORMATION_MESSAGE);
+            int a = JOptionPane.showConfirmDialog(UpdateVipPanel.this, "是否修改该VIP");
+            if (a == JOptionPane.YES_OPTION) {
+                String name = nameInputPanel.getText();
+                String sex = sexInputPanel.getSelect();
+                String phone = phoneInputPanel.getText();
+                String address = addressInputPanel.getText();
+                String postcode = postcodeInputPanel.getText();
+                try {
+                    vipService.updateVip(id, name, sex, phone, address, postcode);
+                    JOptionPane.showMessageDialog(UpdateVipPanel.this, "修改成功", "修改成功", JOptionPane.INFORMATION_MESSAGE);
+                    removeAll();
+                    setLayout(new BorderLayout());
+                    add(new ShowVipPanel());
+                    repaint();
+                    setVisible(true);
+                } catch (WrongDataException ex) {
+                    JOptionPane.showMessageDialog(UpdateVipPanel.this, ex.getMessage(), "修改失败", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+        });
+        deleteButton.addActionListener((e) -> {
+            int a = JOptionPane.showConfirmDialog(UpdateVipPanel.this, "是否删除该VIP");
+            if (a == JOptionPane.YES_OPTION) {
+                vipService.deleteVipById(id);
                 removeAll();
                 setLayout(new BorderLayout());
                 add(new ShowVipPanel());
                 repaint();
                 setVisible(true);
-            } catch (WrongDataException ex) {
-                JOptionPane.showMessageDialog(UpdateVipPanel.this, ex.getMessage(), "修改失败", JOptionPane.INFORMATION_MESSAGE);
             }
-        });
-        deleteButton.addActionListener((e) -> {
-            vipService.deleteVipById(id);
-            removeAll();
-            setLayout(new BorderLayout());
-            add(new ShowVipPanel());
-            repaint();
-            setVisible(true);
         });
     }
 }

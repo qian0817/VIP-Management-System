@@ -71,31 +71,37 @@ class UpdateGoodPanel extends JPanel {
 
         //添加事件
         deleteButton.addActionListener((e) -> {
-            goodService.deleteGoodById(id);
-            removeAll();
-            setLayout(new BorderLayout());
-            add(new ShowGoodPanel());
-            repaint();
-            setVisible(true);
-        });
-        checkButton.addActionListener((e) -> {
-            String name = nameInputPanel.getText();
-            String maker = makerInputPanel.getText();
-            String price = priceInputPanel.getText();
-            Double discount = discountInputPanel.getSelect();
-            String remain = remainInputPanel.getText();
-            String introduction = introductionInputPanel.getText();
-            String remark = remarkInputPanel.getText();
-            try {
-                goodService.updateGood(id, name, maker, price, discount, remain, introduction, remark);
-                JOptionPane.showMessageDialog(UpdateGoodPanel.this, "修改成功", "修改成功", JOptionPane.INFORMATION_MESSAGE);
+            int a = JOptionPane.showConfirmDialog(UpdateGoodPanel.this, "是否删除该商品");
+            if (a == JOptionPane.YES_OPTION) {
+                goodService.deleteGoodById(id);
                 removeAll();
                 setLayout(new BorderLayout());
                 add(new ShowGoodPanel());
                 repaint();
                 setVisible(true);
-            } catch (WrongDataException ex) {
-                JOptionPane.showMessageDialog(UpdateGoodPanel.this, ex.getMessage(), "修改失败", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+        checkButton.addActionListener((e) -> {
+            int a = JOptionPane.showConfirmDialog(UpdateGoodPanel.this, "是否修改该商品");
+            if (a == JOptionPane.YES_OPTION) {
+                String name = nameInputPanel.getText();
+                String maker = makerInputPanel.getText();
+                String price = priceInputPanel.getText();
+                Double discount = discountInputPanel.getSelect();
+                String remain = remainInputPanel.getText();
+                String introduction = introductionInputPanel.getText();
+                String remark = remarkInputPanel.getText();
+                try {
+                    goodService.updateGood(id, name, maker, price, discount, remain, introduction, remark);
+                    JOptionPane.showMessageDialog(UpdateGoodPanel.this, "修改成功", "修改成功", JOptionPane.INFORMATION_MESSAGE);
+                    removeAll();
+                    setLayout(new BorderLayout());
+                    add(new ShowGoodPanel());
+                    repaint();
+                    setVisible(true);
+                } catch (WrongDataException ex) {
+                    JOptionPane.showMessageDialog(UpdateGoodPanel.this, ex.getMessage(), "修改失败", JOptionPane.INFORMATION_MESSAGE);
+                }
             }
         });
     }

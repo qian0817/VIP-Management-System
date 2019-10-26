@@ -36,23 +36,27 @@ public class AddGoodPanel extends JPanel {
         }
         discountInputPanel = new ComboPanel<>("折扣", doubleList);
         button.addActionListener((e) -> {
-            GoodService goodService = new GoodService();
-            String id = idInputPanel.getText();
-            String name = nameInputPanel.getText();
-            String maker = makerInputPanel.getText();
-            String price = priceInputPanel.getText();
-            Double discount = discountInputPanel.getSelect();
-            String remain = remainInputPanel.getText();
-            String introduction = introductionInputPanel.getText();
-            String remark = remarkInputPanel.getText();
-            Date createTime = dateChoosePanel.getSelectDate();
-            try {
-                goodService.addGood(id, name, maker, createTime, price, discount, remain, introduction, remark);
-                JOptionPane.showMessageDialog(AddGoodPanel.this, "添加成功", "添加成功", JOptionPane.INFORMATION_MESSAGE);
-                init();
-            } catch (WrongDataException ex) {
-                JOptionPane.showMessageDialog(AddGoodPanel.this, ex.getMessage(), "添加失败", JOptionPane.INFORMATION_MESSAGE);
+            int a = JOptionPane.showConfirmDialog(AddGoodPanel.this, "是否添加该商品");
+            if (a == JOptionPane.YES_OPTION) {
+                GoodService goodService = new GoodService();
+                String id = idInputPanel.getText();
+                String name = nameInputPanel.getText();
+                String maker = makerInputPanel.getText();
+                String price = priceInputPanel.getText();
+                Double discount = discountInputPanel.getSelect();
+                String remain = remainInputPanel.getText();
+                String introduction = introductionInputPanel.getText();
+                String remark = remarkInputPanel.getText();
+                Date createTime = dateChoosePanel.getSelectDate();
+                try {
+                    goodService.addGood(id, name, maker, createTime, price, discount, remain, introduction, remark);
+                    JOptionPane.showMessageDialog(AddGoodPanel.this, "添加成功", "添加成功", JOptionPane.INFORMATION_MESSAGE);
+                    init();
+                } catch (WrongDataException ex) {
+                    JOptionPane.showMessageDialog(AddGoodPanel.this, ex.getMessage(), "添加失败", JOptionPane.INFORMATION_MESSAGE);
+                }
             }
+
         });
         init();
     }
