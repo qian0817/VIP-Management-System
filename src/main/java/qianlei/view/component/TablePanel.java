@@ -4,7 +4,6 @@ import qianlei.utils.ViewUtil;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.MouseListener;
 
@@ -14,7 +13,6 @@ import java.awt.event.MouseListener;
 public class TablePanel extends JPanel {
     private JTable table;
     private Object[][] data;
-
     public TablePanel(Object[][] data, Object[] columnNames) {
         setLayout(new BorderLayout());
         init(data, columnNames);
@@ -31,9 +29,6 @@ public class TablePanel extends JPanel {
         this.data = data;
         ExtendTableModel model = new ExtendTableModel(data, columnNames);
         table = new JTable(model);
-        //排序
-        RowSorter<ExtendTableModel> sorter = new TableRowSorter<>(model);
-        table.setRowSorter(sorter);
         table.setRowHeight(ViewUtil.getCurFont().getSize() * 2);
         JScrollPane scrollPane = new JScrollPane(table);
         table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
