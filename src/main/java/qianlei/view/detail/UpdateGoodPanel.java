@@ -32,9 +32,10 @@ class UpdateGoodPanel extends JPanel {
         GoodService goodService = new GoodService();
         JButton checkButton = new JButton("确认");
         JButton deleteButton = new JButton("删除");
+
         //各组件初始化
         Good good = goodService.getGoodById(id);
-        setLayout(new GridLayout(19, 1));
+        setLayout(new GridLayout(20, 1));
         idInputPanel.setText(good.getId());
         idInputPanel.setEditable(false);
         nameInputPanel.setText(good.getName());
@@ -47,9 +48,8 @@ class UpdateGoodPanel extends JPanel {
         JPanel panel = new JPanel(new FlowLayout());
         panel.add(checkButton);
         panel.add(deleteButton);
-        //添加组件
+
         add(new JLabel("商品信息修改", JLabel.CENTER));
-        add(new JLabel());
         add(idInputPanel);
         add(new JLabel());
         add(nameInputPanel);
@@ -67,6 +67,8 @@ class UpdateGoodPanel extends JPanel {
         add(remarkInputPanel);
         add(new JLabel());
         add(panel);
+        add(new JLabel());
+
         //添加事件
         deleteButton.addActionListener((e) -> {
             goodService.deleteGoodById(id);

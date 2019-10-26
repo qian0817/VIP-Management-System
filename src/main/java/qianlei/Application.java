@@ -11,8 +11,6 @@ import qianlei.view.LoginFrame;
 
 import java.util.Date;
 
-import javax.swing.*;
-
 /**
  * 启动类
  *
