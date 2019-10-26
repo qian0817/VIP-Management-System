@@ -108,6 +108,7 @@ public class VipDao {
 
     /**
      * 删除指定id的VIP
+     *
      * @param id id
      */
     public void deleteById(String id) {
@@ -125,6 +126,7 @@ public class VipDao {
 
     /**
      * 修改VIP信息
+     *
      * @param vip 修改后的vip
      */
     public void updateVip(Vip vip) {

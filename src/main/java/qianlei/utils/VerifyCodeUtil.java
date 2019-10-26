@@ -15,6 +15,8 @@ public class VerifyCodeUtil {
     private static Random random = new Random();
 
     public static ImageIcon createVerifyCode(int width, int height) {
+        int numberOfInterferingLine = 30;
+        int numberOfCharLength = 4;
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         Graphics graphics = image.getGraphics();
         //背景填充为白色
@@ -24,7 +26,7 @@ public class VerifyCodeUtil {
         Font font = new Font(ViewUtil.getSupportedFont().get(random.nextInt(ViewUtil.getSupportedFont().size())), Font.BOLD, height / 2);
         graphics.setFont(font);
         //生成干扰线
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < numberOfInterferingLine; i++) {
             graphics.setColor(new Color(random.nextInt(255), random.nextInt(255), random.nextInt(255)));
             int x = random.nextInt(width);
             int y = random.nextInt(height);
@@ -33,7 +35,7 @@ public class VerifyCodeUtil {
             graphics.drawLine(x, y, xl + x, yl + y);
         }
         StringBuilder verifyCode = new StringBuilder();
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < numberOfCharLength; i++) {
             char c = VERIFY_CODES.charAt(random.nextInt(VERIFY_CODES.length()));
             // 得到随机产生的验证码数字。
             verifyCode.append(c);

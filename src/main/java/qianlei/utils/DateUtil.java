@@ -1,5 +1,10 @@
 package qianlei.utils;
 
+/**
+ * 日期工具类
+ *
+ * @author qianlei
+ */
 public class DateUtil {
     public static int getDayOfMonth(int year, int month) {
         switch (month) {
@@ -18,7 +23,8 @@ public class DateUtil {
                 return 30;
             case 2:
                 return (year % 100 != 0 && year % 4 == 0) || (year % 400 == 0) ? 29 : 28;
+            default:
+                return -1;
         }
-        return -1;
     }
 }

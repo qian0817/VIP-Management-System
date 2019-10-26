@@ -10,6 +10,8 @@ import java.util.Date;
  * @author qianlei
  */
 public class Vip {
+    public static String man = "男";
+    public static String woman = "女";
     private String id;
     private String name;
     private String sex;

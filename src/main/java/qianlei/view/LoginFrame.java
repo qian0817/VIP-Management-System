@@ -17,23 +17,11 @@ import java.awt.*;
  */
 public class LoginFrame extends JFrame {
     public LoginFrame() {
-        setIconImage(new SvgIcon(getClass().getClassLoader().getResource("icon/icon.svg")).asBufferedImage());
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new GridLayout(8, 1));
-        setTitle("登录界面");
-        add(new JLabel());
-        add(new JLabel("VIP管理系统", JLabel.CENTER));
-        add(new JLabel());
-
         InputPanel usernameInputPanel = new InputPanel("用户名", "请输入用户名");
-        add(usernameInputPanel);
-        add(new JLabel());
-
         PasswordPanel passwordInputPanel = new PasswordPanel("密码", "请输入密码");
-        add(passwordInputPanel);
-        add(new JLabel());
         JPanel loginAndRegister = new JPanel();
         WebButton loginButton = new WebButton("登录");
+        JButton registerButton = new JButton("注册");
         loginButton.addHotkey(10);
         loginButton.addActionListener((e) -> {
             UserService userService = new UserService();
@@ -49,8 +37,20 @@ public class LoginFrame extends JFrame {
                 LoginFrame.this.dispose();
             }
         });
-        JButton registerButton = new JButton("注册");
         registerButton.addActionListener((e) -> new RegisterFrame().setVisible(true));
+
+        setIconImage(new SvgIcon(getClass().getClassLoader().getResource("icon/icon.svg")).asBufferedImage());
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new GridLayout(8, 1));
+        setTitle("登录界面");
+        //添加到界面
+        add(new JLabel());
+        add(new JLabel("VIP管理系统", JLabel.CENTER));
+        add(new JLabel());
+        add(usernameInputPanel);
+        add(new JLabel());
+        add(passwordInputPanel);
+        add(new JLabel());
         loginAndRegister.add(loginButton);
         loginAndRegister.add(registerButton);
         loginAndRegister.setLayout(new FlowLayout());

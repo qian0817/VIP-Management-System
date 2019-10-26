@@ -19,6 +19,7 @@ public class AddRecordPanel extends JPanel {
     private JButton check = new JButton("确认");
     private JLabel showChooseGoodLabel = new JLabel("请选择商品", JLabel.CENTER);
     private JLabel showChooseVipLabel = new JLabel("请选择VIP用户", JLabel.CENTER);
+
     public AddRecordPanel() {
         setLayout(new BorderLayout());
         check.addActionListener((e) -> {

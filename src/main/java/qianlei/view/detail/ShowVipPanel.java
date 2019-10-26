@@ -26,7 +26,9 @@ public class ShowVipPanel extends JPanel {
     private MouseListener mouseListener = new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
-            if (e.getClickCount() >= 2) {
+            //双击
+            int needClickNumber = 2;
+            if (e.getClickCount() >= needClickNumber) {
                 String id = (String) tablePanel.getRowByIndex(e.getPoint(), 0);
                 removeAll();
                 add(new UpdateVipPanel(id));
@@ -67,12 +69,22 @@ public class ShowVipPanel extends JPanel {
         setVisible(true);
     }
 
+    /**
+     * 修改默认的动作
+     *
+     * @param adapter 修改后的动作
+     */
     void changeMouseListener(MouseListener adapter) {
         tablePanel.removeMouseListener(mouseListener);
         mouseListener = adapter;
         tablePanel.addMouseListener(adapter);
     }
 
+    /**
+     * 获取选中的id
+     *
+     * @return 选中的id
+     */
     String getSelectedRow() {
         return (String) tablePanel.getSelectedId();
     }

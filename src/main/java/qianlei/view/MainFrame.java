@@ -31,7 +31,7 @@ public class MainFrame extends JFrame implements ItemListener {
     private JPanel topPanel = new JPanel();
     private WebComboBox fontFamilyChoosePanel = new WebComboBox(StyleId.comboboxUndecorated, ViewUtil.getSupportedFont(), ViewUtil.getCurConfig().getFont().getFontName());
     private WebComboBox fontSizeChoosePanel = new WebComboBox(StyleId.comboboxUndecorated, Arrays.asList(8, 9, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 36, 48), (Integer) ViewUtil.getCurConfig().getFont().getSize());
-    private WebComboBox styleChoosePanel = new WebComboBox(StyleId.comboboxUndecorated, Arrays.asList("亮色主题", "暗色主题"));
+    private WebComboBox styleChoosePanel = new WebComboBox(StyleId.comboboxUndecorated, Arrays.asList(ViewUtil.lightSkin, ViewUtil.darkSkin));
     private WebButton minButton = new WebButton(StyleId.buttonHover, new SvgIcon(getClass().getClassLoader().getResource("icon/min.svg")));
     private WebButton closeButton = new WebButton(StyleId.buttonHover, new SvgIcon(getClass().getClassLoader().getResource("icon/close.svg")));
     private WebLabel titleLabel = new WebLabel("VIP信息管理系统", JLabel.CENTER);
@@ -189,8 +189,9 @@ public class MainFrame extends JFrame implements ItemListener {
                                 BufferedInputStream inputStream = new BufferedInputStream(Objects.requireNonNull(html));
                                 BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream("help.html"))
                         ) {
-                            byte[] bytes = new byte[1024];
-                            while (inputStream.read(bytes) == 1024) {
+                            int onceGetBytes = 1024;
+                            byte[] bytes = new byte[onceGetBytes];
+                            while (inputStream.read(bytes) == onceGetBytes) {
                                 outputStream.write(bytes);
                             }
                             URI uri = new URI("help.html");

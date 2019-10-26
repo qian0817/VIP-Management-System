@@ -17,8 +17,9 @@ import java.util.List;
 class UpdateGoodPanel extends JPanel {
     UpdateGoodPanel(String id) {
         List<Double> doubleList = new LinkedList<>();
-        for (int i = 100; i > 0; i--) {
-            doubleList.add(i / 100.0);
+        double discountGap = 0.01;
+        for (double i = 1; i > 0; i -= discountGap) {
+            doubleList.add(i);
         }
         //各组件定义
         InputPanel idInputPanel = new InputPanel("商品编号", "请输入商品编号");

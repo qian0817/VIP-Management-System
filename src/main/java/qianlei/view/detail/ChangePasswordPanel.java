@@ -18,6 +18,7 @@ public class ChangePasswordPanel extends JPanel {
     private UserService userService = new UserService();
     private PasswordPanel recheckPasswordPanel = new PasswordPanel("确认密码", "请再次填写密码");
     private VerifyCodePanel verifyCodePanel = new VerifyCodePanel();
+
     public ChangePasswordPanel() {
         setLayout(new GridLayout(11, 1));
         InputPanel nameInputPanel = new InputPanel("用户名", "");

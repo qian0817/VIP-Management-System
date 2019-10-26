@@ -27,7 +27,9 @@ public class ShowGoodPanel extends JPanel {
     private MouseListener mouseListener = new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
-            if (e.getClickCount() >= 2) {
+            //是否双击
+            int needClickNumber = 2;
+            if (e.getClickCount() >= needClickNumber) {
                 String id = (String) tablePanel.getRowByIndex(e.getPoint(), 0);
                 removeAll();
                 add(new UpdateGoodPanel(id));

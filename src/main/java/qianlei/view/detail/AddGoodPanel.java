@@ -31,8 +31,8 @@ public class AddGoodPanel extends JPanel {
     private DateChoosePanel dateChoosePanel = new DateChoosePanel("生产日期");
 
     public AddGoodPanel() {
-        for (int i = 100; i > 0; i--) {
-            doubleList.add(i / 100.0);
+        for (double i = 100; i > 0; i--) {
+            doubleList.add(i * 1.0 / 100);
         }
         discountInputPanel = new ComboPanel<>("折扣", doubleList);
         button.addActionListener((e) -> {

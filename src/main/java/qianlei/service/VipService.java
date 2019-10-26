@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  */
 public class VipService {
     private VipDao vipDao = new VipDao();
-
+    private static final int POSTCODE_LENGTH = 6;
     /**
      * 添加VIP
      *
@@ -36,7 +36,7 @@ public class VipService {
         if (!StringUtil.isBigInteger(phone)) {
             throw new WrongDataException("电话号码" + phone + "只能包含数字");
         }
-        if (!StringUtil.isBigInteger(postcode) || postcode.length() != 6) {
+        if (!StringUtil.isBigInteger(postcode) || postcode.length() != POSTCODE_LENGTH) {
             throw new WrongDataException("邮编" + postcode + "只能包含数字且只有6位");
         }
         if (vipDao.selectVipById(id) != null) {
@@ -81,16 +81,17 @@ public class VipService {
 
     /**
      * 修改VIP
-     * @param id 要修改的vip的id
-     * @param name 修改后的名称
-     * @param sex 修改后的性别
-     * @param phone 修改后的电话号码
-     * @param address 修改后的地址
+     *
+     * @param id       要修改的vip的id
+     * @param name     修改后的名称
+     * @param sex      修改后的性别
+     * @param phone    修改后的电话号码
+     * @param address  修改后的地址
      * @param postcode 修改后的邮编
      * @throws WrongDataException 输入的数据错误
      */
     public void updateVip(String id, String name, String sex, String phone, String address, String postcode) throws WrongDataException {
-        if (StringUtil.isBigInteger(postcode) && postcode.length() != 6) {
+        if (StringUtil.isBigInteger(postcode) && postcode.length() != POSTCODE_LENGTH) {
             throw new WrongDataException("邮编" + postcode + "只能包含数字且只有6位");
         }
         Vip vip = new Vip(id, name, sex, phone, address, Integer.parseInt(postcode));

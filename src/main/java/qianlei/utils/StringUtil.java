@@ -47,6 +47,7 @@ public class StringUtil {
 
     /**
      * 判断字符串是否为正整数
+     *
      * @param s 需要判断的字符串
      * @return 是否为正整数
      */

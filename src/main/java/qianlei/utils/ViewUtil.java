@@ -18,7 +18,10 @@ import java.util.List;
  *
  * @author qianlei
  */
+@SuppressWarnings("AlibabaAvoidManuallyCreateThread")
 public class ViewUtil {
+    public static String darkSkin = "暗色模式";
+    public static String lightSkin = "亮色模式";
     private static Config curConfig;
 
     public static Config getCurConfig() {
@@ -68,19 +71,19 @@ public class ViewUtil {
      * @param skin 皮肤名称
      */
     public static void changeSkin(String skin) {
-        if ("暗色主题".equals(skin)) {
+        if (darkSkin.equals(skin)) {
             StyleManager.setSkin(new DarkSkin());
         } else {
             StyleManager.setSkin(new WebSkin());
-            skin = "暗色模式";
+            skin = "亮色模式";
         }
         curConfig.setSkin(skin);
         new Thread(ViewUtil::writeFontConfig).start();
-
     }
 
     /**
      * 修改字体
+     *
      * @param font 字体
      */
     public static void changeFont(Font font) {
@@ -89,6 +92,11 @@ public class ViewUtil {
         setViewFont(curConfig.getFont());
     }
 
+    /**
+     * 获取支持中文的字体
+     *
+     * @return 支持中文的字体的集合
+     */
     public static List<String> getSupportedFont() {
         List<String> ret = new LinkedList<>();
         String[] fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();

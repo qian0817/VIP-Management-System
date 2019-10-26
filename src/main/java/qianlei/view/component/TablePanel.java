@@ -13,6 +13,7 @@ import java.awt.event.MouseListener;
 public class TablePanel extends JPanel {
     private JTable table;
     private Object[][] data;
+
     public TablePanel(Object[][] data, Object[] columnNames) {
         setLayout(new BorderLayout());
         init(data, columnNames);

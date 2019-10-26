@@ -2,6 +2,7 @@ package qianlei.view.component;
 
 import com.alee.laf.button.WebToggleButton;
 import com.alee.laf.grouping.GroupPane;
+import qianlei.entity.Vip;
 import qianlei.utils.ViewUtil;
 
 import javax.swing.*;
@@ -44,7 +45,7 @@ public class SexChoosePanel extends JPanel {
      * @param s 修改后的性别
      */
     public void setSelect(String s) {
-        if ("男".equals(s)) {
+        if (Vip.man.equals(s)) {
             manButton.setSelected(true);
         } else {
             womanButton.setSelected(true);

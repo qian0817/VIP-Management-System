@@ -112,6 +112,7 @@ public class GoodDao {
 
     /**
      * 删除指定id的商品
+     *
      * @param id 指定id
      */
     public void deleteById(String id) {
@@ -129,6 +130,7 @@ public class GoodDao {
 
     /**
      * 修改商品
+     *
      * @param good 修改后的商品
      */
     public void updateGood(Good good) {

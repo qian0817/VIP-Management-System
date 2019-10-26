@@ -8,10 +8,16 @@ import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * 验证码组件
+ *
+ * @author qianlei
+ */
 public class VerifyCodePanel extends JPanel {
     private ImageIcon verifyCode;
     private WebTextField field = new WebTextField(20);
     private JLabel imageLabel = new JLabel();
+
     public VerifyCodePanel() {
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         JLabel label = new JLabel("验证码");
