@@ -9,15 +9,13 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class VerifyCodePanel extends JPanel {
-    private String verifyCode = VerifyCodeUtil.createVerifyCode();
+    private ImageIcon verifyCode;
     private WebTextField field = new WebTextField(20);
-    private ImageIcon image = new ImageIcon("verifyCode.png");
-    private JLabel imageLabel = new JLabel(image);
+    private JLabel imageLabel = new JLabel();
     public VerifyCodePanel() {
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         JLabel label = new JLabel("验证码");
         field.setInputPrompt("请输入验证码");
-        image.getImage().flush();
         //保证右对齐
         add(Box.createHorizontalStrut(ViewUtil.getCurFont().getSize() * 4));
         add(Box.createHorizontalStrut(ViewUtil.getCurFont().getSize()));
@@ -37,13 +35,14 @@ public class VerifyCodePanel extends JPanel {
     }
 
     public boolean isVerifyCodeWrong() {
-        return !field.getText().equalsIgnoreCase(verifyCode);
+        return !field.getText().equalsIgnoreCase(verifyCode.getDescription());
     }
 
     private void changeVerifyCode() {
-        verifyCode = VerifyCodeUtil.createVerifyCode();
+        verifyCode = VerifyCodeUtil.createVerifyCode(ViewUtil.getCurFont().getSize() * 6, 50);
         VerifyCodePanel.this.remove(imageLabel);
-        image.getImage().flush();
+        verifyCode.getImage().flush();
+        imageLabel.setIcon(verifyCode);
         VerifyCodePanel.this.add(imageLabel, 5);
         imageLabel.repaint();
         VerifyCodePanel.this.updateUI();

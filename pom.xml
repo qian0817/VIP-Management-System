@@ -40,13 +40,6 @@
             <version>5.5.2</version>
             <scope>test</scope>
         </dependency>
-        <!--验证码-->
-        <!-- https://mvnrepository.com/artifact/com.github.whvcse/easy-captcha -->
-        <dependency>
-            <groupId>com.github.whvcse</groupId>
-            <artifactId>easy-captcha</artifactId>
-            <version>1.6.2</version>
-        </dependency>
     </dependencies>
     <build>
         <plugins>
