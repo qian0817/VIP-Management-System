@@ -7,8 +7,8 @@ import qianlei.exception.WrongDataException;
 import qianlei.utils.StringUtil;
 
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * vip的service层
@@ -56,14 +56,8 @@ public class VipService {
      */
     public List<Vip> getAllNormalVipByIdAndNameAndPhone(String id, String name, String phone) {
         List<Vip> vipList = vipDao.selectAll();
-        List<Vip> ans = new LinkedList<>();
-        for (Vip vip : vipList) {
-            if (vip.getStatus().getId() == StatusEnum.Normal.getId() && vip.getId().contains(id)
-                    && vip.getName().contains(name) && vip.getPhone().contains(phone)) {
-                ans.add(vip);
-            }
-        }
-        return ans;
+        return vipList.stream().filter((vip -> vip.getStatus().getId() == StatusEnum.Normal.getId() && vip.getId().contains(id)
+                && vip.getName().contains(name) && vip.getPhone().contains(phone))).collect(Collectors.toList());
     }
 
     /**

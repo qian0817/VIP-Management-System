@@ -8,8 +8,8 @@ import qianlei.exception.WrongDataException;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 记录的service层
@@ -19,6 +19,7 @@ import java.util.List;
 public class RecordService {
     private RecordDao recordDao = new RecordDao();
     private GoodDao goodDao = new GoodDao();
+
     /**
      * 根据用户id姓名和电话号码模糊查询记录
      *
@@ -29,13 +30,9 @@ public class RecordService {
      */
     public List<Record> getAllRecordByIdAndName(String id, String name, String phone) {
         List<Record> recordList = recordDao.selectAllRecord();
-        List<Record> ans = new LinkedList<>();
-        for (Record record : recordList) {
-            if (record.getVip().getId().contains(id) && record.getVip().getName().contains(name) && record.getVip().getPhone().contains(phone)) {
-                ans.add(record);
-            }
-        }
-        return ans;
+        return recordList.stream()
+                .filter((record -> record.getVip().getId().contains(id) && record.getVip().getName().contains(name) && record.getVip().getPhone().contains(phone)))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -57,7 +54,7 @@ public class RecordService {
         record.setGoodId(goodId);
         record.setCreateTime(new Date());
         Good good = goodDao.selectGoodById(goodId);
-        record.setPrice(BigDecimal.valueOf(good.getDiscount() * good.getPrice().doubleValue()));
+        record.setPrice(new BigDecimal(String.format("%.2f", good.getDiscount() * good.getPrice().doubleValue())));
         recordDao.addRecord(record);
     }
 }

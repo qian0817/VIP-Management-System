@@ -1,7 +1,7 @@
 package qianlei.exception;
 
 /**
- * service的数据错误
+ * 输入的数据错误
  *
  * @author qianlei
  */

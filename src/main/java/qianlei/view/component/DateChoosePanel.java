@@ -16,6 +16,7 @@ public class DateChoosePanel extends JPanel {
     private WebDateField webDateField = new WebDateField();
     public DateChoosePanel(String title) {
         webDateField.setDateFormat(new SimpleDateFormat("yyyy年MM月dd日"));
+        webDateField.setAllowUserInput(false);
         webDateField.setDate(new Date());
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         add(Box.createHorizontalStrut(ViewUtil.getCurFont().getSize() * 4));

@@ -22,7 +22,7 @@ public class LoginFrame extends JFrame {
         setLayout(new GridLayout(8, 1));
         setTitle("登录界面");
         add(new JLabel());
-        add(new JLabel("登陆界面", JLabel.CENTER));
+        add(new JLabel("VIP管理系统", JLabel.CENTER));
         add(new JLabel());
 
         InputPanel usernameInputPanel = new InputPanel("用户名", "请输入用户名");
@@ -44,8 +44,6 @@ public class LoginFrame extends JFrame {
             if (user == null) {
                 JOptionPane.showMessageDialog(LoginFrame.this, "用户名或密码错误", "登陆失败", JOptionPane.INFORMATION_MESSAGE);
             } else {
-                JOptionPane.showMessageDialog(LoginFrame.this, "登陆成功", "登陆成功", JOptionPane.INFORMATION_MESSAGE);
-
                 userService.setCurUser(user);
                 new MainFrame().setVisible(true);
                 LoginFrame.this.dispose();

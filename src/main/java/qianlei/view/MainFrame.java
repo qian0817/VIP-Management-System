@@ -1,8 +1,10 @@
 package qianlei.view;
 
+import com.alee.extended.image.WebImage;
 import com.alee.extended.svg.SvgIcon;
 import com.alee.laf.button.WebButton;
 import com.alee.laf.combobox.WebComboBox;
+import com.alee.laf.label.WebLabel;
 import com.alee.managers.style.StyleId;
 import com.alee.managers.style.StyleManager;
 import com.alee.skin.dark.DarkSkin;
@@ -30,19 +32,22 @@ import java.util.Objects;
 public class MainFrame extends JFrame implements ItemListener {
     private DetailPanel detailPanel = new DetailPanel();
     private JPanel setFontPanel = new JPanel();
-    private WebComboBox fontFamilyChoosePanel = new WebComboBox(ViewUtil.getSupportedFont(), ViewUtil.getCurFont().getFontName());
-    private WebComboBox fontSizeChoosePanel = new WebComboBox(Arrays.asList(8, 9, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 36, 48), (Integer) ViewUtil.getCurFont().getSize());
-    private WebComboBox styleChoosePanel = new WebComboBox(Arrays.asList("亮色主题", "黑色主题"));
+    private WebComboBox fontFamilyChoosePanel = new WebComboBox(StyleId.comboboxUndecorated, ViewUtil.getSupportedFont(), ViewUtil.getCurFont().getFontName());
+    private WebComboBox fontSizeChoosePanel = new WebComboBox(StyleId.comboboxUndecorated, Arrays.asList(8, 9, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 36, 48), (Integer) ViewUtil.getCurFont().getSize());
+    private WebComboBox styleChoosePanel = new WebComboBox(StyleId.comboboxUndecorated, Arrays.asList("亮色主题", "暗色主题"));
+    private WebButton minButton = new WebButton(StyleId.buttonHover, new SvgIcon(getClass().getClassLoader().getResource("icon/min.svg")));
+    private WebButton closeButton = new WebButton(StyleId.buttonHover, new SvgIcon(getClass().getClassLoader().getResource("icon/close.svg")));
+    private WebLabel titleLabel = new WebLabel("VIP信息管理系统", JLabel.CENTER);
 
     MainFrame() {
+        setUndecorated(true);
         setIconImage(new SvgIcon(getClass().getClassLoader().getResource("icon/icon.svg")).asBufferedImage());
-        setTitle("Vip管理系统");
+        setTitle("VIP管理系统");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setResizable(false);
         init();
-        fontFamilyChoosePanel.setStyleId(StyleId.comboboxUndecorated);
-        fontSizeChoosePanel.setStyleId(StyleId.comboboxUndecorated);
-        styleChoosePanel.setStyleId(StyleId.comboboxUndecorated);
         //设置字体标签
+        titleLabel.setForeground(Color.gray);
         styleChoosePanel.setSelectedItem("亮色主题");
         fontFamilyChoosePanel.addItemListener(this);
         fontSizeChoosePanel.addItemListener(this);
@@ -57,9 +62,10 @@ public class MainFrame extends JFrame implements ItemListener {
                     }
                 })
         );
-        pack();
+        minButton.addActionListener((e) -> MainFrame.this.setExtendedState(JFrame.ICONIFIED));
+        closeButton.addActionListener((e) -> MainFrame.this.dispose());
         //最大化
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setSize(Toolkit.getDefaultToolkit().getScreenSize());
     }
 
     public void init() {
@@ -68,17 +74,20 @@ public class MainFrame extends JFrame implements ItemListener {
         setLayout(new BorderLayout());
         container.add(new MenuPanel(), BorderLayout.WEST);
         detailPanel.change(new AddGoodPanel());
-        setFontPanel.setLayout(new GridLayout(1, 10));
+        setFontPanel.setLayout(new BoxLayout(setFontPanel, BoxLayout.X_AXIS));
         container.add(detailPanel);
+        setFontPanel.add(Box.createHorizontalStrut(10));
+        setFontPanel.add(new WebImage(new SvgIcon(getClass().getClassLoader().getResource("icon/icon.svg"))));
+        setFontPanel.add(Box.createHorizontalStrut(10));
         setFontPanel.add(fontFamilyChoosePanel);
         setFontPanel.add(fontSizeChoosePanel);
         setFontPanel.add(styleChoosePanel);
-        setFontPanel.add(new JLabel());
-        setFontPanel.add(new JLabel());
-        setFontPanel.add(new JLabel());
-        setFontPanel.add(new JLabel());
-        setFontPanel.add(new JLabel());
-        setFontPanel.add(new JLabel());
+        setFontPanel.add(Box.createHorizontalStrut(50));
+        setFontPanel.add(titleLabel);
+        setFontPanel.add(Box.createHorizontalStrut(1000));
+        setFontPanel.add(minButton);
+        setFontPanel.add(Box.createHorizontalStrut(20));
+        setFontPanel.add(closeButton);
         container.add(setFontPanel, BorderLayout.NORTH);
         repaint();
         setVisible(true);
@@ -117,15 +126,15 @@ public class MainFrame extends JFrame implements ItemListener {
 
     private class MenuPanel extends JPanel implements ActionListener {
         private int size = ViewUtil.getCurFont().getSize() * 2;
-        private WebButton addGoodButton = new WebButton("商品录入", new SvgIcon(getClass().getClassLoader().getResource("icon/add_good.svg"), size, size));
-        private WebButton showGoodButton = new WebButton("商品查询", new SvgIcon(getClass().getClassLoader().getResource("icon/show_good.svg"), size, size));
-        private WebButton addVipButton = new WebButton("VIP录入", new SvgIcon(getClass().getClassLoader().getResource("icon/add_vip.svg"), size, size));
-        private WebButton showVipButton = new WebButton("VIP查询", new SvgIcon(getClass().getClassLoader().getResource("icon/show_vip.svg"), size, size));
-        private WebButton addRecordButton = new WebButton("消费记录登记", new SvgIcon(getClass().getClassLoader().getResource("icon/add_record.svg"), size, size));
-        private WebButton showRecordButton = new WebButton("消费记录查询", new SvgIcon(getClass().getClassLoader().getResource("icon/show_record.svg"), size, size));
-        private WebButton managerButton = new WebButton("密码修改", new SvgIcon(getClass().getClassLoader().getResource("icon/password.svg"), size, size));
-        private WebButton helpButton = new WebButton("系统帮助", new SvgIcon(getClass().getClassLoader().getResource("icon/help.svg"), size, size));
-        private WebButton quitButton = new WebButton("退出登录", new SvgIcon(getClass().getClassLoader().getResource("icon/quit.svg"), size, size));
+        private WebButton addGoodButton = new WebButton(StyleId.buttonHover, "商品录入", new SvgIcon(getClass().getClassLoader().getResource("icon/add_good.svg"), size, size));
+        private WebButton showGoodButton = new WebButton(StyleId.buttonHover, "商品查询", new SvgIcon(getClass().getClassLoader().getResource("icon/show_good.svg"), size, size));
+        private WebButton addVipButton = new WebButton(StyleId.buttonHover, "VIP录入", new SvgIcon(getClass().getClassLoader().getResource("icon/add_vip.svg"), size, size));
+        private WebButton showVipButton = new WebButton(StyleId.buttonHover, "VIP查询", new SvgIcon(getClass().getClassLoader().getResource("icon/show_vip.svg"), size, size));
+        private WebButton addRecordButton = new WebButton(StyleId.buttonHover, "消费记录登记", new SvgIcon(getClass().getClassLoader().getResource("icon/add_record.svg"), size, size));
+        private WebButton showRecordButton = new WebButton(StyleId.buttonHover, "消费记录查询", new SvgIcon(getClass().getClassLoader().getResource("icon/show_record.svg"), size, size));
+        private WebButton managerButton = new WebButton(StyleId.buttonHover, "密码修改", new SvgIcon(getClass().getClassLoader().getResource("icon/password.svg"), size, size));
+        private WebButton helpButton = new WebButton(StyleId.buttonHover, "系统帮助", new SvgIcon(getClass().getClassLoader().getResource("icon/help.svg"), size, size));
+        private WebButton quitButton = new WebButton(StyleId.buttonHover, "退出登录", new SvgIcon(getClass().getClassLoader().getResource("icon/quit.svg"), size, size));
 
         MenuPanel() {
             setLayout(new GridLayout(9, 1));

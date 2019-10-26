@@ -17,10 +17,11 @@ class RegisterFrame extends JFrame {
     private PasswordPanel passwordInputPanel = new PasswordPanel("密码", "请输入密码");
     private PasswordPanel recheckPasswordInputPanel = new PasswordPanel("确认密码", "请再次填写密码");
     private WebButton registerButton = new WebButton("注册");
+
     RegisterFrame() {
         setIconImage(new SvgIcon(getClass().getClassLoader().getResource("icon/icon.svg")).asBufferedImage());
         setLayout(new GridLayout(12, 1));
-        setTitle("注册界面");
+        setTitle("注册注册");
         //注册事件
         registerButton.addActionListener((e) -> {
             UserService userService = new UserService();
@@ -34,7 +35,7 @@ class RegisterFrame extends JFrame {
             } else {
                 try {
                     userService.register(name, password);
-                    JOptionPane.showMessageDialog(RegisterFrame.this, "注册成功", "注册成功", JOptionPane.INFORMATION_MESSAGE);
+                    SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(RegisterFrame.this, "注册成功", "注册成功", JOptionPane.INFORMATION_MESSAGE));
                     RegisterFrame.this.dispose();
                 } catch (WrongDataException ex) {
                     JOptionPane.showMessageDialog(RegisterFrame.this, ex.getMessage(), "注册失败", JOptionPane.INFORMATION_MESSAGE);
@@ -48,7 +49,7 @@ class RegisterFrame extends JFrame {
         registerPanel.setLayout(new FlowLayout());
         //添加组件
         add(new JLabel());
-        add(new JLabel("注册界面", JLabel.CENTER));
+        add(new JLabel("用户注册", JLabel.CENTER));
         add(new JLabel());
         add(usernameInputPanel);
         add(new JLabel());

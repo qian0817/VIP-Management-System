@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +23,7 @@ public class ShowVipPanel extends JPanel {
     private SearchBar searchBar = new SearchBar(Arrays.asList("姓名", "证件号", "手机号"));
     private TablePanel tablePanel;
     private VipService vipService = new VipService();
-    private MouseAdapter mouseAdapter = new MouseAdapter() {
+    private MouseListener mouseListener = new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
             if (e.getClickCount() >= 2) {
@@ -61,13 +62,15 @@ public class ShowVipPanel extends JPanel {
         }
         tablePanel = new TablePanel(data, new String[]{"证件号", "姓名", "性别", "手机号码", "联系地址", "邮编", "创建时间"});
         add(tablePanel);
-        tablePanel.addMouseListener(mouseAdapter);
+        tablePanel.addMouseListener(mouseListener);
         repaint();
         setVisible(true);
     }
 
-    void removeMouseListener() {
-        tablePanel.removeMouseListener(mouseAdapter);
+    void changeMouseListener(MouseListener adapter) {
+        tablePanel.removeMouseListener(mouseListener);
+        mouseListener = adapter;
+        tablePanel.addMouseListener(adapter);
     }
 
     String getSelectedRow() {

@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +24,7 @@ public class ShowGoodPanel extends JPanel {
     private TablePanel tablePanel;
     private GoodService goodService = new GoodService();
 
-    private MouseAdapter mouseAdapter = new MouseAdapter() {
+    private MouseListener mouseListener = new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
             if (e.getClickCount() >= 2) {
@@ -63,13 +64,15 @@ public class ShowGoodPanel extends JPanel {
         }
         tablePanel = new TablePanel(data, new String[]{"编号", "名称", "制造商", "生产日期", "价格", "折扣率", "库存", "商品简介"});
         add(tablePanel);
-        tablePanel.addMouseListener(mouseAdapter);
+        tablePanel.addMouseListener(mouseListener);
         repaint();
         setVisible(true);
     }
 
-    void removeMouseListener() {
-        tablePanel.removeMouseListener(mouseAdapter);
+    void changeMouseListener(MouseListener listener) {
+        tablePanel.removeMouseListener(mouseListener);
+        mouseListener = listener;
+        tablePanel.addMouseListener(listener);
     }
 
     String getSelectedRow() {

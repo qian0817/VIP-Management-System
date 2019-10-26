@@ -8,8 +8,8 @@ import qianlei.utils.StringUtil;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 商品的service层
@@ -36,6 +36,9 @@ public class GoodService {
         if (StringUtil.containsBlank(id)) {
             throw new WrongDataException("id" + id + "不能包含空格");
         }
+        if ("".equals(name.trim())) {
+            throw new WrongDataException("name不能为空");
+        }
         if (StringUtil.isNotBigDecimal(price)) {
             throw new WrongDataException("价格：" + price + "格式错误");
         }
@@ -45,7 +48,7 @@ public class GoodService {
         if (goodDao.selectGoodById(id) != null) {
             throw new WrongDataException("id" + id + "已被注册");
         }
-        Good good = new Good(id, name, maker, createTime, new BigDecimal(price), discount, Long.parseLong(remain), introduction, remark, StatusEnum.Normal);
+        Good good = new Good(id, name, maker, createTime, new BigDecimal(String.format("%.2f", Double.valueOf(price))), discount, Long.parseLong(remain), introduction, remark, StatusEnum.Normal);
         goodDao.addGood(good);
     }
 
@@ -58,13 +61,9 @@ public class GoodService {
      */
     public List<Good> getAllNormalGoodByIdAndName(String id, String name) {
         List<Good> goodList = goodDao.selectAll();
-        List<Good> ans = new LinkedList<>();
-        for (Good good : goodList) {
-            if (good.getStatus().getId() == StatusEnum.Normal.getId() && good.getId().contains(id) && good.getName().contains(name)) {
-                ans.add(good);
-            }
-        }
-        return ans;
+        return goodList.stream()
+                .filter((good) -> good.getStatus().getId() == StatusEnum.Normal.getId() && good.getId().contains(id) && good.getName().contains(name))
+                .collect(Collectors.toList());
     }
 
     /**
