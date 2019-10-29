@@ -51,7 +51,7 @@ public class VipDao {
         try (
                 Connection connection = DaoUtil.getConnection();
                 PreparedStatement statement = connection.prepareStatement("SELECT name, sex, phone, address, postcode, " +
-                        "createtime, status FROM vip WHERE id = ?")
+                        "createtime, status FROM vip WHERE id = ? LIMIT 500")
         ) {
             statement.setString(1, id);
             resultSet = statement.executeQuery();
@@ -78,14 +78,19 @@ public class VipDao {
      *
      * @return 所有VIP
      */
-    public List<Vip> selectAll() {
+    public List<Vip> selectAllNormalVipByIdAndNameAndPhone(String getId, String getName, String getPhone) {
         ResultSet resultSet = null;
         List<Vip> vipList = new LinkedList<>();
         try (
                 Connection connection = DaoUtil.getConnection();
                 PreparedStatement statement = connection.prepareStatement("SELECT id,name, sex, phone, address, " +
-                        "postcode, createtime, status FROM vip")
+                        "postcode, createtime, status FROM vip " +
+                        "WHERE id LIKE ? AND name LIKE ? AND phone LIKE ?" +
+                        "LIMIT 500")
         ) {
+            statement.setString(1, "%" + getId + "%");
+            statement.setString(2, "%" + getName + "%");
+            statement.setString(3, "%" + getPhone + "%");
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 String id = resultSet.getString("id");

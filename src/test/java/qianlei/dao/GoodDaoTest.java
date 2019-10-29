@@ -36,8 +36,8 @@ class GoodDaoTest {
 
     @Order(4)
     @Test
-    void selectAll() {
-        Assertions.assertEquals(2, goodDao.selectAll().size());
+    void selectAllNormalByIdAndName() {
+        Assertions.assertEquals(2, goodDao.selectAllNormalByIdAndName("", "").size());
     }
 
     @Order(2)

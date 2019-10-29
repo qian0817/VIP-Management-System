@@ -19,7 +19,7 @@ public class TestCaseToMainDb {
         if (new File("main.db").exists()) {
             return;
         }
-        int n = 10000;
+        int n = 100000;
         GoodService goodService = new GoodService();
         RecordService recordService = new RecordService();
         VipService vipService = new VipService();
@@ -29,7 +29,6 @@ public class TestCaseToMainDb {
             for (int i = 1; i <= n; i++) {
                 goodService.addGood(String.valueOf(i), "测试商品" + i, "测试制造商" + i, new Date((long) (Math.random() * System.currentTimeMillis())),
                         String.valueOf(random.nextInt(10000)), Math.random() * 100000, String.valueOf(random.nextInt(100000)), "", "");
-                System.out.println(i);
             }
         });
         t1.start();
@@ -46,7 +45,6 @@ public class TestCaseToMainDb {
         Random random = new Random();
         for (int i = 1; i <= n; i++) {
             recordService.addRecord(String.valueOf(random.nextInt(n) + 1), String.valueOf(random.nextInt(n) + 1));
-            System.out.println(i);
         }
     }
 }

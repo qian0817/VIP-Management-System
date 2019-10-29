@@ -20,7 +20,7 @@ class RecordDaoTest {
     @Order(2)
     @Test
     void selectAllRecord() {
-        Assertions.assertEquals(recordDao.selectAllRecord().size(), 1);
+        Assertions.assertEquals(recordDao.selectAllRecordByIdAndNameAndPhone("", "", "").size(), 1);
     }
 
     @Order(1)

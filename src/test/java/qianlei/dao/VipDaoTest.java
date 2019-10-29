@@ -35,8 +35,8 @@ class VipDaoTest {
 
     @Order(5)
     @Test
-    void selectAll() {
-        Assertions.assertEquals(vipDao.selectAll().size(), 2);
+    void selectAllNormalVipByIdAndNameAndPhone() {
+        Assertions.assertEquals(vipDao.selectAllNormalVipByIdAndNameAndPhone("", "", "").size(), 2);
     }
 
     @Order(2)

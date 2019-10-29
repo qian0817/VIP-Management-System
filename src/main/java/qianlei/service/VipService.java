@@ -55,7 +55,7 @@ public class VipService {
      * @return 符合条件的vip
      */
     public List<Vip> getAllNormalVipByIdAndNameAndPhone(String id, String name, String phone) {
-        List<Vip> vipList = vipDao.selectAll();
+        List<Vip> vipList = vipDao.selectAllNormalVipByIdAndNameAndPhone(id, name, phone);
         return vipList.stream().filter((vip -> vip.getStatus().getId() == StatusEnum.Normal.getId() && vip.getId().contains(id)
                 && vip.getName().contains(name) && vip.getPhone().contains(phone))).collect(Collectors.toList());
     }

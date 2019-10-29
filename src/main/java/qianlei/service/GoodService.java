@@ -9,7 +9,6 @@ import qianlei.utils.StringUtil;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * 商品的service层
@@ -60,10 +59,7 @@ public class GoodService {
      * @return 符合条件的商品
      */
     public List<Good> getAllNormalGoodByIdAndName(String id, String name) {
-        List<Good> goodList = goodDao.selectAll();
-        return goodList.stream()
-                .filter((good) -> good.getStatus().getId() == StatusEnum.Normal.getId() && good.getId().contains(id) && good.getName().contains(name))
-                .collect(Collectors.toList());
+        return goodDao.selectAllNormalByIdAndName(id, name);
     }
 
     /**

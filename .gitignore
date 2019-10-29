@@ -18,3 +18,6 @@ buildNumber.properties
 !/.mvn/wrapper/maven-wrapper.jar
 /help.html
 /verifyCode.png
+/.classpath
+/.project
+/.settings/

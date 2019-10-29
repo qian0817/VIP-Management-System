@@ -9,7 +9,6 @@ import qianlei.exception.WrongDataException;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * 记录的service层
@@ -29,10 +28,7 @@ public class RecordService {
      * @return 符合条件的用户
      */
     public List<Record> getAllRecordByIdAndName(String id, String name, String phone) {
-        List<Record> recordList = recordDao.selectAllRecord();
-        return recordList.stream()
-                .filter((record -> record.getVip().getId().contains(id) && record.getVip().getName().contains(name) && record.getVip().getPhone().contains(phone)))
-                .collect(Collectors.toList());
+        return recordDao.selectAllRecordByIdAndNameAndPhone(id, name, phone);
     }
 
     /**

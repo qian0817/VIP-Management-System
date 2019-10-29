@@ -26,18 +26,24 @@ public class RecordDao {
      *
      * @return 所有记录
      */
-    public List<Record> selectAllRecord() {
+    public List<Record> selectAllRecordByIdAndNameAndPhone(String getId, String getName, String getPhone) {
         ResultSet resultSet = null;
         List<Record> recordList = new LinkedList<>();
         try (
                 Connection connection = DaoUtil.getConnection();
-                PreparedStatement statement = connection.prepareStatement("SELECT r.id AS record_id, r.userId AS vip_id,r.price AS record_price ," +
+                PreparedStatement statement = connection.prepareStatement("SELECT r.id AS record_id, r.userId AS vip_id," +
+                        "r.price AS record_price ," +
                         "r.goodId AS good_id, r.createTime AS record_create_time, v.phone AS vip_phone ,v.name AS vip_name," +
                         "v.status AS vip_status,g.name AS  good_name,g.status AS good_status " +
                         "FROM record r " +
                         "LEFT JOIN good g on r.goodId = g.id " +
-                        "LEFT JOIN vip v on r.userId = v.id")
+                        "LEFT JOIN vip v on r.userId = v.id " +
+                        "WHERE v.id LIKE ? AND v.name LIKE ? AND v.phone LIKE ?" +
+                        "LIMIT 500")
         ) {
+            statement.setString(1, "%" + getId + "%");
+            statement.setString(2, "%" + getName + "%");
+            statement.setString(3, "%" + getPhone + "%");
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 int id = resultSet.getInt("record_id");

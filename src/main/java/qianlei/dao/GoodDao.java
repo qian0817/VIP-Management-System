@@ -79,38 +79,6 @@ public class GoodDao {
     }
 
     /**
-     * 选择所有商品
-     *
-     * @return 所有商品的列表
-     */
-    public List<Good> selectAll() {
-        List<Good> goodList = new LinkedList<>();
-        try (
-                Connection connection = DaoUtil.getConnection();
-                PreparedStatement statement = connection.prepareStatement("SELECT id,name, maker, createtime, " +
-                        "price, discount, remain, introduction, remarks,status FROM good");
-                ResultSet resultSet = statement.executeQuery()
-        ) {
-            while (resultSet.next()) {
-                String id = resultSet.getString("id");
-                String name = resultSet.getString("name");
-                String maker = resultSet.getString("maker");
-                Date createtime = resultSet.getDate("createtime");
-                BigDecimal price = resultSet.getBigDecimal("price");
-                double discount = resultSet.getDouble("discount");
-                Long remain = resultSet.getLong("remain");
-                String introduction = resultSet.getString("introduction");
-                String remarks = resultSet.getString("remarks");
-                StatusEnum status = StatusEnum.getById(resultSet.getInt("status"));
-                goodList.add(new Good(id, name, maker, createtime, price, discount, remain, introduction, remarks, status));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return goodList;
-    }
-
-    /**
      * 删除指定id的商品
      *
      * @param id 指定id
@@ -151,5 +119,48 @@ public class GoodDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 根据id和name获取数据
+     *
+     * @param needId   需要包含的id
+     * @param needName 需要包含的name
+     * @return 获取的商品的集合
+     */
+    public List<Good> selectAllNormalByIdAndName(String needId, String needName) {
+        List<Good> goodList = new LinkedList<>();
+        ResultSet resultSet = null;
+        try (
+                Connection connection = DaoUtil.getConnection();
+                PreparedStatement statement = connection.prepareStatement("SELECT id,name, maker, createtime, " +
+                        "price, discount, remain, introduction, remarks,status FROM good " +
+                        "WHERE id LIKE ? " +
+                        "AND name LIKE ? " +
+                        "LIMIT 500")
+        ) {
+            statement.setString(1, "%" + needId + "%");
+            statement.setString(2, "%" + needName + "%");
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                String id = resultSet.getString("id");
+                String name = resultSet.getString("name");
+                String maker = resultSet.getString("maker");
+                Date createtime = resultSet.getDate("createtime");
+                BigDecimal price = resultSet.getBigDecimal("price");
+                double discount = resultSet.getDouble("discount");
+                Long remain = resultSet.getLong("remain");
+                String introduction = resultSet.getString("introduction");
+                String remarks = resultSet.getString("remarks");
+                StatusEnum status = StatusEnum.getById(resultSet.getInt("status"));
+                goodList.add(new Good(id, name, maker, createtime, price, discount, remain, introduction, remarks, status));
+            }
+            resultSet.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DaoUtil.closeResultSet(resultSet);
+        }
+        return goodList;
     }
 }
