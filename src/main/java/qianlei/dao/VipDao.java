@@ -85,12 +85,13 @@ public class VipDao {
                 Connection connection = DaoUtil.getConnection();
                 PreparedStatement statement = connection.prepareStatement("SELECT id,name, sex, phone, address, " +
                         "postcode, createtime, status FROM vip " +
-                        "WHERE id LIKE ? AND name LIKE ? AND phone LIKE ?" +
+                        "WHERE id LIKE ? AND name LIKE ? AND phone LIKE ? AND status = ?" +
                         "LIMIT 500")
         ) {
             statement.setString(1, "%" + getId + "%");
             statement.setString(2, "%" + getName + "%");
             statement.setString(3, "%" + getPhone + "%");
+            statement.setInt(4, StatusEnum.Normal.getId());
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 String id = resultSet.getString("id");

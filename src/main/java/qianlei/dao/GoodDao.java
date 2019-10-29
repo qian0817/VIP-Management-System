@@ -137,10 +137,12 @@ public class GoodDao {
                         "price, discount, remain, introduction, remarks,status FROM good " +
                         "WHERE id LIKE ? " +
                         "AND name LIKE ? " +
+                        "AND status = ?" +
                         "LIMIT 500")
         ) {
             statement.setString(1, "%" + needId + "%");
             statement.setString(2, "%" + needName + "%");
+            statement.setInt(3, StatusEnum.Normal.getId());
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 String id = resultSet.getString("id");
