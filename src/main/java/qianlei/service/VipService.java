@@ -4,7 +4,6 @@ import qianlei.dao.VipDao;
 import qianlei.entity.Vip;
 import qianlei.enums.StatusEnum;
 import qianlei.exception.WrongDataException;
-import qianlei.utils.StringUtil;
 
 import java.util.Date;
 import java.util.List;
@@ -17,32 +16,18 @@ import java.util.stream.Collectors;
  */
 public class VipService {
     private VipDao vipDao = new VipDao();
-    private static final int POSTCODE_LENGTH = 6;
     /**
      * 添加VIP
      *
-     * @param id       vip的id
-     * @param name     vip名称
-     * @param sex      vip性别
-     * @param phone    vip电话号码
-     * @param address  vip地址
-     * @param postcode vip邮编
+     * @param vip 需要添加的vip
      * @throws WrongDataException 给入的格式错误
      */
-    public void addVip(String id, String name, String sex, String phone, String address, String postcode) throws WrongDataException {
-        if (StringUtil.containsBlank(id)) {
-            throw new WrongDataException("id" + id + "不能包含空格");
+    public void addVip(Vip vip) throws WrongDataException {
+        if (vipDao.selectVipById(vip.getId()) != null) {
+            throw new WrongDataException("id" + vip.getId() + "已经被注册");
         }
-        if (!StringUtil.isBigInteger(phone)) {
-            throw new WrongDataException("电话号码" + phone + "只能包含数字");
-        }
-        if (!StringUtil.isBigInteger(postcode) || postcode.length() != POSTCODE_LENGTH) {
-            throw new WrongDataException("邮编" + postcode + "只能包含数字且只有6位");
-        }
-        if (vipDao.selectVipById(id) != null) {
-            throw new WrongDataException("id" + id + "已经被注册");
-        }
-        Vip vip = new Vip(id, name, sex, phone, address, Integer.parseInt(postcode), new Date(), StatusEnum.Normal);
+        vip.setStatus(StatusEnum.NORMAL);
+        vip.setCreateTime(new Date());
         vipDao.addVip(vip);
     }
 
@@ -56,7 +41,7 @@ public class VipService {
      */
     public List<Vip> getAllNormalVipByIdAndNameAndPhone(String id, String name, String phone) {
         List<Vip> vipList = vipDao.selectAllNormalVipByIdAndNameAndPhone(id, name, phone);
-        return vipList.stream().filter((vip -> vip.getStatus().getId() == StatusEnum.Normal.getId() && vip.getId().contains(id)
+        return vipList.stream().filter((vip -> vip.getStatus().getId() == StatusEnum.NORMAL.getId() && vip.getId().contains(id)
                 && vip.getName().contains(name) && vip.getPhone().contains(phone))).collect(Collectors.toList());
     }
 
@@ -82,19 +67,10 @@ public class VipService {
     /**
      * 修改VIP
      *
-     * @param id       要修改的vip的id
-     * @param name     修改后的名称
-     * @param sex      修改后的性别
-     * @param phone    修改后的电话号码
-     * @param address  修改后的地址
-     * @param postcode 修改后的邮编
+     * @param vip 修改后的vip
      * @throws WrongDataException 输入的数据错误
      */
-    public void updateVip(String id, String name, String sex, String phone, String address, String postcode) throws WrongDataException {
-        if (StringUtil.isBigInteger(postcode) && postcode.length() != POSTCODE_LENGTH) {
-            throw new WrongDataException("邮编" + postcode + "只能包含数字且只有6位");
-        }
-        Vip vip = new Vip(id, name, sex, phone, address, Integer.parseInt(postcode));
+    public void updateVip(Vip vip) {
         vipDao.updateVip(vip);
     }
 }

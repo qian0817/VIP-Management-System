@@ -1,91 +1,31 @@
 package qianlei.view.detail;
 
-import qianlei.entity.Vip;
-import qianlei.service.VipService;
-import qianlei.view.component.SearchBar;
-import qianlei.view.component.TablePanel;
+import qianlei.view.detail.tabledetail.ShowVipTableWithSearchBar;
 
-import javax.swing.*;
-import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
 
 /**
  * 展示vip信息界面
  *
  * @author qianlei
  */
-public class ShowVipPanel extends JPanel {
-    private SearchBar searchBar = new SearchBar(Arrays.asList("姓名", "证件号", "手机号"));
-    private TablePanel tablePanel;
-    private VipService vipService = new VipService();
-    private MouseListener mouseListener = new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-            //双击
-            int needClickNumber = 2;
-            if (e.getClickCount() >= needClickNumber) {
-                String id = (String) tablePanel.getRowByIndex(e.getPoint(), 0);
-                removeAll();
-                add(new UpdateVipPanel(id));
-                repaint();
-                setVisible(true);
-            }
-        }
-    };
-
+public class ShowVipPanel extends ShowVipTableWithSearchBar implements CanInitPanel {
     public ShowVipPanel() {
-        setLayout(new BorderLayout());
-        searchBar.addActionListener((e) -> {
-            Map<String, String> input = searchBar.getInput();
-            init(input.get("证件号"), input.get("姓名"), input.get("手机号"));
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                //双击
+                int needClickNumber = 2;
+                if (e.getClickCount() >= needClickNumber) {
+                    String id = getSelectedVipId();
+                    removeAll();
+                    //变为修改界面
+                    add(new UpdateVipPanel(id));
+                    repaint();
+                    setVisible(true);
+                }
+            }
         });
-        init("", "", "");
-    }
-
-    public void init(String id, String name, String phone) {
-        removeAll();
-        add(searchBar, BorderLayout.NORTH);
-        List<Vip> vipList = vipService.getAllNormalVipByIdAndNameAndPhone(id, name, phone);
-        Object[][] data = new Object[vipList.size()][7];
-        for (int i = 0; i < vipList.size(); i++) {
-            Vip good = vipList.get(i);
-            data[i][0] = good.getId();
-            data[i][1] = good.getName();
-            data[i][2] = good.getSex();
-            data[i][3] = good.getPhone();
-            data[i][4] = good.getAddress();
-            data[i][5] = good.getPostcode();
-            data[i][6] = good.getCreateTime();
-        }
-        tablePanel = new TablePanel(data, new String[]{"证件号", "姓名", "性别", "手机号码", "联系地址", "邮编", "创建时间"});
-        add(tablePanel);
-        tablePanel.addMouseListener(mouseListener);
-        repaint();
-        setVisible(true);
-    }
-
-    /**
-     * 修改默认的动作
-     *
-     * @param adapter 修改后的动作
-     */
-    void changeMouseListener(MouseListener adapter) {
-        tablePanel.removeMouseListener(mouseListener);
-        mouseListener = adapter;
-        tablePanel.addMouseListener(adapter);
-    }
-
-    /**
-     * 获取选中的id
-     *
-     * @return 选中的id
-     */
-    String getSelectedRow() {
-        return (String) tablePanel.getSelectedId();
     }
 }

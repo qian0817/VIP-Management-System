@@ -2,10 +2,11 @@ package qianlei.view;
 
 import com.alee.extended.svg.SvgIcon;
 import com.alee.laf.button.WebButton;
+import qianlei.entity.Result;
 import qianlei.entity.User;
+import qianlei.exception.WrongDataException;
 import qianlei.service.UserService;
-import qianlei.view.component.InputPanel;
-import qianlei.view.component.PasswordPanel;
+import qianlei.view.detail.linedetail.InputUserPanelBase;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,47 +17,68 @@ import java.awt.*;
  * @author qianlei
  */
 public class LoginFrame extends JFrame {
+    private final InputUserPanelBase inputUserPanelBase = new InputUserPanelBase();
+    private final JPanel loginAndRegister = new JPanel();
+    private final WebButton loginButton = new WebButton("登录");
+    private final JButton registerButton = new JButton("注册");
+    private final JLabel titleLabel = new JLabel("登陆界面", JLabel.CENTER);
+    private UserService userService = new UserService();
     public LoginFrame() {
-        InputPanel usernameInputPanel = new InputPanel("用户名", "请输入用户名");
-        PasswordPanel passwordInputPanel = new PasswordPanel("密码", "请输入密码");
-        JPanel loginAndRegister = new JPanel();
-        WebButton loginButton = new WebButton("登录");
-        JButton registerButton = new JButton("注册");
-        loginButton.addHotkey(10);
-        loginButton.addActionListener((e) -> {
-            UserService userService = new UserService();
-            String name = usernameInputPanel.getText();
-            String password = passwordInputPanel.getText();
-            User user;
-            user = userService.login(name, password);
-            if (user == null) {
-                JOptionPane.showMessageDialog(LoginFrame.this, "用户名或密码错误", "登陆失败", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                userService.setCurUser(user);
-                new MainFrame().setVisible(true);
-                LoginFrame.this.dispose();
-            }
-        });
-        registerButton.addActionListener((e) -> new RegisterFrame().setVisible(true));
-
         setIconImage(new SvgIcon(getClass().getClassLoader().getResource("icon/icon.svg")).asBufferedImage());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new GridLayout(8, 1));
         setTitle("登录界面");
-        //添加到界面
-        add(new JLabel());
-        add(new JLabel("VIP管理系统", JLabel.CENTER));
-        add(new JLabel());
-        add(usernameInputPanel);
-        add(new JLabel());
-        add(passwordInputPanel);
-        add(new JLabel());
+        addAction();
+        addComponent();
+        pack();
+        setLocationCenter();
+    }
+
+    /**
+     * 添加到界面
+     */
+    private void addComponent() {
+        setLayout(new BorderLayout());
         loginAndRegister.add(loginButton);
         loginAndRegister.add(registerButton);
         loginAndRegister.setLayout(new FlowLayout());
-        add(loginAndRegister);
-        pack();
-        // 设置窗口居中显示
+        add(titleLabel, BorderLayout.NORTH);
+        add(inputUserPanelBase);
+        add(loginAndRegister, BorderLayout.SOUTH);
+    }
+
+    /**
+     * 添加事件
+     */
+    private void addAction() {
+        loginButton.addHotkey(10);
+        loginButton.addActionListener((e) -> {
+            Result result = submit();
+            if (result.isSuccess()) {
+                new MainFrame().setVisible(true);
+                LoginFrame.this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(LoginFrame.this, result.getMessage(), "登陆失败", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+        registerButton.addActionListener((e) -> new RegisterFrame().setVisible(true));
+    }
+
+    private Result submit() {
+        try {
+            User user = inputUserPanelBase.getUser();
+            userService.login(user);
+            return new Result(true, "登陆成功");
+        } catch (WrongDataException e) {
+            return new Result(false, "用户名或密码错误");
+        } catch (Exception e) {
+            return new Result(false, "未知错误" + e.getMessage());
+        }
+    }
+
+    /**
+     * 设置窗口居中显示
+     */
+    private void setLocationCenter() {
         int windowWidth = getWidth();
         int windowHeight = getHeight();
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();

@@ -4,6 +4,7 @@ import qianlei.enums.StatusEnum;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * 商品类
@@ -17,19 +18,28 @@ public class Good {
     private Date createTime;
     private BigDecimal price;
     private double discount;
-    private Long remain;
+    private long remain;
     private String introduction;
     private String remarks;
     private StatusEnum status;
 
     public Good() {
+        id = "";
+        name = "";
+        maker = "";
+        createTime = new Date();
+        price = BigDecimal.ZERO;
+        discount = 1.0;
+        remain = 0;
+        introduction = "";
+        remarks = "";
     }
 
-    public Good(String id, String name, String maker, Date createTime, BigDecimal price, double discount, Long remain, String introduction, String remarks, StatusEnum status) {
+    public Good(String id, String name, String maker, Date createTime, BigDecimal price, double discount, long remain, String introduction, String remarks, StatusEnum status) {
         this.id = id;
         this.name = name;
         this.maker = maker;
-        this.createTime = createTime;
+        this.createTime = new Date(createTime.getTime());
         this.price = price;
         this.discount = discount;
         this.remain = remain;
@@ -63,11 +73,11 @@ public class Good {
     }
 
     public Date getCreateTime() {
-        return createTime;
+        return new Date(createTime.getTime());
     }
 
     public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+        this.createTime = new Date(createTime.getTime());
     }
 
     public BigDecimal getPrice() {
@@ -86,20 +96,12 @@ public class Good {
         this.discount = discount;
     }
 
-    public Long getRemain() {
+    public long getRemain() {
         return remain;
     }
 
-    public void setRemain(Long remain) {
+    public void setRemain(long remain) {
         this.remain = remain;
-    }
-
-    public StatusEnum getStatus() {
-        return status;
-    }
-
-    public void setStatus(StatusEnum status) {
-        this.status = status;
     }
 
     public String getIntroduction() {
@@ -118,6 +120,40 @@ public class Good {
         this.remarks = remarks;
     }
 
+    public StatusEnum getStatus() {
+        return status;
+    }
+
+    public void setStatus(StatusEnum status) {
+        this.status = status;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Good good = (Good) o;
+        return Double.compare(good.discount, discount) == 0 &&
+                remain == good.remain &&
+                Objects.equals(id, good.id) &&
+                Objects.equals(name, good.name) &&
+                Objects.equals(maker, good.maker) &&
+                Objects.equals(createTime, good.createTime) &&
+                Objects.equals(price, good.price) &&
+                Objects.equals(introduction, good.introduction) &&
+                Objects.equals(remarks, good.remarks) &&
+                status == good.status;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, maker, createTime, price, discount, remain, introduction, remarks, status);
+    }
+
     @Override
     public String toString() {
         return "Good{" +
@@ -130,6 +166,7 @@ public class Good {
                 ", remain=" + remain +
                 ", introduction='" + introduction + '\'' +
                 ", remarks='" + remarks + '\'' +
+                ", status=" + status +
                 '}';
     }
 }

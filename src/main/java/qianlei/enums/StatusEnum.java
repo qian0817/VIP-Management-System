@@ -7,7 +7,7 @@ package qianlei.enums;
  */
 public enum StatusEnum {
     //normal 代表状态正常 deleted代表已被删除
-    Normal(0, "正常"), Deleted(1, "已删除");
+    NORMAL(0, "正常"), DELETED(1, "已删除");
     private int id;
     private String message;
 

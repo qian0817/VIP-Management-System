@@ -4,22 +4,16 @@ import com.alee.extended.image.WebImage;
 import com.alee.extended.svg.SvgIcon;
 import com.alee.laf.button.WebButton;
 import com.alee.laf.combobox.WebComboBox;
-import com.alee.laf.label.WebLabel;
 import com.alee.managers.style.StyleId;
 import qianlei.utils.ViewUtil;
 import qianlei.view.detail.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.io.*;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Arrays;
-import java.util.Objects;
 
 /**
  * 主界面
@@ -27,25 +21,32 @@ import java.util.Objects;
  * @author qianlei
  */
 public class MainFrame extends JFrame implements ItemListener {
-    private DetailPanel detailPanel = new DetailPanel();
-    private JPanel topPanel = new JPanel();
-    private WebComboBox fontFamilyChoosePanel = new WebComboBox(StyleId.comboboxUndecorated, ViewUtil.getSupportedFont(), ViewUtil.getCurConfig().getFont().getFontName());
-    private WebComboBox fontSizeChoosePanel = new WebComboBox(StyleId.comboboxUndecorated, Arrays.asList(8, 9, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 36, 48), (Integer) ViewUtil.getCurConfig().getFont().getSize());
-    private WebComboBox styleChoosePanel = new WebComboBox(StyleId.comboboxUndecorated, Arrays.asList(ViewUtil.lightSkin, ViewUtil.darkSkin));
-    private WebButton minButton = new WebButton(StyleId.buttonHover, new SvgIcon(getClass().getClassLoader().getResource("icon/min.svg")));
-    private WebButton closeButton = new WebButton(StyleId.buttonHover, new SvgIcon(getClass().getClassLoader().getResource("icon/close.svg")));
-    private WebLabel titleLabel = new WebLabel("VIP信息管理系统", JLabel.CENTER);
+    private final static JLabel TITLE_LABEL = new JLabel(MenuEnum.ADD_GOOD_MENU.getName(), JLabel.CENTER);
+    private final JPanel detailPanel = new JPanel();
+    private final JPanel topPanel = new JPanel();
+    private final WebComboBox fontFamilyChoosePanel = new WebComboBox(StyleId.comboboxUndecorated, ViewUtil.getSupportedFont(), ViewUtil.getCurConfig().getFont().getFontName());
+    private final WebComboBox fontSizeChoosePanel = new WebComboBox(StyleId.comboboxUndecorated, Arrays.asList(8, 9, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 36, 48), (Integer) ViewUtil.getCurConfig().getFont().getSize());
+    private final WebComboBox styleChoosePanel = new WebComboBox(StyleId.comboboxUndecorated, Arrays.asList(ViewUtil.LIGHT_SKIN, ViewUtil.DARK_SKIN), ViewUtil.getCurConfig().getSkin());
+    private final WebButton minButton = new WebButton(StyleId.buttonHover, ViewUtil.getSvgIcon("icon/min.svg", 25, 25));
+    private final WebButton closeButton = new WebButton(StyleId.buttonHover, ViewUtil.getSvgIcon("icon/close.svg", 25, 25));
+    private final JPanel menuPanel = new JPanel();
 
     MainFrame() {
         setUndecorated(true);
-        setIconImage(new SvgIcon(getClass().getClassLoader().getResource("icon/icon.svg")).asBufferedImage());
+        setIconImage(ViewUtil.getSvgIcon("icon/icon.svg", 25, 25).asBufferedImage());
         setTitle("VIP管理系统");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         init();
-        //设置字体标签
-        titleLabel.setForeground(Color.gray);
-        styleChoosePanel.setSelectedItem(ViewUtil.getCurConfig().getSkin());
+        addAction();
+        //最大化
+        setSize(Toolkit.getDefaultToolkit().getScreenSize());
+    }
+
+    /**
+     * 添加事件
+     */
+    private void addAction() {
         fontFamilyChoosePanel.addItemListener(this);
         fontSizeChoosePanel.addItemListener(this);
         styleChoosePanel.addItemListener(e ->
@@ -57,18 +58,89 @@ public class MainFrame extends JFrame implements ItemListener {
         );
         minButton.addActionListener((e) -> MainFrame.this.setExtendedState(JFrame.ICONIFIED));
         closeButton.addActionListener((e) -> MainFrame.this.dispose());
-        //最大化
-        setSize(Toolkit.getDefaultToolkit().getScreenSize());
     }
 
     public void init() {
+        initTopPanel();
+        initMenuPanel();
         Container container = getContentPane();
         container.removeAll();
         setLayout(new BorderLayout());
-        container.add(new MenuPanel(), BorderLayout.WEST);
-        detailPanel.change(new AddGoodPanel());
-        topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
+        changeDetailPanel(new AddGoodPanel());
+        container.add(menuPanel, BorderLayout.WEST);
         container.add(detailPanel);
+        container.add(topPanel, BorderLayout.NORTH);
+        repaint();
+        setVisible(true);
+    }
+
+    /**
+     * 初始化菜单界面
+     */
+    private void initMenuPanel() {
+        setLayout(new GridLayout(MenuEnum.values().length, 1));
+        for (MenuEnum menuEnum : MenuEnum.values()) {
+            add(menuEnum.getButton());
+        }
+        MenuEnum.ADD_GOOD_MENU.addActionListener((e) -> {
+            changeDetailPanel(new AddGoodPanel());
+            TITLE_LABEL.setText(MenuEnum.ADD_GOOD_MENU.getName());
+        });
+        MenuEnum.SHOW_GOOD_MENU.addActionListener((e) -> {
+            changeDetailPanel(new ShowGoodPanel());
+            TITLE_LABEL.setText(MenuEnum.SHOW_GOOD_MENU.getName());
+        });
+        MenuEnum.ADD_VIP_MENU.addActionListener((e) -> {
+            changeDetailPanel(new AddVipPanel());
+            TITLE_LABEL.setText(MenuEnum.ADD_VIP_MENU.getName());
+        });
+        MenuEnum.SHOW_VIP_MENU.addActionListener((e) -> {
+            changeDetailPanel(new ShowVipPanel());
+            TITLE_LABEL.setText(MenuEnum.SHOW_VIP_MENU.getName());
+        });
+        MenuEnum.ADD_RECORD_MENU.addActionListener((e) -> {
+            changeDetailPanel(new AddRecordPanel());
+            TITLE_LABEL.setText(MenuEnum.ADD_RECORD_MENU.getName());
+        });
+        MenuEnum.SHOW_RECORD_MENU.addActionListener((e) -> {
+            changeDetailPanel(new ShowRecordPanel());
+            TITLE_LABEL.setText(MenuEnum.SHOW_RECORD_MENU.getName());
+        });
+        MenuEnum.CHANGE_PASSWORD_MENU.addActionListener((e) -> {
+            changeDetailPanel(new ChangePasswordPanel());
+            TITLE_LABEL.setText(MenuEnum.CHANGE_PASSWORD_MENU.getName());
+        });
+        MenuEnum.HELP_MENU.addActionListener((e) -> SwingUtilities.invokeLater(() -> {
+            ViewUtil.createHelpHtml();
+            ViewUtil.openHelpHtml();
+        }));
+        MenuEnum.QUIT_MENU.addActionListener((e) -> {
+            MainFrame.this.dispose();
+            LoginFrame loginFrame = new LoginFrame();
+            loginFrame.setVisible(true);
+        });
+    }
+
+    /**
+     * 修改主内容界面
+     *
+     * @param panel 修改后的界面
+     */
+    private void changeDetailPanel(JPanel panel) {
+        detailPanel.removeAll();
+        detailPanel.setLayout(new BorderLayout());
+        detailPanel.add(panel);
+        detailPanel.repaint();
+        detailPanel.validate();
+        panel.setVisible(true);
+        detailPanel.setVisible(true);
+    }
+
+    /**
+     * 初始化topPanel
+     */
+    private void initTopPanel() {
+        topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
         topPanel.add(Box.createHorizontalStrut(10));
         topPanel.add(new WebImage(new SvgIcon(getClass().getClassLoader().getResource("icon/icon.svg"))));
         topPanel.add(Box.createHorizontalStrut(10));
@@ -76,14 +148,11 @@ public class MainFrame extends JFrame implements ItemListener {
         topPanel.add(fontSizeChoosePanel);
         topPanel.add(styleChoosePanel);
         topPanel.add(Box.createHorizontalStrut(50));
-        topPanel.add(titleLabel);
+        topPanel.add(TITLE_LABEL);
         topPanel.add(Box.createHorizontalStrut(1000));
         topPanel.add(minButton);
         topPanel.add(Box.createHorizontalStrut(20));
         topPanel.add(closeButton);
-        container.add(topPanel, BorderLayout.NORTH);
-        repaint();
-        setVisible(true);
     }
 
     @Override
@@ -93,121 +162,51 @@ public class MainFrame extends JFrame implements ItemListener {
                 String fontFamily = (String) fontFamilyChoosePanel.getSelectedItem();
                 int fontSize = (int) fontSizeChoosePanel.getSelectedItem();
                 ViewUtil.changeFont(new Font(fontFamily, Font.PLAIN, fontSize));
-                MainFrame.this.dispose();
                 new MainFrame().setVisible(true);
+                MainFrame.this.dispose();
             }
         });
     }
 
-    private static class DetailPanel extends JPanel {
+    private enum MenuEnum {
+        //商品信息录入按钮
+        ADD_GOOD_MENU("商品信息录入", "icon/add_good.svg"),
+        //商品信息查询
+        SHOW_GOOD_MENU("商品信息查询", "icon/show_good.svg"),
+        //VIP信息录入
+        ADD_VIP_MENU("VIP信息录入", "icon/show_good.svg"),
+        //VIP信息查询
+        SHOW_VIP_MENU("VIP信息查询", "icon/show_vip.svg"),
+        //VIP消费购物记录登记
+        ADD_RECORD_MENU("VIP消费购物记录登记", "icon/add_record.svg"),
+        //VIP消费记录查询
+        SHOW_RECORD_MENU("VIP消费记录查询", "icon/show_record.svg"),
+        //修改密码
+        CHANGE_PASSWORD_MENU("修改密码", "icon/password.svg"),
+        //系统帮助
+        HELP_MENU("系统帮助", "icon/help.svg"),
+        //退出登录
+        QUIT_MENU("退出登录", "icon/quit.svg");
 
-        /**
-         * 修改显示内容
-         *
-         * @param panel 需要显示的内容
-         */
-        void change(JPanel panel) {
-            removeAll();
-            setLayout(new BorderLayout());
-            add(panel);
-            repaint();
-            validate();
-            updateUI();
-            setVisible(true);
-        }
-    }
+        private String name;
+        private WebButton button;
 
-    private class MenuPanel extends JPanel implements ActionListener {
-        private int size = ViewUtil.getCurConfig().getFont().getSize() * 2;
-        private WebButton addGoodButton = new WebButton(StyleId.buttonHover, "商品录入", new SvgIcon(getClass().getClassLoader().getResource("icon/add_good.svg"), size, size));
-        private WebButton showGoodButton = new WebButton(StyleId.buttonHover, "商品查询", new SvgIcon(getClass().getClassLoader().getResource("icon/show_good.svg"), size, size));
-        private WebButton addVipButton = new WebButton(StyleId.buttonHover, "VIP录入", new SvgIcon(getClass().getClassLoader().getResource("icon/add_vip.svg"), size, size));
-        private WebButton showVipButton = new WebButton(StyleId.buttonHover, "VIP查询", new SvgIcon(getClass().getClassLoader().getResource("icon/show_vip.svg"), size, size));
-        private WebButton addRecordButton = new WebButton(StyleId.buttonHover, "消费记录登记", new SvgIcon(getClass().getClassLoader().getResource("icon/add_record.svg"), size, size));
-        private WebButton showRecordButton = new WebButton(StyleId.buttonHover, "消费记录查询", new SvgIcon(getClass().getClassLoader().getResource("icon/show_record.svg"), size, size));
-        private WebButton managerButton = new WebButton(StyleId.buttonHover, "密码修改", new SvgIcon(getClass().getClassLoader().getResource("icon/password.svg"), size, size));
-        private WebButton helpButton = new WebButton(StyleId.buttonHover, "系统帮助", new SvgIcon(getClass().getClassLoader().getResource("icon/help.svg"), size, size));
-        private WebButton quitButton = new WebButton(StyleId.buttonHover, "退出登录", new SvgIcon(getClass().getClassLoader().getResource("icon/quit.svg"), size, size));
-
-        MenuPanel() {
-            setLayout(new GridLayout(9, 1));
-            initListener();
-            add(addGoodButton);
-            add(showGoodButton);
-            add(addVipButton);
-            add(showVipButton);
-            add(addRecordButton);
-            add(showRecordButton);
-            add(managerButton);
-            add(helpButton);
-            add(quitButton);
+        MenuEnum(String name, String icon) {
+            this.name = name;
+            button = new WebButton(StyleId.buttonHover, ViewUtil.getSvgIcon(icon));
+            button.setToolTip(name);
         }
 
-        /**
-         * 设置监听事件
-         */
-        private void initListener() {
-            addGoodButton.addActionListener(this);
-            showGoodButton.addActionListener(this);
-            addVipButton.addActionListener(this);
-            showVipButton.addActionListener(this);
-            addRecordButton.addActionListener(this);
-            showRecordButton.addActionListener(this);
-            managerButton.addActionListener(this);
-            helpButton.addActionListener(this);
-            quitButton.addActionListener(this);
+        public String getName() {
+            return name;
         }
 
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            switch (e.getActionCommand()) {
-                case "商品录入":
-                    MainFrame.this.detailPanel.change(new AddGoodPanel());
-                    break;
-                case "商品查询":
-                    MainFrame.this.detailPanel.change(new ShowGoodPanel());
-                    break;
-                case "VIP录入":
-                    MainFrame.this.detailPanel.change(new AddVipPanel());
-                    break;
-                case "VIP查询":
-                    MainFrame.this.detailPanel.change(new ShowVipPanel());
-                    break;
-                case "消费记录登记":
-                    MainFrame.this.detailPanel.change(new AddRecordPanel());
-                    break;
-                case "消费记录查询":
-                    MainFrame.this.detailPanel.change(new ShowRecordPanel());
-                    break;
-                case "密码修改":
-                    MainFrame.this.detailPanel.change(new ChangePasswordPanel());
-                    break;
-                case "系统帮助":
-                    SwingUtilities.invokeLater(() -> {
-                        try (
-                                InputStream html = getClass().getClassLoader().getResourceAsStream("help.html");
-                                BufferedInputStream inputStream = new BufferedInputStream(Objects.requireNonNull(html));
-                                BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream("help.html"))
-                        ) {
-                            int onceGetBytes = 1024;
-                            byte[] bytes = new byte[onceGetBytes];
-                            while (inputStream.read(bytes) == onceGetBytes) {
-                                outputStream.write(bytes);
-                            }
-                            URI uri = new URI("help.html");
-                            Desktop.getDesktop().browse(uri);
-                        } catch (IOException | URISyntaxException ex) {
-                            ex.printStackTrace();
-                        }
-                    });
-                    break;
-                case "退出登录":
-                    MainFrame.this.dispose();
-                    LoginFrame loginFrame = new LoginFrame();
-                    loginFrame.setVisible(true);
-                    break;
-                default:
-            }
+        public void addActionListener(ActionListener e) {
+            button.addActionListener(e);
+        }
+
+        public WebButton getButton() {
+            return button;
         }
     }
 }

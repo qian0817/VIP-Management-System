@@ -2,37 +2,44 @@ package qianlei.service;
 
 import org.junit.jupiter.api.*;
 import qianlei.TestHelper;
+import qianlei.entity.Vip;
 import qianlei.exception.WrongDataException;
 import qianlei.utils.DaoUtil;
+
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class VipServiceTest {
 
-    static {
-        TestHelper.deleteTestDb();
+    private VipService vipService = new VipService();
+
+    @BeforeAll
+    static void start() {
         DaoUtil.init("test.db");
     }
 
-    private VipService vipService = new VipService();
+    @AfterAll
+    static void end() {
+        TestHelper.deleteTestDb();
+    }
 
     @Order(1)
     @Test
     void addVip() {
-        Assertions.assertDoesNotThrow(() -> vipService.addVip("test1", "测试VIP1", "男", "12345", "测试地址1", "123456"));
-        Assertions.assertThrows(WrongDataException.class, () -> vipService.addVip("test1", "测试VIP1", "男", "12345", "测试地址1", "123456"));
-        Assertions.assertThrows(WrongDataException.class, () -> vipService.addVip("test2", "测试VIP1", "男", "12345", "测试地址1", "1234567"));
-        Assertions.assertThrows(WrongDataException.class, () -> vipService.addVip("test1", "测试VIP1", "男", "12345e", "测试地址1", "123456"));
-    }
-
-    @Order(3)
-    @Test
-    void deleteById() {
-        Assertions.assertDoesNotThrow(() -> vipService.deleteVipById("test1"));
+        assertDoesNotThrow(() -> vipService.addVip(new Vip("test1", "测试VIP1", "男", "12345", "测试地址1", 123456)));
+        assertThrows(WrongDataException.class, () -> vipService.addVip(new Vip("test1", "测试VIP1", "男", "12345", "测试地址1", 123456)));
     }
 
     @Order(2)
     @Test
     void updateVip() {
-        Assertions.assertDoesNotThrow(() -> vipService.updateVip("test1", "测试VIP2", "男", "12345", "测试地址2", "123456"));
+        assertDoesNotThrow(() -> vipService.updateVip(new Vip("test1", "测试VIP2", "男", "12345", "测试地址2", 123456)));
+    }
+
+    @Order(3)
+    @Test
+    void deleteById() {
+        assertDoesNotThrow(() -> vipService.deleteVipById("test1"));
     }
 }

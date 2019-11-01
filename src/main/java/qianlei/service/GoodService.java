@@ -4,10 +4,7 @@ import qianlei.dao.GoodDao;
 import qianlei.entity.Good;
 import qianlei.enums.StatusEnum;
 import qianlei.exception.WrongDataException;
-import qianlei.utils.StringUtil;
 
-import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,33 +18,14 @@ public class GoodService {
     /**
      * 添加商品
      *
-     * @param id           商品id
-     * @param name         商品名称
-     * @param maker        商品制造商
-     * @param price        商品价格
-     * @param discount     商品折扣
-     * @param remain       商品库存
-     * @param introduction 商品介绍
-     * @param remark       商品备注
+     * @param good 商品
      * @throws WrongDataException 输入的数据格式错误
      */
-    public void addGood(String id, String name, String maker, Date createTime, String price, Double discount, String remain, String introduction, String remark) throws WrongDataException {
-        if (StringUtil.containsBlank(id)) {
-            throw new WrongDataException("id" + id + "不能包含空格");
+    public void addGood(Good good) throws WrongDataException {
+        if (goodDao.selectGoodById(good.getId()) != null) {
+            throw new WrongDataException("id" + good.getId() + "已被注册");
         }
-        if ("".equals(name.trim())) {
-            throw new WrongDataException("name不能为空");
-        }
-        if (StringUtil.isNotBigDecimal(price)) {
-            throw new WrongDataException("价格：" + price + "格式错误");
-        }
-        if (!StringUtil.isBigInteger(remain)) {
-            throw new WrongDataException("库存" + remain + "格式错误");
-        }
-        if (goodDao.selectGoodById(id) != null) {
-            throw new WrongDataException("id" + id + "已被注册");
-        }
-        Good good = new Good(id, name, maker, createTime, new BigDecimal(String.format("%.2f", Double.valueOf(price))), discount, Long.parseLong(remain), introduction, remark, StatusEnum.Normal);
+        good.setStatus(StatusEnum.NORMAL);
         goodDao.addGood(good);
     }
 
@@ -59,7 +37,7 @@ public class GoodService {
      * @return 符合条件的商品
      */
     public List<Good> getAllNormalGoodByIdAndName(String id, String name) {
-        return goodDao.selectAllNormalByIdAndName(id, name);
+        return goodDao.selectAllNormalGoodByIdAndName(id, name);
     }
 
     /**
@@ -84,24 +62,11 @@ public class GoodService {
     /**
      * 修改商品信息
      *
-     * @param id           商品id
-     * @param name         商品名称
-     * @param maker        商品制造商
-     * @param price        商品价格
-     * @param discount     商品折扣
-     * @param remain       商品库存
-     * @param introduction 商品介绍
-     * @param remark       商品备注
+     * @param good 需要修改的商品
      * @throws WrongDataException 输入的数据格式错误
      */
-    public void updateGood(String id, String name, String maker, String price, Double discount, String remain, String introduction, String remark) throws WrongDataException {
-        if (StringUtil.isNotBigDecimal(price)) {
-            throw new WrongDataException("价格：" + price + "格式错误");
-        }
-        if (!StringUtil.isBigInteger(remain)) {
-            throw new WrongDataException("库存" + remain + "格式错误");
-        }
-        Good good = new Good(id, name, maker, new Date(), new BigDecimal(price), discount, Long.parseLong(remain), introduction, remark, StatusEnum.Normal);
+    public void updateGood(Good good) throws WrongDataException {
+        good.setStatus(StatusEnum.NORMAL);
         goodDao.updateGood(good);
     }
 }

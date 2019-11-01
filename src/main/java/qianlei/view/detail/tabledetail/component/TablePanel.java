@@ -1,5 +1,6 @@
-package qianlei.view.component;
+package qianlei.view.detail.tabledetail.component;
 
+import com.alee.laf.table.WebTable;
 import qianlei.utils.ViewUtil;
 
 import javax.swing.*;
@@ -11,7 +12,7 @@ import java.awt.event.MouseListener;
  * @author qianlei
  */
 public class TablePanel extends JPanel {
-    private JTable table;
+    private WebTable table;
     private Object[][] data;
 
     public TablePanel(Object[][] data, Object[] columnNames) {
@@ -27,9 +28,9 @@ public class TablePanel extends JPanel {
      */
     public void init(Object[][] data, Object[] columnNames) {
         removeAll();
-        this.data = data;
+        this.data = data.clone();
         ExtendTableModel model = new ExtendTableModel(data, columnNames);
-        table = new JTable(model);
+        table = new WebTable(model);
         table.setRowHeight(ViewUtil.getCurConfig().getFont().getSize() * 2);
         JScrollPane scrollPane = new JScrollPane(table);
         table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -69,7 +70,6 @@ public class TablePanel extends JPanel {
     public void removeMouseListener(MouseListener mouseListener) {
         table.removeMouseListener(mouseListener);
     }
-
 
     private static class ExtendTableModel extends DefaultTableModel {
         ExtendTableModel(Object[][] data, Object[] columnNames) {

@@ -7,7 +7,10 @@ import java.sql.*;
  *
  * @author qianlei
  */
-public class DaoUtil {
+public final class DaoUtil {
+    private DaoUtil() {
+    }
+
     private static String fileName;
 
     /**

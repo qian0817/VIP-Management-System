@@ -2,6 +2,7 @@ package qianlei.entity;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * 记录类
@@ -9,7 +10,7 @@ import java.util.Date;
  * @author qianlei
  */
 public class Record {
-    private Integer id;
+    private int id;
     private String goodId;
     private String vipId;
     private Date createTime;
@@ -20,19 +21,19 @@ public class Record {
     public Record() {
     }
 
-    public Record(Integer id, String goodId, String vipId, Date createTime, BigDecimal buyPrice) {
+    public Record(int id, String goodId, String vipId, Date createTime, BigDecimal buyPrice) {
         this.id = id;
         this.goodId = goodId;
         this.vipId = vipId;
-        this.createTime = createTime;
+        this.createTime = new Date(createTime.getTime());
         this.price = buyPrice;
     }
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -53,11 +54,11 @@ public class Record {
     }
 
     public Date getCreateTime() {
-        return createTime;
+        return new Date(createTime.getTime());
     }
 
     public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+        this.createTime = new Date(createTime.getTime());
     }
 
     public Good getGood() {
@@ -85,6 +86,29 @@ public class Record {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Record record = (Record) o;
+        return id == record.id &&
+                Objects.equals(goodId, record.goodId) &&
+                Objects.equals(vipId, record.vipId) &&
+                Objects.equals(createTime, record.createTime) &&
+                Objects.equals(good, record.good) &&
+                Objects.equals(vip, record.vip) &&
+                Objects.equals(price, record.price);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, goodId, vipId, createTime, good, vip, price);
+    }
+
+    @Override
     public String toString() {
         return "Record{" +
                 "id=" + id +
@@ -93,7 +117,7 @@ public class Record {
                 ", createTime=" + createTime +
                 ", good=" + good +
                 ", vip=" + vip +
-                ", buyPrice=" + price +
+                ", price=" + price +
                 '}';
     }
 }

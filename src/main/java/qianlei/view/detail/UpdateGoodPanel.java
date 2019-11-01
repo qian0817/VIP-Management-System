@@ -1,109 +1,100 @@
 package qianlei.view.detail;
 
 import qianlei.entity.Good;
+import qianlei.entity.Result;
 import qianlei.exception.WrongDataException;
 import qianlei.service.GoodService;
-import qianlei.view.component.ComboPanel;
-import qianlei.view.component.InputPanel;
+import qianlei.view.detail.linedetail.InputGoodPanelBase;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * @author qianlei
  */
-class UpdateGoodPanel extends JPanel {
+class UpdateGoodPanel extends JPanel implements CanSubmitPanel {
+    private final InputGoodPanelBase inputGoodPanel = new InputGoodPanelBase();
+    private final JPanel checkPanel = new JPanel(new FlowLayout());
+    private final JButton checkButton = new JButton("确认");
+    private final JButton deleteButton = new JButton("删除");
+    private final GoodService goodService = new GoodService();
+
     UpdateGoodPanel(String id) {
-        List<Double> doubleList = new LinkedList<>();
-        double discountGap = 0.01;
-        for (double i = 1; i > 0; i -= discountGap) {
-            doubleList.add(i);
-        }
-        //各组件定义
-        InputPanel idInputPanel = new InputPanel("商品编号", "请输入商品编号");
-        InputPanel nameInputPanel = new InputPanel("商品名称", "请输入商品名称");
-        InputPanel makerInputPanel = new InputPanel("制造商", "请输入制造商");
-        InputPanel priceInputPanel = new InputPanel("价格", "请输入价格");
-        ComboPanel<Double> discountInputPanel = new ComboPanel<>("折扣", doubleList);
-        InputPanel remainInputPanel = new InputPanel("商品库存", "请输入商品库存");
-        InputPanel introductionInputPanel = new InputPanel("商品简介", "请输入商品简介");
-        InputPanel remarkInputPanel = new InputPanel("备注", "请输入备注");
-        GoodService goodService = new GoodService();
-        JButton checkButton = new JButton("确认");
-        JButton deleteButton = new JButton("删除");
+        setLayout(new BorderLayout());
+        initInputGoodPanel(id);
+        addComponent();
+        addAction(id);
+    }
 
-        //各组件初始化
+    /**
+     * 初始化数据
+     *
+     * @param id 商品id
+     */
+    private void initInputGoodPanel(String id) {
         Good good = goodService.getGoodById(id);
-        setLayout(new GridLayout(20, 1));
-        idInputPanel.setText(good.getId());
-        idInputPanel.setEditable(false);
-        nameInputPanel.setText(good.getName());
-        makerInputPanel.setText(good.getMaker());
-        priceInputPanel.setText(good.getPrice().toString());
-        discountInputPanel.setSelectItem(good.getDiscount());
-        remainInputPanel.setText(String.valueOf(good.getRemain()));
-        introductionInputPanel.setText(good.getIntroduction());
-        remarkInputPanel.setText(good.getRemarks());
-        JPanel panel = new JPanel(new FlowLayout());
-        panel.add(checkButton);
-        panel.add(deleteButton);
+        inputGoodPanel.init(good);
+        inputGoodPanel.setEditable(InputGoodPanelBase.ID, false);
+    }
 
-        add(new JLabel("商品信息修改", JLabel.CENTER));
-        add(idInputPanel);
-        add(new JLabel());
-        add(nameInputPanel);
-        add(new JLabel());
-        add(makerInputPanel);
-        add(new JLabel());
-        add(priceInputPanel);
-        add(new JLabel());
-        add(discountInputPanel);
-        add(new JLabel());
-        add(remainInputPanel);
-        add(new JLabel());
-        add(introductionInputPanel);
-        add(new JLabel());
-        add(remarkInputPanel);
-        add(new JLabel());
-        add(panel);
-        add(new JLabel());
-
-        //添加事件
+    /**
+     * 添加事件
+     *
+     * @param id 当前商品id
+     */
+    private void addAction(String id) {
         deleteButton.addActionListener((e) -> {
             int a = JOptionPane.showConfirmDialog(UpdateGoodPanel.this, "是否删除该商品");
             if (a == JOptionPane.YES_OPTION) {
                 goodService.deleteGoodById(id);
-                removeAll();
-                setLayout(new BorderLayout());
-                add(new ShowGoodPanel());
-                repaint();
-                setVisible(true);
+                changeToShowGoodPanel();
             }
         });
         checkButton.addActionListener((e) -> {
             int a = JOptionPane.showConfirmDialog(UpdateGoodPanel.this, "是否修改该商品");
             if (a == JOptionPane.YES_OPTION) {
-                String name = nameInputPanel.getText();
-                String maker = makerInputPanel.getText();
-                String price = priceInputPanel.getText();
-                Double discount = discountInputPanel.getSelect();
-                String remain = remainInputPanel.getText();
-                String introduction = introductionInputPanel.getText();
-                String remark = remarkInputPanel.getText();
-                try {
-                    goodService.updateGood(id, name, maker, price, discount, remain, introduction, remark);
-                    JOptionPane.showMessageDialog(UpdateGoodPanel.this, "修改成功", "修改成功", JOptionPane.INFORMATION_MESSAGE);
-                    removeAll();
-                    setLayout(new BorderLayout());
-                    add(new ShowGoodPanel());
-                    repaint();
-                    setVisible(true);
-                } catch (WrongDataException ex) {
-                    JOptionPane.showMessageDialog(UpdateGoodPanel.this, ex.getMessage(), "修改失败", JOptionPane.INFORMATION_MESSAGE);
+                Result result = submit();
+                if (result.isSuccess()) {
+                    JOptionPane.showMessageDialog(UpdateGoodPanel.this, result.getMessage(), "修改成功", JOptionPane.INFORMATION_MESSAGE);
+                    changeToShowGoodPanel();
+                } else {
+                    JOptionPane.showMessageDialog(UpdateGoodPanel.this, result.getMessage(), "修改失败", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
         });
+    }
+
+    @Override
+    public Result submit() {
+        try {
+            Good good = inputGoodPanel.getGood();
+            goodService.updateGood(good);
+            return new Result(true, "修改成功");
+        } catch (WrongDataException e) {
+            return new Result(false, e.getMessage());
+        } catch (Exception e) {
+            return new Result(false, "未知错误" + e.getMessage());
+        }
+    }
+
+    /**
+     * 回到showGoodPanel
+     */
+    private void changeToShowGoodPanel() {
+        removeAll();
+        setLayout(new BorderLayout());
+        add(new ShowGoodPanel());
+        repaint();
+        setVisible(true);
+    }
+
+    /**
+     * 添加组件
+     */
+    private void addComponent() {
+        checkPanel.add(checkButton);
+        checkPanel.add(deleteButton);
+        add(inputGoodPanel);
+        add(checkPanel, BorderLayout.SOUTH);
     }
 }

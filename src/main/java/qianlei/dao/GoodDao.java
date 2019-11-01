@@ -53,22 +53,13 @@ public class GoodDao {
         ResultSet resultSet = null;
         try (
                 Connection connection = DaoUtil.getConnection();
-                PreparedStatement statement = connection.prepareStatement("SELECT name, maker, createtime, " +
+                PreparedStatement statement = connection.prepareStatement("SELECT id,name, maker, createtime, " +
                         "price, discount, remain, introduction, remarks,status FROM good WHERE id = ?")
         ) {
             statement.setString(1, id);
             resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                String name = resultSet.getString("name");
-                String maker = resultSet.getString("maker");
-                Date createtime = resultSet.getDate("createtime");
-                BigDecimal price = resultSet.getBigDecimal("price");
-                double discount = resultSet.getDouble("discount");
-                Long remain = resultSet.getLong("remain");
-                String introduction = resultSet.getString("introduction");
-                String remarks = resultSet.getString("remarks");
-                StatusEnum status = StatusEnum.getById(resultSet.getInt("status"));
-                return new Good(id, name, maker, createtime, price, discount, remain, introduction, remarks, status);
+                return getGoodByResult(resultSet);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -88,7 +79,7 @@ public class GoodDao {
                 Connection connection = DaoUtil.getConnection();
                 PreparedStatement statement = connection.prepareStatement("UPDATE good SET status = ? WHERE id = ?")
         ) {
-            statement.setInt(1, StatusEnum.Deleted.getId());
+            statement.setInt(1, StatusEnum.DELETED.getId());
             statement.setString(2, id);
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -124,45 +115,47 @@ public class GoodDao {
     /**
      * 根据id和name获取数据
      *
-     * @param needId   需要包含的id
-     * @param needName 需要包含的name
+     * @param searchId   需要包含的id
+     * @param searchName 需要包含的name
      * @return 获取的商品的集合
      */
-    public List<Good> selectAllNormalByIdAndName(String needId, String needName) {
+    public List<Good> selectAllNormalGoodByIdAndName(String searchId, String searchName) {
         List<Good> goodList = new LinkedList<>();
         ResultSet resultSet = null;
         try (
                 Connection connection = DaoUtil.getConnection();
                 PreparedStatement statement = connection.prepareStatement("SELECT id,name, maker, createtime, " +
                         "price, discount, remain, introduction, remarks,status FROM good " +
-                        "WHERE id LIKE ? " +
-                        "AND name LIKE ? " +
-                        "AND status = ?" +
+                        "WHERE id LIKE ? AND name LIKE ? AND status = ?" +
                         "LIMIT 500")
         ) {
-            statement.setString(1, "%" + needId + "%");
-            statement.setString(2, "%" + needName + "%");
-            statement.setInt(3, StatusEnum.Normal.getId());
+            statement.setString(1, "%" + searchId + "%");
+            statement.setString(2, "%" + searchName + "%");
+            statement.setInt(3, StatusEnum.NORMAL.getId());
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                String id = resultSet.getString("id");
-                String name = resultSet.getString("name");
-                String maker = resultSet.getString("maker");
-                Date createtime = resultSet.getDate("createtime");
-                BigDecimal price = resultSet.getBigDecimal("price");
-                double discount = resultSet.getDouble("discount");
-                Long remain = resultSet.getLong("remain");
-                String introduction = resultSet.getString("introduction");
-                String remarks = resultSet.getString("remarks");
-                StatusEnum status = StatusEnum.getById(resultSet.getInt("status"));
-                goodList.add(new Good(id, name, maker, createtime, price, discount, remain, introduction, remarks, status));
+                Good good = getGoodByResult(resultSet);
+                goodList.add(good);
             }
-            resultSet.close();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             DaoUtil.closeResultSet(resultSet);
         }
         return goodList;
+    }
+
+    private Good getGoodByResult(ResultSet resultSet) throws SQLException {
+        String id = resultSet.getString("id");
+        String name = resultSet.getString("name");
+        String maker = resultSet.getString("maker");
+        Date createTime = resultSet.getDate("createTime");
+        BigDecimal price = resultSet.getBigDecimal("price");
+        double discount = resultSet.getDouble("discount");
+        long remain = resultSet.getLong("remain");
+        String introduction = resultSet.getString("introduction");
+        String remarks = resultSet.getString("remarks");
+        StatusEnum status = StatusEnum.getById(resultSet.getInt("status"));
+        return new Good(id, name, maker, createTime, price, discount, remain, introduction, remarks, status);
     }
 }

@@ -3,6 +3,7 @@ package qianlei.entity;
 import qianlei.enums.StatusEnum;
 
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * vip类
@@ -10,8 +11,9 @@ import java.util.Date;
  * @author qianlei
  */
 public class Vip {
-    public static String man = "男";
-    public static String woman = "女";
+    public static final int POSTCODE_LENGTH = 6;
+    public static final String MAN = "男";
+    public static final String WOMAN = "女";
     private String id;
     private String name;
     private String sex;
@@ -22,6 +24,13 @@ public class Vip {
     private StatusEnum status;
 
     public Vip() {
+        id = "";
+        name = "";
+        sex = MAN;
+        phone = "";
+        address = "";
+        postcode = 100000;
+        createTime = new Date();
     }
 
     public Vip(String id, String name, String sex, String phone, String address, int postcode, Date createTime, StatusEnum status) {
@@ -31,7 +40,7 @@ public class Vip {
         this.phone = phone;
         this.address = address;
         this.postcode = postcode;
-        this.createTime = createTime;
+        this.createTime = new Date(createTime.getTime());
         this.status = status;
     }
 
@@ -93,11 +102,11 @@ public class Vip {
     }
 
     public Date getCreateTime() {
-        return createTime;
+        return new Date(createTime.getTime());
     }
 
     public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+        this.createTime = new Date(createTime.getTime());
     }
 
     public StatusEnum getStatus() {
@@ -109,11 +118,35 @@ public class Vip {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Vip vip = (Vip) o;
+        return postcode == vip.postcode &&
+                Objects.equals(id, vip.id) &&
+                Objects.equals(name, vip.name) &&
+                Objects.equals(sex, vip.sex) &&
+                Objects.equals(phone, vip.phone) &&
+                Objects.equals(address, vip.address) &&
+                Objects.equals(createTime, vip.createTime) &&
+                status == vip.status;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, sex, phone, address, postcode, createTime, status);
+    }
+
+    @Override
     public String toString() {
         return "Vip{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
-                ", sex=" + sex +
+                ", sex='" + sex + '\'' +
                 ", phone='" + phone + '\'' +
                 ", address='" + address + '\'' +
                 ", postcode=" + postcode +

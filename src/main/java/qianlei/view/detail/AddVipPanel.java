@@ -1,9 +1,10 @@
 package qianlei.view.detail;
 
+import qianlei.entity.Result;
+import qianlei.entity.Vip;
 import qianlei.exception.WrongDataException;
 import qianlei.service.VipService;
-import qianlei.view.component.InputPanel;
-import qianlei.view.component.SexChoosePanel;
+import qianlei.view.detail.linedetail.InputVipPanelBase;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,69 +14,58 @@ import java.awt.*;
  *
  * @author qianlei
  */
-public class AddVipPanel extends JPanel {
-    private InputPanel nameInputPanel = new InputPanel("姓名", "请输入商品姓名");
-    private InputPanel idInputPanel = new InputPanel("证件号", "请输入证件号");
-    private SexChoosePanel sexInputPanel = new SexChoosePanel();
-    private InputPanel phoneInputPanel = new InputPanel("电话号码", "请输入电话号码");
-    private InputPanel addressInputPanel = new InputPanel("联系地址", "请输入联系地址");
-    private InputPanel postcodeInputPanel = new InputPanel("邮编", "请输入邮编");
-    private JButton button = new JButton("确认");
+public class AddVipPanel extends JPanel implements CanInitPanel, CanSubmitPanel {
+    private final VipService vipService = new VipService();
+    private final JButton button = new JButton("确认");
+    private final InputVipPanelBase inputVipPanel = new InputVipPanelBase();
 
     public AddVipPanel() {
-        button.addActionListener((e) -> {
-            int a = JOptionPane.showConfirmDialog(AddVipPanel.this, "是否添加该VIP");
-            if (a == JOptionPane.YES_OPTION) {
-                VipService vipService = new VipService();
-                String id = idInputPanel.getText();
-                String name = nameInputPanel.getText();
-                String sex = sexInputPanel.getSelect();
-                String phone = phoneInputPanel.getText();
-                String address = addressInputPanel.getText();
-                String postcode = postcodeInputPanel.getText();
-                try {
-                    vipService.addVip(id, name, sex, phone, address, postcode);
-                    JOptionPane.showMessageDialog(AddVipPanel.this, "添加成功", "添加成功", JOptionPane.INFORMATION_MESSAGE);
-                    init();
-                } catch (WrongDataException ex) {
-                    JOptionPane.showMessageDialog(AddVipPanel.this, ex.getMessage(), "添加失败", JOptionPane.INFORMATION_MESSAGE);
-                }
-            }
-        });
         init();
+        addAction();
     }
 
     /**
-     * 初始化界面
+     * 添加事件
      */
+    private void addAction() {
+        button.addActionListener((e) -> {
+            int a = JOptionPane.showConfirmDialog(AddVipPanel.this, "是否添加该VIP");
+            if (a == JOptionPane.YES_OPTION) {
+                Result result = submit();
+                if (result.isSuccess()) {
+                    JOptionPane.showMessageDialog(AddVipPanel.this, result.getMessage(), "添加成功", JOptionPane.INFORMATION_MESSAGE);
+                    init();
+                } else {
+                    JOptionPane.showMessageDialog(AddVipPanel.this, result.getMessage(), "添加失败", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+        });
+    }
+
+    @Override
+    public Result submit() {
+        try {
+            Vip vip = inputVipPanel.getVip();
+            vipService.addVip(vip);
+            return new Result(true, "添加成功");
+        } catch (WrongDataException ex) {
+            return new Result(false, ex.getMessage());
+        } catch (Exception e) {
+            return new Result(false, "未知错误" + e.getMessage());
+        }
+    }
+
+    @Override
     public void init() {
+        inputVipPanel.init();
         removeAll();
         //重置界面
-        setLayout(new GridLayout(15, 1));
-        idInputPanel.setText("");
-        nameInputPanel.setText("");
-        sexInputPanel.setSelect("男");
-        phoneInputPanel.setText("");
-        addressInputPanel.setText("");
-        postcodeInputPanel.setText("");
+        setLayout(new BorderLayout());
         JPanel panel = new JPanel(new FlowLayout());
         panel.add(button);
         //添加组件
-        add(new JLabel("VIP信息录入", JLabel.CENTER));
-        add(new JLabel());
-        add(idInputPanel);
-        add(new JLabel());
-        add(nameInputPanel);
-        add(new JLabel());
-        add(sexInputPanel);
-        add(new JLabel());
-        add(phoneInputPanel);
-        add(new JLabel());
-        add(addressInputPanel);
-        add(new JLabel());
-        add(postcodeInputPanel);
-        add(new JLabel());
-        add(panel);
+        add(inputVipPanel);
+        add(panel, BorderLayout.SOUTH);
         repaint();
         setVisible(true);
     }

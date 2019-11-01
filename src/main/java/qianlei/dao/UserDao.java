@@ -56,6 +56,11 @@ public class UserDao {
         }
     }
 
+    /**
+     * 修改账号
+     *
+     * @param user 修改后的账号
+     */
     public void updateUser(User user) {
         try (
                 Connection connection = DaoUtil.getConnection();

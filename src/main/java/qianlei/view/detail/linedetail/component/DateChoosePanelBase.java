@@ -1,9 +1,11 @@
-package qianlei.view.component;
+package qianlei.view.detail.linedetail.component;
 
 import com.alee.extended.date.WebDateField;
+import qianlei.utils.DateUtil;
 import qianlei.utils.ViewUtil;
 
 import javax.swing.*;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -12,10 +14,10 @@ import java.util.Date;
  *
  * @author qianlei
  */
-public class DateChoosePanel extends JPanel {
-    private WebDateField webDateField = new WebDateField();
+public class DateChoosePanelBase extends BaseComponentPanel {
+    private final WebDateField webDateField = new WebDateField();
 
-    public DateChoosePanel(String title) {
+    public DateChoosePanelBase(String title) {
         webDateField.setDateFormat(new SimpleDateFormat("yyyy年MM月dd日"));
         webDateField.setAllowUserInput(false);
         webDateField.setDate(new Date());
@@ -29,13 +31,24 @@ public class DateChoosePanel extends JPanel {
         add(Box.createHorizontalStrut(ViewUtil.getCurConfig().getFont().getSize() * 4));
     }
 
+    @Override
+    public String getItem() {
+        return DateUtil.transferToString(webDateField.getDate());
+    }
 
-    /**
-     * 获取当前选中的日期
-     *
-     * @return 当前选中的日期
-     */
-    public Date getSelectDate() {
-        return webDateField.getDate();
+    @Override
+    public void setItem(String s) {
+        if (s != null) {
+            try {
+                webDateField.setDate(DateUtil.transferToDate(s));
+            } catch (ParseException e) {
+                webDateField.setDate(new Date());
+            }
+        }
+    }
+
+    @Override
+    public void setEditable(boolean editable) {
+
     }
 }

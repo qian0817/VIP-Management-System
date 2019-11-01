@@ -22,9 +22,11 @@ import java.util.List;
  */
 public class RecordDao {
     /**
-     * 选择所有记录
-     *
-     * @return 所有记录
+     * 根据vip的id name和phone获取记录
+     * @param getId 获取到的id
+     * @param getName 获取到的name
+     * @param getPhone 获取到的phone
+     * @return 符合条件的vip
      */
     public List<Record> selectAllRecordByIdAndNameAndPhone(String getId, String getName, String getPhone) {
         ResultSet resultSet = null;
@@ -32,8 +34,8 @@ public class RecordDao {
         try (
                 Connection connection = DaoUtil.getConnection();
                 PreparedStatement statement = connection.prepareStatement("SELECT r.id AS record_id, r.userId AS vip_id," +
-                        "r.price AS record_price ," +
-                        "r.goodId AS good_id, r.createTime AS record_create_time, v.phone AS vip_phone ,v.name AS vip_name," +
+                        "r.price AS record_price ,r.goodId AS good_id, r.createTime AS record_create_time, " +
+                        "v.phone AS vip_phone ,v.name AS vip_name," +
                         "v.status AS vip_status,g.name AS  good_name,g.status AS good_status " +
                         "FROM record r " +
                         "LEFT JOIN good g on r.goodId = g.id " +
@@ -57,20 +59,22 @@ public class RecordDao {
                 StatusEnum goodStatus = StatusEnum.getById(resultSet.getInt("good_status"));
                 BigDecimal price = resultSet.getBigDecimal("record_price");
                 Record record = new Record();
+                Good good = new Good();
+                Vip vip = new Vip();
+                good.setId(goodId);
+                good.setName(goodName);
+                good.setId(goodId);
+                good.setStatus(goodStatus);
+                vip.setId(vipId);
+                vip.setName(vipName);
+                vip.setPhone(phone);
+                vip.setStatus(vipStatus);
                 record.setId(id);
                 record.setGoodId(goodId);
                 record.setVipId(vipId);
                 record.setCreateTime(createTime);
-                record.setGood(new Good());
-                record.getGood().setId(goodId);
-                record.getGood().setName(goodName);
-                record.getGood().setPrice(price);
-                record.getGood().setStatus(goodStatus);
-                record.setVip(new Vip());
-                record.getVip().setId(vipId);
-                record.getVip().setStatus(vipStatus);
-                record.getVip().setPhone(phone);
-                record.getVip().setName(vipName);
+                record.setGood(good);
+                record.setVip(vip);
                 record.setPrice(price);
                 recordList.add(record);
             }

@@ -1,35 +1,45 @@
 package qianlei.utils;
 
+import java.util.regex.Pattern;
+
 /**
  * 字符串工具类
  *
  * @author qianlei
  */
-public class StringUtil {
+public final class StringUtil {
+    private static final Pattern BIG_DECIMAL_PATTERN = Pattern.compile("^\\d+\\.?\\d*$");
+    private static final Pattern CONTAINS_BLANK_PATTERN = Pattern.compile("\\S+");
+    private static final Pattern PASSWORD_PATTERN = Pattern.compile("^\\w{6,16}$");
+    private static final Pattern BIG_INTEGER_PATTERN = Pattern.compile("^\\d+$");
+
+    private StringUtil() {
+    }
+
     /**
      * 判断字符串是否是数字
      *
      * @param s 需要判断的字符串
      * @return 是否是数字
      */
-    public static boolean isNotBigDecimal(String s) {
+    public static boolean isBigDecimal(String s) {
         if (s == null) {
             return true;
         }
-        return !s.matches("^\\d+\\.?\\d*$");
+        return BIG_DECIMAL_PATTERN.matcher(s).matches();
     }
 
     /**
-     * 判断字符串是否有空格或为空
+     * 判断字符串是否有空格
      *
      * @param s 需要判断的字符串
-     * @return 是否有空格或为空
+     * @return 是否有空格
      */
     public static boolean containsBlank(String s) {
         if (s == null) {
-            return true;
+            return false;
         }
-        return !s.matches("\\S+");
+        return !CONTAINS_BLANK_PATTERN.matcher(s).matches();
     }
 
     /**
@@ -38,11 +48,11 @@ public class StringUtil {
      * @param password 需要判断的字符串
      * @return 是否符合密码格式
      */
-    public static boolean isNotPassword(String password) {
+    public static boolean isPassword(String password) {
         if (password == null) {
             return true;
         }
-        return !password.matches("^\\w{6,16}$");
+        return PASSWORD_PATTERN.matcher(password).matches();
     }
 
     /**
@@ -55,6 +65,6 @@ public class StringUtil {
         if (s == null) {
             return false;
         }
-        return s.matches("^\\d+$");
+        return BIG_INTEGER_PATTERN.matcher(s).matches();
     }
 }

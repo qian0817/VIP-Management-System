@@ -1,8 +1,9 @@
-package qianlei.view.component;
+package qianlei.view.detail.tabledetail.component;
 
 import com.alee.laf.button.WebButton;
-import com.alee.laf.panel.WebPanel;
+import qianlei.view.detail.linedetail.component.InputPanelBase;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
@@ -14,13 +15,13 @@ import java.util.Map;
  *
  * @author qianlei
  */
-public class SearchBar extends WebPanel {
-    private Map<String, InputPanel> map = new HashMap<>();
-    private WebButton search = new WebButton("搜索");
+public class SearchBar extends JPanel {
+    private final Map<String, InputPanelBase> map = new HashMap<>();
+    private final WebButton search = new WebButton("搜索");
 
     public SearchBar(List<String> items) {
         for (String item : items) {
-            map.put(item, new InputPanel(item, "请输入" + item, 0));
+            map.put(item, new InputPanelBase(item, "请输入" + item, 0));
         }
         setLayout(new GridLayout(1, map.size() + 1));
         for (String item : items) {
@@ -37,9 +38,9 @@ public class SearchBar extends WebPanel {
      * @return 输入的文字
      */
     public Map<String, String> getInput() {
-        Map<String, String> ret = new HashMap<>();
-        for (String s : map.keySet()) {
-            ret.put(s, map.get(s).getText());
+        Map<String, String> ret = new HashMap<>(8);
+        for (Map.Entry<String, InputPanelBase> s : map.entrySet()) {
+            ret.put(s.getKey(), s.getValue().getItem());
         }
         return ret;
     }

@@ -1,25 +1,25 @@
-package qianlei.view.component;
+package qianlei.view.detail.linedetail.component;
 
-import com.alee.laf.text.WebTextField;
+import com.alee.laf.text.WebPasswordField;
 import qianlei.utils.ViewUtil;
 
 import javax.swing.*;
 
 /**
- * 输入组件
+ * 密码输入组件
  *
  * @author qianlei
  */
-public class InputPanel extends JPanel {
-    private WebTextField field = new WebTextField(20);
+public class PasswordPanelBase extends BaseComponentPanel {
+    private final WebPasswordField field;
 
-    public InputPanel(String title, String hintText) {
+    public PasswordPanelBase(String title, String hintText) {
         this(title, hintText, ViewUtil.getCurConfig().getFont().getSize() * 4);
     }
 
-    InputPanel(String title, String hintText, int margin) {
+    private PasswordPanelBase(String title, String hintText, int margin) {
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-        //保证右对齐
+        //保证右对齐，根据字体大小调节
         add(Box.createHorizontalStrut(ViewUtil.getCurConfig().getFont().getSize() * 4));
         add(Box.createHorizontalStrut(margin - title.length() * ViewUtil.getCurConfig().getFont().getSize()));
         add(Box.createHorizontalBox());
@@ -27,6 +27,7 @@ public class InputPanel extends JPanel {
         JLabel label = new JLabel(title);
         add(label);
 
+        field = new WebPasswordField(20);
         //添加提示文字
         field.setInputPrompt(hintText);
         add(field);
@@ -34,30 +35,20 @@ public class InputPanel extends JPanel {
         add(Box.createHorizontalStrut(margin));
     }
 
-    /**
-     * 获取文本
-     *
-     * @return field的文本
-     */
-    public String getText() {
-        return field.getText();
+    @Override
+    public String getItem() {
+        return String.valueOf(field.getPassword());
     }
 
-    /**
-     * 设置文本
-     *
-     * @param s 需要设置的文本
-     */
-    public void setText(String s) {
-        field.setText(s);
+    @Override
+    public void setItem(String s) {
+        if (s != null) {
+            field.setText(s);
+        }
     }
 
-    /**
-     * 设置是否可编辑
-     *
-     * @param editable 能否编辑
-     */
+    @Override
     public void setEditable(boolean editable) {
-        field.setEditable(editable);
+
     }
 }

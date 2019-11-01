@@ -1,10 +1,11 @@
 package qianlei.view.detail;
 
+import com.alee.laf.button.WebButton;
+import qianlei.entity.Result;
+import qianlei.entity.User;
 import qianlei.exception.WrongDataException;
 import qianlei.service.UserService;
-import qianlei.view.component.InputPanel;
-import qianlei.view.component.PasswordPanel;
-import qianlei.view.component.VerifyCodePanel;
+import qianlei.view.detail.linedetail.InputChangeUserPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,48 +15,67 @@ import java.awt.*;
  *
  * @author qianlei
  */
-public class ChangePasswordPanel extends JPanel {
+public class ChangePasswordPanel extends JPanel implements CanInitPanel, CanSubmitPanel {
     private UserService userService = new UserService();
-    private PasswordPanel recheckPasswordPanel = new PasswordPanel("确认密码", "请再次填写密码");
-    private VerifyCodePanel verifyCodePanel = new VerifyCodePanel();
-
+    private InputChangeUserPanel inputChangeUserPanel = new InputChangeUserPanel();
+    private WebButton check = new WebButton("确认");
+    private JLabel titleLabel = new JLabel("密码修改", JLabel.CENTER);
+    private JPanel button = new JPanel(new FlowLayout());
     public ChangePasswordPanel() {
-        setLayout(new GridLayout(11, 1));
-        InputPanel nameInputPanel = new InputPanel("用户名", "");
-        nameInputPanel.setEditable(false);
-        PasswordPanel passwordPanel = new PasswordPanel("密码", "请输入修改后密码");
-        JButton check = new JButton("确认");
-        nameInputPanel.setText(userService.getCurUser().getUsername());
-        JPanel button = new JPanel(new FlowLayout());
-        button.add(check);
+        addAction();
+        addComponent();
+    }
+
+    /**
+     * 添加事件
+     */
+    private void addAction() {
+        check.addHotkey(10);
         check.addActionListener((e) -> {
-            String name = nameInputPanel.getText();
-            String password = passwordPanel.getText();
-            String recheckPassword = recheckPasswordPanel.getText();
-            if (verifyCodePanel.isVerifyCodeWrong()) {
-                JOptionPane.showMessageDialog(ChangePasswordPanel.this, "验证码错误", "修改密码失败", JOptionPane.INFORMATION_MESSAGE);
-                return;
-            } else if (!recheckPassword.equals(password)) {
-                JOptionPane.showMessageDialog(ChangePasswordPanel.this, "两次填写的密码不一致", "修改密码失败", JOptionPane.INFORMATION_MESSAGE);
-                return;
-            }
-            try {
-                userService.changePassword(name, password);
+            Result result = submit();
+            if (result.isSuccess()) {
                 JOptionPane.showMessageDialog(ChangePasswordPanel.this, "修改密码成功", "修改密码成功", JOptionPane.INFORMATION_MESSAGE);
-            } catch (WrongDataException ex) {
-                JOptionPane.showMessageDialog(ChangePasswordPanel.this, ex.getMessage(), "修改密码失败", JOptionPane.INFORMATION_MESSAGE);
+                init();
+            } else {
+                JOptionPane.showMessageDialog(ChangePasswordPanel.this, result.getMessage(), "修改密码失败", JOptionPane.INFORMATION_MESSAGE);
             }
+            inputChangeUserPanel.changeVerifyCode();
         });
-        add(new JLabel("密码修改", JLabel.CENTER));
-        add(new JLabel());
-        add(nameInputPanel);
-        add(new JLabel());
-        add(passwordPanel);
-        add(new JLabel());
-        add(recheckPasswordPanel);
-        add(new JLabel());
-        add(verifyCodePanel);
-        add(new JLabel());
-        add(button);
+    }
+
+    /**
+     * 提交
+     *
+     * @return 结果
+     */
+    @Override
+    public Result submit() {
+        try {
+            User user = inputChangeUserPanel.getUser();
+            userService.changePassword(user);
+            return new Result(true, "添加成功");
+        } catch (WrongDataException e) {
+            return new Result(false, e.getMessage());
+        } catch (Exception e) {
+            return new Result(false, "未知错误" + e.getMessage());
+        }
+    }
+
+    /**
+     * 添加组件
+     */
+    private void addComponent() {
+        inputChangeUserPanel.setEditable(InputChangeUserPanel.USERNAME, false);
+        inputChangeUserPanel.init(userService.getCurUser().getUsername());
+        button.add(check);
+        setLayout(new BorderLayout());
+        add(titleLabel, BorderLayout.NORTH);
+        add(inputChangeUserPanel);
+        add(button, BorderLayout.SOUTH);
+    }
+
+    @Override
+    public void init() {
+        inputChangeUserPanel.init(userService.getCurUser().getUsername());
     }
 }

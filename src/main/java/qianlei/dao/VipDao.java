@@ -50,20 +50,13 @@ public class VipDao {
         ResultSet resultSet = null;
         try (
                 Connection connection = DaoUtil.getConnection();
-                PreparedStatement statement = connection.prepareStatement("SELECT name, sex, phone, address, postcode, " +
+                PreparedStatement statement = connection.prepareStatement("SELECT id,name, sex, phone, address, postcode, " +
                         "createtime, status FROM vip WHERE id = ? LIMIT 500")
         ) {
             statement.setString(1, id);
             resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                String name = resultSet.getString("name");
-                String sex = resultSet.getString("sex");
-                Date createtime = resultSet.getDate("createtime");
-                String phone = resultSet.getString("phone");
-                String address = resultSet.getString("address");
-                int postcode = resultSet.getInt("postcode");
-                StatusEnum status = StatusEnum.getById(resultSet.getInt("status"));
-                return new Vip(id, name, sex, phone, address, postcode, createtime, status);
+                return getVipByResultSet(resultSet);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -74,11 +67,13 @@ public class VipDao {
     }
 
     /**
-     * 获取所有VIP
-     *
-     * @return 所有VIP
+     * 根据id name和phone查找vip
+     * @param searchId 获取到的id
+     * @param searchName 获取到的name
+     * @param searchPhone 获取到的phone
+     * @return 符合条件的vip
      */
-    public List<Vip> selectAllNormalVipByIdAndNameAndPhone(String getId, String getName, String getPhone) {
+    public List<Vip> selectAllNormalVipByIdAndNameAndPhone(String searchId, String searchName, String searchPhone) {
         ResultSet resultSet = null;
         List<Vip> vipList = new LinkedList<>();
         try (
@@ -86,23 +81,16 @@ public class VipDao {
                 PreparedStatement statement = connection.prepareStatement("SELECT id,name, sex, phone, address, " +
                         "postcode, createtime, status FROM vip " +
                         "WHERE id LIKE ? AND name LIKE ? AND phone LIKE ? AND status = ?" +
-                        "LIMIT 500")
+                        "LIMIT 500 ")
         ) {
-            statement.setString(1, "%" + getId + "%");
-            statement.setString(2, "%" + getName + "%");
-            statement.setString(3, "%" + getPhone + "%");
-            statement.setInt(4, StatusEnum.Normal.getId());
+            statement.setString(1, "%" + searchId + "%");
+            statement.setString(2, "%" + searchName + "%");
+            statement.setString(3, "%" + searchPhone + "%");
+            statement.setInt(4, StatusEnum.NORMAL.getId());
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                String id = resultSet.getString("id");
-                String name = resultSet.getString("name");
-                String sex = resultSet.getString("sex");
-                Date createtime = resultSet.getDate("createtime");
-                String phone = resultSet.getString("phone");
-                String address = resultSet.getString("address");
-                int postcode = resultSet.getInt("postcode");
-                StatusEnum status = StatusEnum.getById(resultSet.getInt("status"));
-                vipList.add(new Vip(id, name, sex, phone, address, postcode, createtime, status));
+                Vip vip = getVipByResultSet(resultSet);
+                vipList.add(vip);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -110,6 +98,25 @@ public class VipDao {
             DaoUtil.closeResultSet(resultSet);
         }
         return vipList;
+    }
+
+    /**
+     * 根据result获取vip
+     *
+     * @param resultSet resultSet
+     * @return vip
+     * @throws SQLException sql错误
+     */
+    private Vip getVipByResultSet(ResultSet resultSet) throws SQLException {
+        String id = resultSet.getString("id");
+        String name = resultSet.getString("name");
+        String sex = resultSet.getString("sex");
+        Date createTime = resultSet.getDate("createTime");
+        String phone = resultSet.getString("phone");
+        String address = resultSet.getString("address");
+        int postcode = resultSet.getInt("postcode");
+        StatusEnum status = StatusEnum.getById(resultSet.getInt("status"));
+        return new Vip(id, name, sex, phone, address, postcode, createTime, status);
     }
 
     /**
@@ -122,7 +129,7 @@ public class VipDao {
                 Connection connection = DaoUtil.getConnection();
                 PreparedStatement statement = connection.prepareStatement("UPDATE vip SET status = ? WHERE id = ?")
         ) {
-            statement.setInt(1, StatusEnum.Deleted.getId());
+            statement.setInt(1, StatusEnum.DELETED.getId());
             statement.setString(2, id);
             statement.executeUpdate();
         } catch (SQLException e) {

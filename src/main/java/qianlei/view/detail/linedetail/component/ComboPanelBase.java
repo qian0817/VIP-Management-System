@@ -1,4 +1,4 @@
-package qianlei.view.component;
+package qianlei.view.detail.linedetail.component;
 
 import com.alee.laf.combobox.WebComboBox;
 import qianlei.utils.ViewUtil;
@@ -9,10 +9,10 @@ import java.util.List;
 /**
  * @author qianlei
  */
-public class ComboPanel<T> extends JPanel {
-    private JComboBox webComboBox;
+public class ComboPanelBase extends BaseComponentPanel {
+    private final WebComboBox webComboBox;
 
-    public ComboPanel(String title, List<T> items) {
+    public ComboPanelBase(String title, List<String> items) {
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         //右对齐，根据字体大小调节
         add(Box.createHorizontalStrut(ViewUtil.getCurConfig().getFont().getSize() * 4));
@@ -25,23 +25,20 @@ public class ComboPanel<T> extends JPanel {
         add(Box.createHorizontalStrut(ViewUtil.getCurConfig().getFont().getSize() * 4));
     }
 
-    /**
-     * 设置选择项
-     *
-     * @param t 需要选择的内容
-     */
-    public void setSelectItem(T t) {
-        webComboBox.setSelectedItem(t);
+    @Override
+    public String getItem() {
+        return (String) webComboBox.getSelectedItem();
     }
 
-    /**
-     * 获取当前选择内容
-     *
-     * @return 当前选择的内容
-     */
-    @SuppressWarnings("unchecked")
-    public T getSelect() {
-        return (T) webComboBox.getSelectedItem();
+    @Override
+    public void setItem(String s) {
+        if (s != null) {
+            webComboBox.setSelectedItem(s);
+        }
     }
 
+    @Override
+    public void setEditable(boolean editable) {
+        webComboBox.setEditable(editable);
+    }
 }

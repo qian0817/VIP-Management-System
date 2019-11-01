@@ -1,4 +1,4 @@
-package qianlei.view.component;
+package qianlei.view.detail.linedetail.component;
 
 import com.alee.laf.button.WebToggleButton;
 import com.alee.laf.grouping.GroupPane;
@@ -12,11 +12,11 @@ import javax.swing.*;
  *
  * @author qianlei
  */
-public class SexChoosePanel extends JPanel {
-    private WebToggleButton manButton = new WebToggleButton("  男  ", true);
-    private WebToggleButton womanButton = new WebToggleButton("  女  ");
+public class SexChoosePanelBase extends BaseComponentPanel {
+    private final WebToggleButton manButton = new WebToggleButton("  男  ", true);
+    private final WebToggleButton womanButton = new WebToggleButton("  女  ");
 
-    public SexChoosePanel() {
+    public SexChoosePanelBase() {
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         add(Box.createHorizontalStrut(ViewUtil.getCurConfig().getFont().getSize() * 4));
         add(Box.createHorizontalStrut(ViewUtil.getCurConfig().getFont().getSize() * 2));
@@ -30,25 +30,22 @@ public class SexChoosePanel extends JPanel {
         add(Box.createHorizontalStrut(ViewUtil.getCurConfig().getFont().getSize() * 4));
     }
 
-    /**
-     * 获取选择的性别
-     *
-     * @return 当前选择的性别
-     */
-    public String getSelect() {
+    @Override
+    public String getItem() {
         return manButton.isSelected() ? "男" : "女";
     }
 
-    /**
-     * 修改选择的性别
-     *
-     * @param s 修改后的性别
-     */
-    public void setSelect(String s) {
-        if (Vip.man.equals(s)) {
+    @Override
+    public void setItem(String s) {
+        if (Vip.MAN.equals(s)) {
             manButton.setSelected(true);
-        } else {
+        } else if (Vip.WOMAN.equals(s)) {
             womanButton.setSelected(true);
         }
+    }
+
+    @Override
+    public void setEditable(boolean editable) {
+
     }
 }

@@ -1,67 +1,81 @@
 package qianlei.view;
 
-import com.alee.extended.svg.SvgIcon;
 import com.alee.laf.button.WebButton;
+import qianlei.entity.Result;
+import qianlei.entity.User;
 import qianlei.exception.WrongDataException;
 import qianlei.service.UserService;
-import qianlei.view.component.InputPanel;
-import qianlei.view.component.PasswordPanel;
-import qianlei.view.component.VerifyCodePanel;
+import qianlei.utils.ViewUtil;
+import qianlei.view.detail.linedetail.InputChangeUserPanel;
 
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * 注册界面
+ *
+ * @author qianlei
+ */
 class RegisterFrame extends JFrame {
-    private VerifyCodePanel verifyCodePanel = new VerifyCodePanel();
-    private InputPanel usernameInputPanel = new InputPanel("用户名", "请输入用户名");
-    private PasswordPanel passwordInputPanel = new PasswordPanel("密码", "请输入密码");
-    private PasswordPanel recheckPasswordInputPanel = new PasswordPanel("确认密码", "请再次填写密码");
-    private WebButton registerButton = new WebButton("注册");
+    private final UserService userService = new UserService();
+    private final InputChangeUserPanel inputChangeUserPanel = new InputChangeUserPanel();
+    private final JPanel registerPanel = new JPanel();
+    private final WebButton registerButton = new WebButton("注册");
 
     RegisterFrame() {
-        setIconImage(new SvgIcon(getClass().getClassLoader().getResource("icon/icon.svg")).asBufferedImage());
-        setLayout(new GridLayout(12, 1));
-        setTitle("注册注册");
-        //注册事件
+        setIconImage(ViewUtil.getSvgIcon("icon/icon.svg").asBufferedImage());
+        setTitle("注册界面");
+        addAction();
+        addComponent();
+        pack();
+        setLocationCenter();
+    }
+
+    /**
+     * 设置事件
+     */
+    private void addAction() {
         registerButton.addActionListener((e) -> {
-            UserService userService = new UserService();
-            String name = usernameInputPanel.getText();
-            String password = passwordInputPanel.getText();
-            String remarkPassword = recheckPasswordInputPanel.getText();
-            if (verifyCodePanel.isVerifyCodeWrong()) {
-                JOptionPane.showMessageDialog(RegisterFrame.this, "验证码错误", "注册失败", JOptionPane.INFORMATION_MESSAGE);
-            } else if (!remarkPassword.equals(password)) {
-                JOptionPane.showMessageDialog(RegisterFrame.this, "两次填写的密码不一致", "注册失败", JOptionPane.INFORMATION_MESSAGE);
+            Result result = submit();
+            if (result.isSuccess()) {
+                SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(RegisterFrame.this, "注册成功", "注册成功", JOptionPane.INFORMATION_MESSAGE));
+                RegisterFrame.this.dispose();
             } else {
-                try {
-                    userService.register(name, password);
-                    SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(RegisterFrame.this, "注册成功", "注册成功", JOptionPane.INFORMATION_MESSAGE));
-                    RegisterFrame.this.dispose();
-                } catch (WrongDataException ex) {
-                    JOptionPane.showMessageDialog(RegisterFrame.this, ex.getMessage(), "注册失败", JOptionPane.INFORMATION_MESSAGE);
-                }
+                inputChangeUserPanel.changeVerifyCode();
+                JOptionPane.showMessageDialog(RegisterFrame.this, result.getMessage(), "注册失败", JOptionPane.INFORMATION_MESSAGE);
             }
         });
-        //快捷键
         registerButton.addHotkey(10);
-        JPanel registerPanel = new JPanel();
+    }
+
+    private Result submit() {
+        try {
+            User user = inputChangeUserPanel.getUser();
+            userService.register(user);
+            return new Result(true, "登陆成功");
+        } catch (WrongDataException e) {
+            return new Result(false, e.getMessage());
+        } catch (Exception e) {
+            return new Result(false, "未知错误" + e.getMessage());
+        }
+    }
+
+    /**
+     * 添加组件
+     */
+    private void addComponent() {
+        setLayout(new BorderLayout());
         registerPanel.add(registerButton);
         registerPanel.setLayout(new FlowLayout());
-        //添加组件
-        add(new JLabel());
-        add(new JLabel("用户注册", JLabel.CENTER));
-        add(new JLabel());
-        add(usernameInputPanel);
-        add(new JLabel());
-        add(passwordInputPanel);
-        add(new JLabel());
-        add(recheckPasswordInputPanel);
-        add(new JLabel());
-        add(verifyCodePanel);
-        add(new JLabel());
-        add(registerPanel);
-        pack();
-        // 设置窗口居中显示
+        add(new JLabel("用户注册", JLabel.CENTER), BorderLayout.NORTH);
+        add(inputChangeUserPanel);
+        add(registerPanel, BorderLayout.SOUTH);
+    }
+
+    /**
+     * 设置窗口居中显示
+     */
+    private void setLocationCenter() {
         int windowWidth = getWidth();
         int windowHeight = getHeight();
         Toolkit kit = Toolkit.getDefaultToolkit();

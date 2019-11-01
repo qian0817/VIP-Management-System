@@ -2,8 +2,8 @@ package qianlei.view.detail;
 
 import qianlei.entity.Record;
 import qianlei.service.RecordService;
-import qianlei.view.component.SearchBar;
-import qianlei.view.component.TablePanel;
+import qianlei.view.detail.tabledetail.component.SearchBar;
+import qianlei.view.detail.tabledetail.component.TablePanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,9 +14,9 @@ import java.util.Map;
 /**
  * @author qianlei
  */
-public class ShowRecordPanel extends JPanel {
-    private SearchBar searchBar = new SearchBar(Arrays.asList("姓名", "证件号", "手机号"));
-    private RecordService goodService = new RecordService();
+public class ShowRecordPanel extends JPanel implements CanInitPanel {
+    private final SearchBar searchBar = new SearchBar(Arrays.asList("姓名", "证件号", "手机号"));
+    private final RecordService goodService = new RecordService();
 
     public ShowRecordPanel() {
         setLayout(new BorderLayout());
@@ -24,6 +24,11 @@ public class ShowRecordPanel extends JPanel {
             Map<String, String> input = searchBar.getInput();
             init(input.get("证件号"), input.get("姓名"), input.get("手机号"));
         });
+        init();
+    }
+
+    @Override
+    public void init() {
         init("", "", "");
     }
 

@@ -10,10 +10,13 @@ import java.util.Random;
  *
  * @author qianlei
  */
-public class VerifyCodeUtil {
+public final class VerifyCodeUtil {
     private static final String VERIFY_CODES = "23456789abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ";
     private static final int NUMBER_OF_INTERFERING_LINE = 30;
-    private static final int NUMBER_OF_CHAR_LENGTH = 4;
+    private static final int NUMBER_OF_CHARS = 4;
+
+    private VerifyCodeUtil() {
+    }
 
     public static ImageIcon createVerifyCode(int width, int height) {
         Random random = new Random();
@@ -36,7 +39,7 @@ public class VerifyCodeUtil {
             graphics.drawLine(x, y, xl + x, yl + y);
         }
         StringBuilder verifyCode = new StringBuilder();
-        for (int i = 0; i < NUMBER_OF_CHAR_LENGTH; i++) {
+        for (int i = 0; i < NUMBER_OF_CHARS; i++) {
             char c = VERIFY_CODES.charAt(random.nextInt(VERIFY_CODES.length()));
             // 得到随机产生的验证码数字。
             verifyCode.append(c);

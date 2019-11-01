@@ -1,5 +1,6 @@
 package qianlei.utils;
 
+import com.alee.extended.svg.SvgIcon;
 import com.alee.managers.style.StyleManager;
 import com.alee.skin.dark.DarkSkin;
 import com.alee.skin.web.WebSkin;
@@ -10,19 +11,27 @@ import qianlei.entity.Config;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 界面的工具类
  *
  * @author qianlei
  */
-@SuppressWarnings("AlibabaAvoidManuallyCreateThread")
-public class ViewUtil {
-    public static String darkSkin = "暗色模式";
-    public static String lightSkin = "亮色模式";
+public final class ViewUtil {
+    public static final String DARK_SKIN = "暗色模式";
+    public static final String LIGHT_SKIN = "亮色模式";
+
     private static Config curConfig;
+    private static List<String> supportFonts;
+
+    private ViewUtil() {
+    }
 
     public static Config getCurConfig() {
         return curConfig;
@@ -51,6 +60,7 @@ public class ViewUtil {
         }
         curConfig = config;
         changeFont(config.getFont());
+        changeSkin(config.getSkin());
     }
 
     /**
@@ -59,23 +69,23 @@ public class ViewUtil {
     private static void writeFontConfig() {
         try (BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(new File("config.json")))) {
             String s = JSON.toJSONString(curConfig, SerializerFeature.PrettyFormat);
-            outputStream.write(s.getBytes());
+            outputStream.write(s.getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     /**
-     * 修改皮肤
+     * 修改界面主题
      *
      * @param skin 皮肤名称
      */
     public static void changeSkin(String skin) {
-        if (darkSkin.equals(skin)) {
+        if (DARK_SKIN.equals(skin)) {
             StyleManager.setSkin(new DarkSkin());
         } else {
             StyleManager.setSkin(new WebSkin());
-            skin = "亮色模式";
+            skin = LIGHT_SKIN;
         }
         curConfig.setSkin(skin);
         new Thread(ViewUtil::writeFontConfig).start();
@@ -98,6 +108,9 @@ public class ViewUtil {
      * @return 支持中文的字体的集合
      */
     public static List<String> getSupportedFont() {
+        if (supportFonts != null) {
+            return supportFonts;
+        }
         List<String> ret = new LinkedList<>();
         String[] fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
         for (String s : fonts) {
@@ -106,6 +119,7 @@ public class ViewUtil {
                 ret.add(s);
             }
         }
+        supportFonts = ret;
         return ret;
     }
 
@@ -147,4 +161,48 @@ public class ViewUtil {
         UIManager.put("OptionPane.buttonFont", font);
     }
 
+    public static SvgIcon getSvgIcon(String fileName) {
+        return getSvgIcon(fileName, curConfig.getFont().getSize() * 2, curConfig.getFont().getSize() * 2);
+    }
+
+    public static SvgIcon getSvgIcon(String fileName, int width, int height) {
+        return new SvgIcon(ViewUtil.class.getClassLoader().getResource(fileName), width, height);
+    }
+
+
+    /**
+     * 打开帮助网页
+     */
+    public static void openHelpHtml() {
+        try {
+            URI uri = new URI("help.html");
+            Desktop.getDesktop().browse(uri);
+        } catch (IOException | URISyntaxException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 生成帮助网页
+     */
+    public static void createHelpHtml() {
+        File file = new File("help.html");
+        if (file.exists()) {
+            return;
+        }
+        try (
+                InputStream html = ViewUtil.class.getClassLoader().getResourceAsStream("help.html");
+                BufferedInputStream inputStream = new BufferedInputStream(Objects.requireNonNull(html));
+                BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(file, false))
+        ) {
+            int onceGetBytes = 1024;
+            byte[] bytes = new byte[onceGetBytes];
+            int count;
+            while ((count = inputStream.read(bytes, 0, onceGetBytes)) != -1) {
+                outputStream.write(bytes, 0, count);
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
 }

@@ -2,39 +2,46 @@ package qianlei.service;
 
 import org.junit.jupiter.api.*;
 import qianlei.TestHelper;
+import qianlei.entity.User;
 import qianlei.exception.WrongDataException;
 import qianlei.utils.DaoUtil;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class UserServiceTest {
     private UserService userService = new UserService();
 
-    static {
-        TestHelper.deleteTestDb();
+    @BeforeAll
+    static void start() {
         DaoUtil.init("test.db");
     }
 
-    @Order(3)
-    @Test
-    void login() {
-        Assertions.assertNotNull(userService.login("test", "123456789"));
-        Assertions.assertNull(userService.login("test", "123456"));
-        Assertions.assertNull(userService.login("test1", "1234569"));
+    @AfterAll
+    static void end() {
+        TestHelper.deleteTestDb();
     }
+
 
     @Order(1)
     @Test
     void register() {
-
-        Assertions.assertDoesNotThrow(() -> userService.register("test", "123456"));
-        Assertions.assertThrows(WrongDataException.class, () -> userService.register("te st", "123456"));
-        Assertions.assertThrows(WrongDataException.class, () -> userService.register("test1", "123456+-"));
-        Assertions.assertThrows(WrongDataException.class, () -> userService.register("test", "123456"));
+        assertDoesNotThrow(() -> userService.register(new User("test", "123456")));
+        assertThrows(WrongDataException.class, () -> userService.register(new User("test", "123456")));
+        assertThrows(WrongDataException.class, () -> userService.register(new User("test1", "123456+-")));
     }
 
     @Order(2)
     @Test
     void changePassword() {
-        Assertions.assertDoesNotThrow(() -> userService.changePassword("test", "123456789"));
+        assertDoesNotThrow(() -> userService.changePassword(new User("test", "123456789")));
+    }
+
+    @Order(3)
+    @Test
+    void login() {
+        assertDoesNotThrow(() -> userService.login(new User("test", "123456789")));
+        assertThrows(WrongDataException.class, () -> userService.login(new User("test", "123456789")));
+        assertThrows(WrongDataException.class, () -> userService.login(new User("test1", "123456789")));
     }
 }
