@@ -6,7 +6,7 @@ import qianlei.entity.Result;
 import qianlei.entity.User;
 import qianlei.exception.WrongDataException;
 import qianlei.service.UserService;
-import qianlei.view.detail.linedetail.InputUserPanelBase;
+import qianlei.view.panel.linedetail.InputUserPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,7 +17,7 @@ import java.awt.*;
  * @author qianlei
  */
 public class LoginFrame extends JFrame {
-    private final InputUserPanelBase inputUserPanelBase = new InputUserPanelBase();
+    private final InputUserPanel inputUserPanel = new InputUserPanel();
     private final JPanel loginAndRegister = new JPanel();
     private final WebButton loginButton = new WebButton("登录");
     private final JButton registerButton = new JButton("注册");
@@ -42,7 +42,7 @@ public class LoginFrame extends JFrame {
         loginAndRegister.add(registerButton);
         loginAndRegister.setLayout(new FlowLayout());
         add(titleLabel, BorderLayout.NORTH);
-        add(inputUserPanelBase);
+        add(inputUserPanel);
         add(loginAndRegister, BorderLayout.SOUTH);
     }
 
@@ -65,7 +65,7 @@ public class LoginFrame extends JFrame {
 
     private Result submit() {
         try {
-            User user = inputUserPanelBase.getUser();
+            User user = inputUserPanel.getUser();
             userService.login(user);
             return new Result(true, "登陆成功");
         } catch (WrongDataException e) {

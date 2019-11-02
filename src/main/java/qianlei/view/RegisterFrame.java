@@ -6,7 +6,7 @@ import qianlei.entity.User;
 import qianlei.exception.WrongDataException;
 import qianlei.service.UserService;
 import qianlei.utils.ViewUtil;
-import qianlei.view.detail.linedetail.InputChangeUserPanel;
+import qianlei.view.panel.linedetail.InputChangeUserPanel;
 
 import javax.swing.*;
 import java.awt.*;

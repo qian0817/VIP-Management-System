@@ -11,12 +11,9 @@ import qianlei.entity.Config;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * 界面的工具类
@@ -169,40 +166,8 @@ public final class ViewUtil {
         return new SvgIcon(ViewUtil.class.getClassLoader().getResource(fileName), width, height);
     }
 
-
-    /**
-     * 打开帮助网页
-     */
-    public static void openHelpHtml() {
-        try {
-            URI uri = new URI("help.html");
-            Desktop.getDesktop().browse(uri);
-        } catch (IOException | URISyntaxException e) {
-            e.printStackTrace();
-        }
+    public static int getFontSize() {
+        return curConfig.getFont().getSize();
     }
 
-    /**
-     * 生成帮助网页
-     */
-    public static void createHelpHtml() {
-        File file = new File("help.html");
-        if (file.exists()) {
-            return;
-        }
-        try (
-                InputStream html = ViewUtil.class.getClassLoader().getResourceAsStream("help.html");
-                BufferedInputStream inputStream = new BufferedInputStream(Objects.requireNonNull(html));
-                BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(file, false))
-        ) {
-            int onceGetBytes = 1024;
-            byte[] bytes = new byte[onceGetBytes];
-            int count;
-            while ((count = inputStream.read(bytes, 0, onceGetBytes)) != -1) {
-                outputStream.write(bytes, 0, count);
-            }
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
 }
