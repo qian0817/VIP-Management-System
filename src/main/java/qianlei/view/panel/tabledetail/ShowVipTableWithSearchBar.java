@@ -1,14 +1,17 @@
 package qianlei.view.panel.tabledetail;
 
 import qianlei.entity.Vip;
+import qianlei.exception.WrongDataException;
 import qianlei.service.VipService;
 import qianlei.view.panel.AbstractCanInitPanel;
 import qianlei.view.panel.tabledetail.component.SearchBar;
 import qianlei.view.panel.tabledetail.component.TablePanel;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseListener;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -35,7 +38,13 @@ public class ShowVipTableWithSearchBar extends AbstractCanInitPanel {
     public void init(String id, String name, String phone) {
         removeAll();
         add(searchBar, BorderLayout.NORTH);
-        List<Vip> vipList = vipService.getAllNormalVipByIdAndNameAndPhone(id, name, phone);
+        List<Vip> vipList;
+        try {
+            vipList = vipService.getAllNormalVipByIdAndNameAndPhone(id, name, phone);
+        } catch (WrongDataException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+            vipList = new LinkedList<>();
+        }
         Object[][] data = new Object[vipList.size()][7];
         for (int i = 0; i < vipList.size(); i++) {
             Vip good = vipList.get(i);

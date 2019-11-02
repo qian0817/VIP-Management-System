@@ -68,7 +68,7 @@ public final class ViewUtil {
             String s = JSON.toJSONString(curConfig, SerializerFeature.PrettyFormat);
             outputStream.write(s.getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
-            e.printStackTrace();
+            LogUtil.error(e);
         }
     }
 

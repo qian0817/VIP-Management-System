@@ -60,7 +60,7 @@ public class InputGoodPanel extends BaseInputPanel {
     }
 
     public void init() {
-        init(new Good());
+        init(null);
     }
 
     /**
@@ -69,15 +69,17 @@ public class InputGoodPanel extends BaseInputPanel {
      * @param good 商品
      */
     public void init(Good good) {
-        panelMap.get(ID).setItem(good.getId());
-        panelMap.get(NAME).setItem(good.getName());
-        panelMap.get(MAKER).setItem(good.getMaker());
-        panelMap.get(PRICE).setItem(good.getPrice().toString());
-        panelMap.get(REMAIN).setItem(String.valueOf(good.getRemain()));
-        panelMap.get(INTRODUCTION).setItem(good.getIntroduction());
-        panelMap.get(REMARK).setItem(good.getRemarks());
-        panelMap.get(CREATE_TIME).setItem(DateUtil.transferToString(good.getCreateTime()));
-        panelMap.get(DISCOUNT).setItem(String.valueOf(good.getDiscount()));
+        if (good != null) {
+            panelMap.get(ID).setItem(good.getId());
+            panelMap.get(NAME).setItem(good.getName());
+            panelMap.get(MAKER).setItem(good.getMaker());
+            panelMap.get(PRICE).setItem(good.getPrice().toString());
+            panelMap.get(REMAIN).setItem(String.valueOf(good.getRemain()));
+            panelMap.get(INTRODUCTION).setItem(good.getIntroduction());
+            panelMap.get(REMARK).setItem(good.getRemarks());
+            panelMap.get(CREATE_TIME).setItem(DateUtil.transferToString(good.getCreateTime()));
+            panelMap.get(DISCOUNT).setItem(String.valueOf(good.getDiscount()));
+        }
         removeAll();
         setLayout(new GridLayout(19, 1));
         addToView();

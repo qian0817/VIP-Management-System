@@ -3,6 +3,7 @@ package qianlei;
 import qianlei.entity.Good;
 import qianlei.entity.Vip;
 import qianlei.enums.StatusEnum;
+import qianlei.exception.WrongDataException;
 import qianlei.service.GoodService;
 import qianlei.service.RecordService;
 import qianlei.service.VipService;
@@ -37,7 +38,11 @@ public class TestCaseToMainDb {
                         new Date((long) (Math.random() * System.currentTimeMillis())),
                         BigDecimal.valueOf(random.nextInt(10000)), (int) (Math.random() * 100) * 1.0 / 100,
                         random.nextInt(100000), "", "", StatusEnum.NORMAL);
-                goodService.addGood(good);
+                try {
+                    goodService.addGood(good);
+                } catch (WrongDataException e) {
+                    e.printStackTrace();
+                }
                 j++;
             }
         });
@@ -47,7 +52,11 @@ public class TestCaseToMainDb {
             for (int i = 1; i <= n; i++) {
                 Vip vip = new Vip(String.valueOf(i), "测试VIP" + i, "男", String.valueOf((long) (Math.random() * 20000000000L)),
                         "测试地址" + i, random.nextInt(900000) + 100000);
-                vipService.addVip(vip);
+                try {
+                    vipService.addVip(vip);
+                } catch (WrongDataException e) {
+                    e.printStackTrace();
+                }
                 j++;
             }
         });
@@ -62,7 +71,11 @@ public class TestCaseToMainDb {
         j = 0;
         new Thread(() -> {
             for (int i = 1; i <= n; i++) {
-                recordService.addRecord(String.valueOf(random.nextInt(n) + 1), String.valueOf(random.nextInt(n) + 1));
+                try {
+                    recordService.addRecord(String.valueOf(random.nextInt(n) + 1), String.valueOf(random.nextInt(n) + 1));
+                } catch (WrongDataException e) {
+                    e.printStackTrace();
+                }
                 j++;
             }
         }).start();

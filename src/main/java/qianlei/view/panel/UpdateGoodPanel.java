@@ -35,7 +35,12 @@ class UpdateGoodPanel extends JPanel implements CanSubmitPanel {
      * @param id 商品id
      */
     private void initInputGoodPanel(String id) {
-        Good good = goodService.getGoodById(id);
+        Good good = null;
+        try {
+            good = goodService.getGoodById(id);
+        } catch (WrongDataException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
         inputGoodPanel.init(good);
         inputGoodPanel.setEditable(InputGoodPanel.ID, false);
     }
@@ -49,7 +54,11 @@ class UpdateGoodPanel extends JPanel implements CanSubmitPanel {
         deleteButton.addActionListener((e) -> {
             int a = JOptionPane.showConfirmDialog(UpdateGoodPanel.this, "是否删除该商品");
             if (a == JOptionPane.YES_OPTION) {
-                goodService.deleteGoodById(id);
+                try {
+                    goodService.deleteGoodById(id);
+                } catch (WrongDataException ex) {
+                    JOptionPane.showMessageDialog(this, ex.getMessage());
+                }
                 changeToShowGoodPanel();
             }
         });

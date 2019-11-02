@@ -37,16 +37,18 @@ public class InputVipPanel extends BaseInputPanel {
     }
 
     public void init() {
-        init(new Vip());
+        init(null);
     }
 
     public void init(Vip vip) {
-        panelMap.get(NAME).setItem(vip.getName());
-        panelMap.get(ID).setItem(vip.getId());
-        panelMap.get(SEX).setItem(vip.getSex());
-        panelMap.get(PHONE).setItem(vip.getPhone());
-        panelMap.get(ADDRESS).setItem(vip.getAddress());
-        panelMap.get(POSTCODE).setItem(String.valueOf(vip.getPostcode()));
+        if (vip != null) {
+            panelMap.get(NAME).setItem(vip.getName());
+            panelMap.get(ID).setItem(vip.getId());
+            panelMap.get(SEX).setItem(vip.getSex());
+            panelMap.get(PHONE).setItem(vip.getPhone());
+            panelMap.get(ADDRESS).setItem(vip.getAddress());
+            panelMap.get(POSTCODE).setItem(String.valueOf(vip.getPostcode()));
+        }
         removeAll();
         setLayout(new GridLayout(13, 1));
         addToView();

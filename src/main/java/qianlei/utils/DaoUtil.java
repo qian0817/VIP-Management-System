@@ -22,7 +22,7 @@ public final class DaoUtil {
         try {
             Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            LogUtil.error(e);
         }
         DaoUtil.fileName = fileName;
         try (Connection connection = getConnection();
@@ -61,7 +61,7 @@ public final class DaoUtil {
                     "price DECIMAL NOT NULL " +
                     ")");
         } catch (SQLException e) {
-            e.printStackTrace();
+            LogUtil.error(e);
         }
     }
 
@@ -86,7 +86,7 @@ public final class DaoUtil {
             try {
                 resultSet.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                LogUtil.error(e);
             }
         }
     }

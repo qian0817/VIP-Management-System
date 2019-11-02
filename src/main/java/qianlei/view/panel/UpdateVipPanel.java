@@ -48,7 +48,12 @@ class UpdateVipPanel extends JPanel implements CanSubmitPanel {
      * @param id vipId
      */
     private void initInputVipPanel(String id) {
-        Vip vip = vipService.getVipById(id);
+        Vip vip = null;
+        try {
+            vip = vipService.getVipById(id);
+        } catch (WrongDataException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
         inputVipPanel.init(vip);
         inputVipPanel.setEditable(InputVipPanel.ID, false);
     }
@@ -74,7 +79,11 @@ class UpdateVipPanel extends JPanel implements CanSubmitPanel {
         deleteButton.addActionListener((e) -> {
             int a = JOptionPane.showConfirmDialog(UpdateVipPanel.this, "是否删除该VIP");
             if (a == JOptionPane.YES_OPTION) {
-                vipService.deleteVipById(id);
+                try {
+                    vipService.deleteVipById(id);
+                } catch (WrongDataException ex) {
+                    JOptionPane.showMessageDialog(this, ex.getMessage());
+                }
                 changeToShowVipPanel();
             }
         });

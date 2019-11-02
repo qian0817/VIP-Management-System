@@ -36,7 +36,7 @@ public class GoodService {
      * @param name 商品名称
      * @return 符合条件的商品
      */
-    public List<Good> getAllNormalGoodByIdAndName(String id, String name) {
+    public List<Good> getAllNormalGoodByIdAndName(String id, String name) throws WrongDataException {
         return goodDao.selectAllNormalGoodByIdAndName(id, name);
     }
 
@@ -46,7 +46,7 @@ public class GoodService {
      * @param id id
      * @return 该id的商品
      */
-    public Good getGoodById(String id) {
+    public Good getGoodById(String id) throws WrongDataException {
         return goodDao.selectGoodById(id);
     }
 
@@ -55,7 +55,7 @@ public class GoodService {
      *
      * @param id id
      */
-    public void deleteGoodById(String id) {
+    public void deleteGoodById(String id) throws WrongDataException {
         goodDao.deleteById(id);
     }
 

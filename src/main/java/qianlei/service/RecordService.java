@@ -27,7 +27,7 @@ public class RecordService {
      * @param phone 电话号码
      * @return 符合条件的用户
      */
-    public List<Record> getAllRecordByIdAndName(String id, String name, String phone) {
+    public List<Record> getAllRecordByIdAndName(String id, String name, String phone) throws WrongDataException {
         return recordDao.selectAllRecordByIdAndNameAndPhone(id, name, phone);
     }
 

@@ -2,7 +2,9 @@ package qianlei.dao;
 
 import qianlei.entity.Good;
 import qianlei.enums.StatusEnum;
+import qianlei.exception.WrongDataException;
 import qianlei.utils.DaoUtil;
+import qianlei.utils.LogUtil;
 
 import java.math.BigDecimal;
 import java.sql.*;
@@ -21,7 +23,7 @@ public class GoodDao {
      *
      * @param good 需要添加的商品
      */
-    public void addGood(Good good) {
+    public void addGood(Good good) throws WrongDataException {
         try (
                 Connection connection = DaoUtil.getConnection();
                 PreparedStatement statement = connection.prepareStatement("INSERT INTO good(id, name, maker, createTime, " +
@@ -39,7 +41,8 @@ public class GoodDao {
             statement.setInt(10, good.getStatus().getId());
             statement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LogUtil.error(e);
+            throw new WrongDataException("数据库错误");
         }
     }
 
@@ -49,7 +52,7 @@ public class GoodDao {
      * @param id id
      * @return 该id的商品
      */
-    public Good selectGoodById(String id) {
+    public Good selectGoodById(String id) throws WrongDataException {
         ResultSet resultSet = null;
         try (
                 Connection connection = DaoUtil.getConnection();
@@ -62,7 +65,8 @@ public class GoodDao {
                 return getGoodByResult(resultSet);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LogUtil.error(e);
+            throw new WrongDataException("数据库错误");
         } finally {
             DaoUtil.closeResultSet(resultSet);
         }
@@ -74,7 +78,7 @@ public class GoodDao {
      *
      * @param id 指定id
      */
-    public void deleteById(String id) {
+    public void deleteById(String id) throws WrongDataException {
         try (
                 Connection connection = DaoUtil.getConnection();
                 PreparedStatement statement = connection.prepareStatement("UPDATE good SET status = ? WHERE id = ?")
@@ -83,7 +87,8 @@ public class GoodDao {
             statement.setString(2, id);
             statement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LogUtil.error(e);
+            throw new WrongDataException("数据库错误");
         }
     }
 
@@ -92,7 +97,7 @@ public class GoodDao {
      *
      * @param good 修改后的商品
      */
-    public void updateGood(Good good) {
+    public void updateGood(Good good) throws WrongDataException {
         try (
                 Connection connection = DaoUtil.getConnection();
                 PreparedStatement statement = connection.prepareStatement("UPDATE good SET name = ?,maker = ?,price=?,discount=? ," +
@@ -108,7 +113,8 @@ public class GoodDao {
             statement.setString(8, good.getId());
             statement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LogUtil.error(e);
+            throw new WrongDataException("数据库错误");
         }
     }
 
@@ -119,7 +125,7 @@ public class GoodDao {
      * @param searchName 需要包含的name
      * @return 获取的商品的集合
      */
-    public List<Good> selectAllNormalGoodByIdAndName(String searchId, String searchName) {
+    public List<Good> selectAllNormalGoodByIdAndName(String searchId, String searchName) throws WrongDataException {
         List<Good> goodList = new LinkedList<>();
         ResultSet resultSet = null;
         try (
@@ -138,7 +144,8 @@ public class GoodDao {
                 goodList.add(good);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LogUtil.error(e);
+            throw new WrongDataException("数据库错误");
         } finally {
             DaoUtil.closeResultSet(resultSet);
         }

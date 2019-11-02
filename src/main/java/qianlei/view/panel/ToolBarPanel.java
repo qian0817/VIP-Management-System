@@ -2,6 +2,7 @@ package qianlei.view.panel;
 
 import com.alee.laf.button.WebButton;
 import com.alee.managers.style.StyleId;
+import qianlei.utils.LogUtil;
 import qianlei.utils.ViewUtil;
 import qianlei.view.LoginFrame;
 import qianlei.view.MainFrame;
@@ -34,42 +35,6 @@ public class ToolBarPanel extends JPanel {
         this.parent = parent;
         addComponent();
         addAction();
-    }
-
-    /**
-     * 打开帮助网页
-     */
-    private static void openHelpHtml() {
-        try {
-            URI uri = new URI("help.html");
-            Desktop.getDesktop().browse(uri);
-        } catch (IOException | URISyntaxException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * 生成帮助网页
-     */
-    private static void createHelpHtml() {
-        File file = new File("help.html");
-        if (file.exists()) {
-            return;
-        }
-        try (
-                InputStream html = ViewUtil.class.getClassLoader().getResourceAsStream("help.html");
-                BufferedInputStream inputStream = new BufferedInputStream(Objects.requireNonNull(html));
-                BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(file, false))
-        ) {
-            int onceGetBytes = 1024;
-            byte[] bytes = new byte[onceGetBytes];
-            int count;
-            while ((count = inputStream.read(bytes, 0, onceGetBytes)) != -1) {
-                outputStream.write(bytes, 0, count);
-            }
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
     }
 
     /**
@@ -115,6 +80,44 @@ public class ToolBarPanel extends JPanel {
         add(quitButton);
     }
 
+    /**
+     * 打开帮助网页
+     */
+    private static void openHelpHtml() {
+        new Thread(() -> {
+            try {
+                URI uri = new URI("help.html");
+                Desktop.getDesktop().browse(uri);
+            } catch (IOException | URISyntaxException e) {
+                LogUtil.error(e);
+            }
+        }).start();
+    }
+
+    /**
+     * 生成帮助网页
+     */
+    private static void createHelpHtml() {
+        File file = new File("help.html");
+        if (file.exists()) {
+            return;
+        }
+        try (
+                InputStream html = ViewUtil.class.getClassLoader().getResourceAsStream("help.html");
+                BufferedInputStream inputStream = new BufferedInputStream(Objects.requireNonNull(html));
+                BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(file, false))
+        ) {
+            int onceGetBytes = 1024;
+            byte[] bytes = new byte[onceGetBytes];
+            int count;
+            while ((count = inputStream.read(bytes, 0, onceGetBytes)) != -1) {
+                outputStream.write(bytes, 0, count);
+            }
+        } catch (IOException ex) {
+            LogUtil.error(ex);
+        }
+    }
+
     private static class MenuButton extends WebButton {
         private String name;
 
@@ -129,4 +132,5 @@ public class ToolBarPanel extends JPanel {
             return name;
         }
     }
+
 }

@@ -1,14 +1,17 @@
 package qianlei.view.panel.tabledetail;
 
 import qianlei.entity.Good;
+import qianlei.exception.WrongDataException;
 import qianlei.service.GoodService;
 import qianlei.view.panel.AbstractCanInitPanel;
 import qianlei.view.panel.tabledetail.component.SearchBar;
 import qianlei.view.panel.tabledetail.component.TablePanel;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseListener;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -35,7 +38,13 @@ public class ShowGoodTableWithSearchBar extends AbstractCanInitPanel {
         setLayout(new BorderLayout());
         removeAll();
         add(searchBar, BorderLayout.NORTH);
-        List<Good> goodList = goodService.getAllNormalGoodByIdAndName(id, name);
+        List<Good> goodList;
+        try {
+            goodList = goodService.getAllNormalGoodByIdAndName(id, name);
+        } catch (WrongDataException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+            goodList = new LinkedList<>();
+        }
         Object[][] data = new Object[goodList.size()][8];
         for (int i = 0; i < goodList.size(); i++) {
             Good good = goodList.get(i);

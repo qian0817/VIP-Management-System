@@ -44,7 +44,7 @@ class GoodServiceTest {
 
     @Order(3)
     @Test
-    void getGoodById() {
+    void getGoodById() throws WrongDataException {
         assertNotNull(goodService.getGoodById("1"));
         assertNull(goodService.getGoodById("3"));
     }
@@ -57,7 +57,7 @@ class GoodServiceTest {
 
     @Order(5)
     @Test
-    void getAllNormalGoodByIdAndName() {
+    void getAllNormalGoodByIdAndName() throws WrongDataException {
         assertEquals(1, goodService.getAllNormalGoodByIdAndName("2", "2").size());
         assertEquals(0, goodService.getAllNormalGoodByIdAndName("2", "1").size());
     }

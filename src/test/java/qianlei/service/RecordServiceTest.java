@@ -18,7 +18,7 @@ class RecordServiceTest {
     private RecordService recordService = new RecordService();
 
     @BeforeAll
-    static void start() {
+    static void start() throws WrongDataException {
         DaoUtil.init("test.db");
         GoodService goodService = new GoodService();
         VipService vipService = new VipService();
@@ -41,7 +41,7 @@ class RecordServiceTest {
 
     @Order(2)
     @Test
-    void getAllRecordByIdAndName() {
+    void getAllRecordByIdAndName() throws WrongDataException {
         assertEquals(recordService.getAllRecordByIdAndName("1", "1", "890").size(), 1);
     }
 

@@ -39,7 +39,7 @@ public class VipService {
      * @param phone 电话号码
      * @return 符合条件的vip
      */
-    public List<Vip> getAllNormalVipByIdAndNameAndPhone(String id, String name, String phone) {
+    public List<Vip> getAllNormalVipByIdAndNameAndPhone(String id, String name, String phone) throws WrongDataException {
         List<Vip> vipList = vipDao.selectAllNormalVipByIdAndNameAndPhone(id, name, phone);
         return vipList.stream().filter((vip -> vip.getStatus().getId() == StatusEnum.NORMAL.getId() && vip.getId().contains(id)
                 && vip.getName().contains(name) && vip.getPhone().contains(phone))).collect(Collectors.toList());
@@ -51,7 +51,7 @@ public class VipService {
      * @param id id
      * @return 该id的vip
      */
-    public Vip getVipById(String id) {
+    public Vip getVipById(String id) throws WrongDataException {
         return vipDao.selectVipById(id);
     }
 
@@ -60,7 +60,7 @@ public class VipService {
      *
      * @param id id
      */
-    public void deleteVipById(String id) {
+    public void deleteVipById(String id) throws WrongDataException {
         vipDao.deleteById(id);
     }
 
@@ -70,7 +70,7 @@ public class VipService {
      * @param vip 修改后的vip
      * @throws WrongDataException 输入的数据错误
      */
-    public void updateVip(Vip vip) {
+    public void updateVip(Vip vip) throws WrongDataException {
         vipDao.updateVip(vip);
     }
 }

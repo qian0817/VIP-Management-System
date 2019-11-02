@@ -2,7 +2,9 @@ package qianlei.dao;
 
 import qianlei.entity.Vip;
 import qianlei.enums.StatusEnum;
+import qianlei.exception.WrongDataException;
 import qianlei.utils.DaoUtil;
+import qianlei.utils.LogUtil;
 
 import java.sql.*;
 import java.util.LinkedList;
@@ -20,7 +22,7 @@ public class VipDao {
      *
      * @param vip 需要添加的VIP
      */
-    public void addVip(Vip vip) {
+    public void addVip(Vip vip) throws WrongDataException {
         try (
                 Connection connection = DaoUtil.getConnection();
                 PreparedStatement statement = connection.prepareStatement("INSERT INTO vip(id, name, sex, phone, " +
@@ -36,7 +38,8 @@ public class VipDao {
             statement.setInt(8, vip.getStatus().getId());
             statement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LogUtil.error(e);
+            throw new WrongDataException("数据库错误");
         }
     }
 
@@ -46,7 +49,7 @@ public class VipDao {
      * @param id id
      * @return 该id的VIP
      */
-    public Vip selectVipById(String id) {
+    public Vip selectVipById(String id) throws WrongDataException {
         ResultSet resultSet = null;
         try (
                 Connection connection = DaoUtil.getConnection();
@@ -59,7 +62,8 @@ public class VipDao {
                 return getVipByResultSet(resultSet);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LogUtil.error(e);
+            throw new WrongDataException("数据库错误");
         } finally {
             DaoUtil.closeResultSet(resultSet);
         }
@@ -73,7 +77,7 @@ public class VipDao {
      * @param searchPhone 获取到的phone
      * @return 符合条件的vip
      */
-    public List<Vip> selectAllNormalVipByIdAndNameAndPhone(String searchId, String searchName, String searchPhone) {
+    public List<Vip> selectAllNormalVipByIdAndNameAndPhone(String searchId, String searchName, String searchPhone) throws WrongDataException {
         ResultSet resultSet = null;
         List<Vip> vipList = new LinkedList<>();
         try (
@@ -93,7 +97,8 @@ public class VipDao {
                 vipList.add(vip);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LogUtil.error(e);
+            throw new WrongDataException("数据库错误");
         } finally {
             DaoUtil.closeResultSet(resultSet);
         }
@@ -124,7 +129,7 @@ public class VipDao {
      *
      * @param id id
      */
-    public void deleteById(String id) {
+    public void deleteById(String id) throws WrongDataException {
         try (
                 Connection connection = DaoUtil.getConnection();
                 PreparedStatement statement = connection.prepareStatement("UPDATE vip SET status = ? WHERE id = ?")
@@ -133,7 +138,8 @@ public class VipDao {
             statement.setString(2, id);
             statement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LogUtil.error(e);
+            throw new WrongDataException("数据库错误");
         }
     }
 
@@ -142,7 +148,7 @@ public class VipDao {
      *
      * @param vip 修改后的vip
      */
-    public void updateVip(Vip vip) {
+    public void updateVip(Vip vip) throws WrongDataException {
         try (
                 Connection connection = DaoUtil.getConnection();
                 PreparedStatement statement = connection.prepareStatement("UPDATE vip SET name = ?,sex=?,phone=?,address=?,postcode=?WHERE id = ?")
@@ -155,7 +161,8 @@ public class VipDao {
             statement.setString(6, vip.getId());
             statement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LogUtil.error(e);
+            throw new WrongDataException("数据库错误");
         }
     }
 }
