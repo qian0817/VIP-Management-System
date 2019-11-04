@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -49,8 +50,16 @@ public final class Log {
                     ex.printStackTrace();
                 }
             }
+            String type;
+            if (e instanceof SQLException) {
+                type = "数据库错误";
+            } else if (e instanceof IOException) {
+                type = "IO错误";
+            } else {
+                type = "未知错误";
+            }
+            NotificationManager.showNotification("发生" + type + ",已记录到日志中");
         }).start();
-        NotificationManager.showNotification("发生未知错误,已记录到日志中");
     }
 
 }
