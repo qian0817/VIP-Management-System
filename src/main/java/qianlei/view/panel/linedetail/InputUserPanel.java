@@ -37,9 +37,9 @@ public class InputUserPanel extends BaseInputPanel {
      * 获取填写的用户信息
      *
      * @return 填写的用户信息
-     * @throws WrongDataException 填写的信息错误
+     * @ 填写的信息错误
      */
-    public User getUser() throws WrongDataException {
+    public User getUser() {
         String name = get(InputUserPanel.USERNAME);
         if (StringUtil.containsBlank(name)) {
             throw new WrongDataException("用户名中不能有空格");

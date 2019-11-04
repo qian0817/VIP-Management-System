@@ -12,6 +12,7 @@ import qianlei.view.LoginFrame;
  */
 public class Application {
     public static void main(String[] args) {
+        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
         Thread t = new Thread(() -> DaoUtil.init("main.db"));
         t.start();
         WebLookAndFeel.install();

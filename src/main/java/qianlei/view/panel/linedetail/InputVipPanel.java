@@ -3,10 +3,12 @@ package qianlei.view.panel.linedetail;
 import qianlei.entity.Vip;
 import qianlei.exception.WrongDataException;
 import qianlei.utils.StringUtil;
+import qianlei.view.panel.linedetail.component.BaseComponentPanel;
 import qianlei.view.panel.linedetail.component.InputPanelBase;
 import qianlei.view.panel.linedetail.component.SexChoosePanelBase;
 
 import java.awt.*;
+import java.util.Map;
 
 /**
  * 输入VIP信息
@@ -48,6 +50,10 @@ public class InputVipPanel extends BaseInputPanel {
             panelMap.get(PHONE).setItem(vip.getPhone());
             panelMap.get(ADDRESS).setItem(vip.getAddress());
             panelMap.get(POSTCODE).setItem(String.valueOf(vip.getPostcode()));
+        } else {
+            for (Map.Entry<Integer, BaseComponentPanel> entry : panelMap.entrySet()) {
+                entry.getValue().setItem(null);
+            }
         }
         removeAll();
         setLayout(new GridLayout(13, 1));
@@ -56,7 +62,7 @@ public class InputVipPanel extends BaseInputPanel {
         setVisible(true);
     }
 
-    public Vip getVip() throws WrongDataException {
+    public Vip getVip() {
         Vip vip = new Vip();
         setId(vip);
         setName(vip);
@@ -67,7 +73,7 @@ public class InputVipPanel extends BaseInputPanel {
         return vip;
     }
 
-    private void setPostcode() throws WrongDataException {
+    private void setPostcode() {
         String postcode = get(InputVipPanel.POSTCODE);
         if (!StringUtil.isBigInteger(postcode) || postcode.length() != Vip.POSTCODE_LENGTH) {
             throw new WrongDataException("邮编" + postcode + "只能包含数字且只有6位");
@@ -79,7 +85,7 @@ public class InputVipPanel extends BaseInputPanel {
         vip.setAddress(address);
     }
 
-    private void setPhone(Vip vip) throws WrongDataException {
+    private void setPhone(Vip vip) {
         String phone = get(InputVipPanel.PHONE);
         if (!StringUtil.isBigInteger(phone)) {
             throw new WrongDataException("电话号码" + phone + "只能包含数字");
@@ -97,7 +103,7 @@ public class InputVipPanel extends BaseInputPanel {
         vip.setName(name);
     }
 
-    private void setId(Vip vip) throws WrongDataException {
+    private void setId(Vip vip) {
         String id = get(InputVipPanel.ID);
         if (StringUtil.containsBlank(id)) {
             throw new WrongDataException("id" + id + "不能包含空格");

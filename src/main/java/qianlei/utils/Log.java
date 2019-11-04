@@ -1,5 +1,7 @@
 package qianlei.utils;
 
+import com.alee.managers.notification.NotificationManager;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -9,24 +11,28 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
 
-public final class LogUtil {
+/**
+ * 日志记录
+ *
+ * @author qianlei
+ */
+public final class Log {
     private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd--hh-mm-ss-SSS");
     private static final DateFormat FILE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
     private static final Properties PROPS = System.getProperties();
 
-    private LogUtil() {
+    private Log() {
     }
 
-    public static void error(Throwable e) {
-        String date = FILE_DATE_FORMAT.format(new Date());
-        File file = new File("log/vip-manager-system-" + date + "-error.log");
-        if (!file.getParentFile().exists()) {
-            //noinspection ResultOfMethodCallIgnored
-            file.getParentFile().mkdirs();
-        }
-        String threadName = Thread.currentThread().getName();
+    public static void error(Thread t, Throwable e) {
         new Thread(() -> {
-            synchronized (LogUtil.class) {
+            synchronized (Log.class) {
+                String date = FILE_DATE_FORMAT.format(new Date());
+                File file = new File("log/vip-manager-system-" + date + "-error.log");
+                if (!file.getParentFile().exists()) {
+                    //noinspection ResultOfMethodCallIgnored
+                    file.getParentFile().mkdirs();
+                }
                 try (FileOutputStream log = new FileOutputStream(file, true);
                      PrintStream printStream = new PrintStream(log, true, "UTF-8")
                 ) {
@@ -35,7 +41,7 @@ public final class LogUtil {
                     printStream.println("os-name:" + PROPS.get("os.name"));
                     printStream.println("os-arch:" + PROPS.get("os.arch"));
                     printStream.println("os-version:" + PROPS.get("os.version"));
-                    printStream.println(DATE_FORMAT.format(new Date()) + "  [" + threadName + "]");
+                    printStream.println(DATE_FORMAT.format(new Date()) + "  [" + t.getName() + "]");
                     e.printStackTrace();
                     e.printStackTrace(printStream);
                     printStream.println();
@@ -44,6 +50,7 @@ public final class LogUtil {
                 }
             }
         }).start();
+        NotificationManager.showNotification("发生未知错误,已记录到日志中");
     }
 
 }

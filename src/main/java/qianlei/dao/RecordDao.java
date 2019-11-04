@@ -4,9 +4,8 @@ import qianlei.entity.Good;
 import qianlei.entity.Record;
 import qianlei.entity.Vip;
 import qianlei.enums.StatusEnum;
-import qianlei.exception.WrongDataException;
 import qianlei.utils.DaoUtil;
-import qianlei.utils.LogUtil;
+import qianlei.utils.Log;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -30,7 +29,7 @@ public class RecordDao {
      * @param getPhone 获取到的phone
      * @return 符合条件的vip
      */
-    public List<Record> selectAllRecordByIdAndNameAndPhone(String getId, String getName, String getPhone) throws WrongDataException {
+    public List<Record> selectAllRecordByIdAndNameAndPhone(String getId, String getName, String getPhone) {
         ResultSet resultSet = null;
         List<Record> recordList = new LinkedList<>();
         try (
@@ -81,8 +80,7 @@ public class RecordDao {
                 recordList.add(record);
             }
         } catch (SQLException e) {
-            LogUtil.error(e);
-            throw new WrongDataException("数据库错误");
+            Log.error(Thread.currentThread(), e);
         } finally {
             DaoUtil.closeResultSet(resultSet);
         }
@@ -94,7 +92,7 @@ public class RecordDao {
      *
      * @param record 需要添加的记录
      */
-    public void addRecord(Record record) throws WrongDataException {
+    public void addRecord(Record record) {
         try (
                 Connection connection = DaoUtil.getConnection();
                 PreparedStatement statement = connection.prepareStatement("INSERT INTO record(userid, goodid, createtime,price)" +
@@ -106,8 +104,7 @@ public class RecordDao {
             statement.setBigDecimal(4, record.getPrice());
             statement.executeUpdate();
         } catch (SQLException e) {
-            LogUtil.error(e);
-            throw new WrongDataException("数据库错误");
+            Log.error(Thread.currentThread(), e);
         }
     }
 }

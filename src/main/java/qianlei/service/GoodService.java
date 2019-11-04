@@ -19,9 +19,8 @@ public class GoodService {
      * 添加商品
      *
      * @param good 商品
-     * @throws WrongDataException 输入的数据格式错误
      */
-    public void addGood(Good good) throws WrongDataException {
+    public void addGood(Good good) {
         if (goodDao.selectGoodById(good.getId()) != null) {
             throw new WrongDataException("id" + good.getId() + "已被注册");
         }
@@ -36,7 +35,7 @@ public class GoodService {
      * @param name 商品名称
      * @return 符合条件的商品
      */
-    public List<Good> getAllNormalGoodByIdAndName(String id, String name) throws WrongDataException {
+    public List<Good> getAllNormalGoodByIdAndName(String id, String name) {
         return goodDao.selectAllNormalGoodByIdAndName(id, name);
     }
 
@@ -46,7 +45,7 @@ public class GoodService {
      * @param id id
      * @return 该id的商品
      */
-    public Good getGoodById(String id) throws WrongDataException {
+    public Good getGoodById(String id) {
         return goodDao.selectGoodById(id);
     }
 
@@ -55,7 +54,7 @@ public class GoodService {
      *
      * @param id id
      */
-    public void deleteGoodById(String id) throws WrongDataException {
+    public void deleteGoodById(String id) {
         goodDao.deleteById(id);
     }
 
@@ -63,9 +62,8 @@ public class GoodService {
      * 修改商品信息
      *
      * @param good 需要修改的商品
-     * @throws WrongDataException 输入的数据格式错误
      */
-    public void updateGood(Good good) throws WrongDataException {
+    public void updateGood(Good good) {
         good.setStatus(StatusEnum.NORMAL);
         goodDao.updateGood(good);
     }

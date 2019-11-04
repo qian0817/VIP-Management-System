@@ -61,4 +61,8 @@ public class VerifyCodePanel extends JPanel {
         imageLabel.repaint();
         VerifyCodePanel.this.updateUI();
     }
+
+    public void setText(String s) {
+        field.setText(s);
+    }
 }

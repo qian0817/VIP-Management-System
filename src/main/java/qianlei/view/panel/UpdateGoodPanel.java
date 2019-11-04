@@ -35,12 +35,7 @@ class UpdateGoodPanel extends JPanel implements CanSubmitPanel {
      * @param id 商品id
      */
     private void initInputGoodPanel(String id) {
-        Good good = null;
-        try {
-            good = goodService.getGoodById(id);
-        } catch (WrongDataException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
-        }
+        Good good = goodService.getGoodById(id);
         inputGoodPanel.init(good);
         inputGoodPanel.setEditable(InputGoodPanel.ID, false);
     }
@@ -84,8 +79,6 @@ class UpdateGoodPanel extends JPanel implements CanSubmitPanel {
             return new Result(true, "修改成功");
         } catch (WrongDataException e) {
             return new Result(false, e.getMessage());
-        } catch (Exception e) {
-            return new Result(false, "未知错误" + e.getMessage());
         }
     }
 

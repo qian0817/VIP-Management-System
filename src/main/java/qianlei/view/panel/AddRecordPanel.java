@@ -57,8 +57,6 @@ public class AddRecordPanel extends AbstractCanInitPanel implements CanSubmitPan
             return new Result(true, "添加成功");
         } catch (WrongDataException e) {
             return new Result(false, e.getMessage());
-        } catch (Exception e) {
-            return new Result(false, "未知错误" + e.getMessage());
         }
     }
 

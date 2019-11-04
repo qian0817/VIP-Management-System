@@ -2,7 +2,7 @@ package qianlei.view.panel;
 
 import com.alee.laf.button.WebButton;
 import com.alee.managers.style.StyleId;
-import qianlei.utils.LogUtil;
+import qianlei.utils.Log;
 import qianlei.utils.ViewUtil;
 import qianlei.view.LoginFrame;
 import qianlei.view.MainFrame;
@@ -38,24 +38,34 @@ public class ToolBarPanel extends JPanel {
     }
 
     /**
-     * 添加动作
+     * 打开帮助网页
      */
-    private void addAction() {
-        addGoodButton.addActionListener((e) -> changeDetailPanel(addGoodButton, new AddGoodPanel()));
-        showGoodButton.addActionListener((e) -> changeDetailPanel(showGoodButton, new ShowGoodPanel(parent)));
-        addVipButton.addActionListener((e) -> changeDetailPanel(addVipButton, new AddVipPanel()));
-        showVipButton.addActionListener((e) -> changeDetailPanel(showVipButton, new ShowVipPanel(parent)));
-        addRecordButton.addActionListener((e) -> changeDetailPanel(addRecordButton, new AddRecordPanel()));
-        showRecordButton.addActionListener((e) -> changeDetailPanel(showRecordButton, new ShowRecordPanel()));
-        changePasswordButton.addActionListener((e) -> changeDetailPanel(changePasswordButton, new ChangePasswordPanel()));
-        helpButton.addActionListener((e) -> {
-            createHelpHtml();
-            openHelpHtml();
-        });
-        quitButton.addActionListener((e) -> {
-            parent.dispose();
-            new LoginFrame().setVisible(true);
-        });
+    private static void openHelpHtml() {
+        new Thread(() -> {
+            File file = new File("help.html");
+            if (!file.exists()) {
+                try (
+                        InputStream html = ViewUtil.class.getClassLoader().getResourceAsStream("help.html");
+                        BufferedInputStream inputStream = new BufferedInputStream(Objects.requireNonNull(html));
+                        BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(file, false))
+                ) {
+                    int onceGetBytes = 1024;
+                    byte[] bytes = new byte[onceGetBytes];
+                    int count;
+                    while ((count = inputStream.read(bytes, 0, onceGetBytes)) != -1) {
+                        outputStream.write(bytes, 0, count);
+                    }
+                } catch (IOException ex) {
+                    Log.error(Thread.currentThread(), ex);
+                }
+            }
+            try {
+                URI uri = new URI("help.html");
+                Desktop.getDesktop().browse(uri);
+            } catch (IOException | URISyntaxException e) {
+                Log.error(Thread.currentThread(), e);
+            }
+        }).start();
     }
 
     private void changeDetailPanel(MenuButton button, AbstractCanInitPanel panel) {
@@ -81,41 +91,21 @@ public class ToolBarPanel extends JPanel {
     }
 
     /**
-     * 打开帮助网页
+     * 添加动作
      */
-    private static void openHelpHtml() {
-        new Thread(() -> {
-            try {
-                URI uri = new URI("help.html");
-                Desktop.getDesktop().browse(uri);
-            } catch (IOException | URISyntaxException e) {
-                LogUtil.error(e);
-            }
-        }).start();
-    }
-
-    /**
-     * 生成帮助网页
-     */
-    private static void createHelpHtml() {
-        File file = new File("help.html");
-        if (file.exists()) {
-            return;
-        }
-        try (
-                InputStream html = ViewUtil.class.getClassLoader().getResourceAsStream("help.html");
-                BufferedInputStream inputStream = new BufferedInputStream(Objects.requireNonNull(html));
-                BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(file, false))
-        ) {
-            int onceGetBytes = 1024;
-            byte[] bytes = new byte[onceGetBytes];
-            int count;
-            while ((count = inputStream.read(bytes, 0, onceGetBytes)) != -1) {
-                outputStream.write(bytes, 0, count);
-            }
-        } catch (IOException ex) {
-            LogUtil.error(ex);
-        }
+    private void addAction() {
+        addGoodButton.addActionListener((e) -> changeDetailPanel(addGoodButton, new AddGoodPanel()));
+        showGoodButton.addActionListener((e) -> changeDetailPanel(showGoodButton, new ShowGoodPanel(parent)));
+        addVipButton.addActionListener((e) -> changeDetailPanel(addVipButton, new AddVipPanel()));
+        showVipButton.addActionListener((e) -> changeDetailPanel(showVipButton, new ShowVipPanel(parent)));
+        addRecordButton.addActionListener((e) -> changeDetailPanel(addRecordButton, new AddRecordPanel()));
+        showRecordButton.addActionListener((e) -> changeDetailPanel(showRecordButton, new ShowRecordPanel()));
+        changePasswordButton.addActionListener((e) -> changeDetailPanel(changePasswordButton, new ChangePasswordPanel()));
+        helpButton.addActionListener((e) -> openHelpHtml());
+        quitButton.addActionListener((e) -> {
+            parent.dispose();
+            new LoginFrame().setVisible(true);
+        });
     }
 
     private static class MenuButton extends WebButton {

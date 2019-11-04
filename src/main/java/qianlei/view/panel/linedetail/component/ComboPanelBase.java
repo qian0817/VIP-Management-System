@@ -34,6 +34,8 @@ public class ComboPanelBase extends BaseComponentPanel {
     public void setItem(String s) {
         if (s != null) {
             webComboBox.setSelectedItem(s);
+        } else {
+            webComboBox.setSelectedIndex(0);
         }
     }
 

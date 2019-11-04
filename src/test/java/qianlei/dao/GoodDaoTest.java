@@ -4,7 +4,6 @@ import org.junit.jupiter.api.*;
 import qianlei.TestHelper;
 import qianlei.entity.Good;
 import qianlei.enums.StatusEnum;
-import qianlei.exception.WrongDataException;
 import qianlei.utils.DaoUtil;
 
 import java.math.BigDecimal;
@@ -48,13 +47,13 @@ class GoodDaoTest {
 
     @Order(4)
     @Test
-    void selectAllNormalByIdAndName() throws WrongDataException {
+    void selectAllNormalByIdAndName() {
         Assertions.assertEquals(1, goodDao.selectAllNormalGoodByIdAndName("", "").size());
     }
 
     @Order(5)
     @Test
-    void selectGoodById() throws WrongDataException {
+    void selectGoodById() {
         Assertions.assertEquals(goodDao.selectGoodById("Test1").getStatus(), StatusEnum.DELETED);
         Assertions.assertEquals(goodDao.selectGoodById("Test2").getName(), "测试商品3");
     }

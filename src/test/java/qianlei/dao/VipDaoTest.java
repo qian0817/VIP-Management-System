@@ -7,7 +7,6 @@ import org.junit.jupiter.api.TestMethodOrder;
 import qianlei.TestHelper;
 import qianlei.entity.Vip;
 import qianlei.enums.StatusEnum;
-import qianlei.exception.WrongDataException;
 import qianlei.utils.DaoUtil;
 
 import java.util.Date;
@@ -48,14 +47,14 @@ class VipDaoTest {
 
     @Order(4)
     @Test
-    void selectVipById() throws WrongDataException {
+    void selectVipById() {
         assertEquals(vipDao.selectVipById("test1").getStatus(), StatusEnum.DELETED);
         assertEquals(vipDao.selectVipById("test2").getName(), "测试VIP3");
     }
 
     @Order(5)
     @Test
-    void selectAllNormalVipByIdAndNameAndPhone() throws WrongDataException {
+    void selectAllNormalVipByIdAndNameAndPhone() {
         assertEquals(vipDao.selectAllNormalVipByIdAndNameAndPhone("", "", "").size(), 2);
     }
 }

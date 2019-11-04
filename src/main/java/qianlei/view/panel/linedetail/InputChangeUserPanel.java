@@ -48,6 +48,9 @@ public class InputChangeUserPanel extends BaseInputPanel {
      */
     public void init(String username) {
         panelMap.get(USERNAME).setItem(username);
+        panelMap.get(PASSWORD).setItem(null);
+        panelMap.get(CHECK_PASSWORD).setItem(null);
+        verifyCodePanel.setText("");
         removeAll();
         setLayout(new GridLayout(9, 1));
         addToView();
@@ -61,9 +64,9 @@ public class InputChangeUserPanel extends BaseInputPanel {
      * 获取填写的用户
      *
      * @return 填写的用户信息
-     * @throws WrongDataException 填写的信息错误
+     * @ 填写的信息错误
      */
-    public User getUser() throws WrongDataException {
+    public User getUser() {
         if (verifyCodePanel.isVerifyCodeWrong()) {
             throw new WrongDataException("验证码错误");
         }
@@ -73,7 +76,7 @@ public class InputChangeUserPanel extends BaseInputPanel {
         return user;
     }
 
-    private void setPassword(User user) throws WrongDataException {
+    private void setPassword(User user) {
         String password = get(InputChangeUserPanel.PASSWORD);
         String remarkPassword = get(InputChangeUserPanel.CHECK_PASSWORD);
         if (!StringUtil.isPassword(password)) {
@@ -85,7 +88,7 @@ public class InputChangeUserPanel extends BaseInputPanel {
         user.setPassword(password);
     }
 
-    private void setName(User user) throws WrongDataException {
+    private void setName(User user) {
         String name = get(InputChangeUserPanel.USERNAME);
         if (StringUtil.containsBlank(name)) {
             throw new WrongDataException("用户名中不能有空格");

@@ -50,8 +50,6 @@ public class AddVipPanel extends AbstractCanInitPanel implements CanSubmitPanel 
             return new Result(true, "添加成功");
         } catch (WrongDataException ex) {
             return new Result(false, ex.getMessage());
-        } catch (Exception e) {
-            return new Result(false, "未知错误" + e.getMessage());
         }
     }
 

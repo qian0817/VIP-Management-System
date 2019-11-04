@@ -1,15 +1,12 @@
 package qianlei.view.panel;
 
 import qianlei.entity.Record;
-import qianlei.exception.WrongDataException;
 import qianlei.service.RecordService;
 import qianlei.view.panel.tabledetail.component.SearchBar;
 import qianlei.view.panel.tabledetail.component.TablePanel;
 
-import javax.swing.*;
 import java.awt.*;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -37,13 +34,7 @@ public class ShowRecordPanel extends AbstractCanInitPanel {
     public void init(String id, String name, String phone) {
         removeAll();
         add(searchBar, BorderLayout.NORTH);
-        List<Record> recordList;
-        try {
-            recordList = goodService.getAllRecordByIdAndName(id, name, phone);
-        } catch (WrongDataException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
-            recordList = new LinkedList<>();
-        }
+        List<Record> recordList = goodService.getAllRecordByIdAndName(id, name, phone);
         Object[][] data = new Object[recordList.size()][10];
         for (int i = 0; i < recordList.size(); i++) {
             Record record = recordList.get(i);

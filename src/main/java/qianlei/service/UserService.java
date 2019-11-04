@@ -22,7 +22,7 @@ public class UserService {
      *
      * @param user 需要登录的用户
      */
-    public void login(User user) throws WrongDataException {
+    public void login(User user) {
         User existUser = userDao.getUserByName(user.getUsername());
         if (existUser == null || !existUser.getPassword().equals(user.getPassword())) {
             throw new WrongDataException("用户名或密码错误");
@@ -34,9 +34,8 @@ public class UserService {
      * 用户注册
      *
      * @param user 需要注册的用户
-     * @throws WrongDataException 输入的数据有格式错误
      */
-    public void register(User user) throws WrongDataException {
+    public void register(User user) {
         if (userDao.getUserByName(user.getUsername()) != null) {
             throw new WrongDataException("该用户名已被注册");
         }
@@ -46,9 +45,8 @@ public class UserService {
     /**
      * 修改密码
      *@param user 修改后的用户名
-     * @throws WrongDataException 输入的数据有格式错误
      */
-    public void changePassword(User user) throws WrongDataException {
+    public void changePassword(User user) {
         userDao.updateUser(user);
     }
 }

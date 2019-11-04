@@ -27,7 +27,7 @@ public class RecordService {
      * @param phone 电话号码
      * @return 符合条件的用户
      */
-    public List<Record> getAllRecordByIdAndName(String id, String name, String phone) throws WrongDataException {
+    public List<Record> getAllRecordByIdAndName(String id, String name, String phone) {
         return recordDao.selectAllRecordByIdAndNameAndPhone(id, name, phone);
     }
 
@@ -36,9 +36,8 @@ public class RecordService {
      *
      * @param goodId 消费的商品
      * @param vipId  消费的vip
-     * @throws WrongDataException 给出的数据错误
      */
-    public void addRecord(String goodId, String vipId) throws WrongDataException {
+    public void addRecord(String goodId, String vipId) {
         if (goodId == null) {
             throw new WrongDataException("请选择商品");
         }

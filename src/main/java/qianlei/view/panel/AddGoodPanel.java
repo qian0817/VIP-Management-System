@@ -57,10 +57,7 @@ public class AddGoodPanel extends AbstractCanInitPanel implements CanSubmitPanel
             return new Result(true, "添加成功");
         } catch (WrongDataException e) {
             return new Result(false, e.getMessage());
-        } catch (Exception e) {
-            return new Result(false, "未知错误" + e.getMessage());
         }
-
     }
 
     @Override

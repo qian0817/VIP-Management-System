@@ -44,6 +44,8 @@ public class DateChoosePanelBase extends BaseComponentPanel {
             } catch (ParseException e) {
                 webDateField.setDate(new Date());
             }
+        } else {
+            webDateField.setDate(new Date());
         }
     }
 

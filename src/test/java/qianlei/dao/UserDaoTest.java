@@ -3,7 +3,6 @@ package qianlei.dao;
 import org.junit.jupiter.api.*;
 import qianlei.TestHelper;
 import qianlei.entity.User;
-import qianlei.exception.WrongDataException;
 import qianlei.utils.DaoUtil;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -31,7 +30,7 @@ class UserDaoTest {
 
     @Order(2)
     @Test
-    void getUserByName() throws WrongDataException {
+    void getUserByName() {
         assertEquals(userDao.getUserByName("测试用户").getUsername(), "测试用户");
     }
 

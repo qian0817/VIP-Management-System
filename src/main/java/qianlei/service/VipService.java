@@ -20,9 +20,8 @@ public class VipService {
      * 添加VIP
      *
      * @param vip 需要添加的vip
-     * @throws WrongDataException 给入的格式错误
      */
-    public void addVip(Vip vip) throws WrongDataException {
+    public void addVip(Vip vip) {
         if (vipDao.selectVipById(vip.getId()) != null) {
             throw new WrongDataException("id" + vip.getId() + "已经被注册");
         }
@@ -39,7 +38,7 @@ public class VipService {
      * @param phone 电话号码
      * @return 符合条件的vip
      */
-    public List<Vip> getAllNormalVipByIdAndNameAndPhone(String id, String name, String phone) throws WrongDataException {
+    public List<Vip> getAllNormalVipByIdAndNameAndPhone(String id, String name, String phone) {
         List<Vip> vipList = vipDao.selectAllNormalVipByIdAndNameAndPhone(id, name, phone);
         return vipList.stream().filter((vip -> vip.getStatus().getId() == StatusEnum.NORMAL.getId() && vip.getId().contains(id)
                 && vip.getName().contains(name) && vip.getPhone().contains(phone))).collect(Collectors.toList());
@@ -51,7 +50,7 @@ public class VipService {
      * @param id id
      * @return 该id的vip
      */
-    public Vip getVipById(String id) throws WrongDataException {
+    public Vip getVipById(String id) {
         return vipDao.selectVipById(id);
     }
 
@@ -60,7 +59,7 @@ public class VipService {
      *
      * @param id id
      */
-    public void deleteVipById(String id) throws WrongDataException {
+    public void deleteVipById(String id) {
         vipDao.deleteById(id);
     }
 
@@ -68,9 +67,8 @@ public class VipService {
      * 修改VIP
      *
      * @param vip 修改后的vip
-     * @throws WrongDataException 输入的数据错误
      */
-    public void updateVip(Vip vip) throws WrongDataException {
+    public void updateVip(Vip vip) {
         vipDao.updateVip(vip);
     }
 }

@@ -70,8 +70,6 @@ public class LoginFrame extends JFrame {
             return new Result(true, "登陆成功");
         } catch (WrongDataException e) {
             return new Result(false, "用户名或密码错误");
-        } catch (Exception e) {
-            return new Result(false, "未知错误" + e.getMessage());
         }
     }
 

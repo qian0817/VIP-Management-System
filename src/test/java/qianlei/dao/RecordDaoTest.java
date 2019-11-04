@@ -6,7 +6,6 @@ import qianlei.entity.Good;
 import qianlei.entity.Record;
 import qianlei.entity.Vip;
 import qianlei.enums.StatusEnum;
-import qianlei.exception.WrongDataException;
 import qianlei.utils.DaoUtil;
 
 import java.math.BigDecimal;
@@ -33,7 +32,7 @@ class RecordDaoTest {
 
     @Order(1)
     @Test
-    void addRecord() throws WrongDataException {
+    void addRecord() {
         goodDao.addGood(new Good("1", "测试商品1", "测试制造商1", new Date(),
                 new BigDecimal(123), 0.65, 123L, "测试1", "测试1", StatusEnum.NORMAL));
         vipDao.addVip(new Vip("1", "测试VIP1", "男", "123456789"
@@ -43,7 +42,7 @@ class RecordDaoTest {
 
     @Order(2)
     @Test
-    void selectAllRecord() throws WrongDataException {
+    void selectAllRecord() {
         assertEquals(recordDao.selectAllRecordByIdAndNameAndPhone("", "", "").size(), 1);
     }
 }

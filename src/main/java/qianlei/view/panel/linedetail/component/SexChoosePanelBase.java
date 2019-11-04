@@ -39,7 +39,7 @@ public class SexChoosePanelBase extends BaseComponentPanel {
     public void setItem(String s) {
         if (Vip.MAN.equals(s)) {
             manButton.setSelected(true);
-        } else if (Vip.WOMAN.equals(s)) {
+        } else {
             womanButton.setSelected(true);
         }
     }

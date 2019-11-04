@@ -61,14 +61,14 @@ public final class ViewUtil {
     }
 
     /**
-     * 写入字体配置文件
+     * 写配置文件
      */
-    private static void writeFontConfig() {
+    private static void writeConfig() {
         try (BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(new File("config.json")))) {
             String s = JSON.toJSONString(curConfig, SerializerFeature.PrettyFormat);
             outputStream.write(s.getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
-            LogUtil.error(e);
+            Log.error(Thread.currentThread(), e);
         }
     }
 
@@ -85,7 +85,7 @@ public final class ViewUtil {
             skin = LIGHT_SKIN;
         }
         curConfig.setSkin(skin);
-        new Thread(ViewUtil::writeFontConfig).start();
+        new Thread(ViewUtil::writeConfig).start();
     }
 
     /**
@@ -95,7 +95,7 @@ public final class ViewUtil {
      */
     public static void changeFont(Font font) {
         curConfig.setFont(font);
-        new Thread(ViewUtil::writeFontConfig).start();
+        new Thread(ViewUtil::writeConfig).start();
         setViewFont(curConfig.getFont());
     }
 

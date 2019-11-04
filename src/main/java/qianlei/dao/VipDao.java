@@ -2,9 +2,8 @@ package qianlei.dao;
 
 import qianlei.entity.Vip;
 import qianlei.enums.StatusEnum;
-import qianlei.exception.WrongDataException;
 import qianlei.utils.DaoUtil;
-import qianlei.utils.LogUtil;
+import qianlei.utils.Log;
 
 import java.sql.*;
 import java.util.LinkedList;
@@ -22,7 +21,7 @@ public class VipDao {
      *
      * @param vip 需要添加的VIP
      */
-    public void addVip(Vip vip) throws WrongDataException {
+    public void addVip(Vip vip) {
         try (
                 Connection connection = DaoUtil.getConnection();
                 PreparedStatement statement = connection.prepareStatement("INSERT INTO vip(id, name, sex, phone, " +
@@ -38,8 +37,7 @@ public class VipDao {
             statement.setInt(8, vip.getStatus().getId());
             statement.executeUpdate();
         } catch (SQLException e) {
-            LogUtil.error(e);
-            throw new WrongDataException("数据库错误");
+            Log.error(Thread.currentThread(), e);
         }
     }
 
@@ -49,7 +47,7 @@ public class VipDao {
      * @param id id
      * @return 该id的VIP
      */
-    public Vip selectVipById(String id) throws WrongDataException {
+    public Vip selectVipById(String id) {
         ResultSet resultSet = null;
         try (
                 Connection connection = DaoUtil.getConnection();
@@ -62,8 +60,7 @@ public class VipDao {
                 return getVipByResultSet(resultSet);
             }
         } catch (SQLException e) {
-            LogUtil.error(e);
-            throw new WrongDataException("数据库错误");
+            Log.error(Thread.currentThread(), e);
         } finally {
             DaoUtil.closeResultSet(resultSet);
         }
@@ -77,7 +74,7 @@ public class VipDao {
      * @param searchPhone 获取到的phone
      * @return 符合条件的vip
      */
-    public List<Vip> selectAllNormalVipByIdAndNameAndPhone(String searchId, String searchName, String searchPhone) throws WrongDataException {
+    public List<Vip> selectAllNormalVipByIdAndNameAndPhone(String searchId, String searchName, String searchPhone) {
         ResultSet resultSet = null;
         List<Vip> vipList = new LinkedList<>();
         try (
@@ -85,6 +82,7 @@ public class VipDao {
                 PreparedStatement statement = connection.prepareStatement("SELECT id,name, sex, phone, address, " +
                         "postcode, createtime, status FROM vip " +
                         "WHERE id LIKE ? AND name LIKE ? AND phone LIKE ? AND status = ?" +
+                        "ORDER BY length(id)" +
                         "LIMIT 500 ")
         ) {
             statement.setString(1, "%" + searchId + "%");
@@ -97,8 +95,7 @@ public class VipDao {
                 vipList.add(vip);
             }
         } catch (SQLException e) {
-            LogUtil.error(e);
-            throw new WrongDataException("数据库错误");
+            Log.error(Thread.currentThread(), e);
         } finally {
             DaoUtil.closeResultSet(resultSet);
         }
@@ -129,7 +126,7 @@ public class VipDao {
      *
      * @param id id
      */
-    public void deleteById(String id) throws WrongDataException {
+    public void deleteById(String id) {
         try (
                 Connection connection = DaoUtil.getConnection();
                 PreparedStatement statement = connection.prepareStatement("UPDATE vip SET status = ? WHERE id = ?")
@@ -138,8 +135,7 @@ public class VipDao {
             statement.setString(2, id);
             statement.executeUpdate();
         } catch (SQLException e) {
-            LogUtil.error(e);
-            throw new WrongDataException("数据库错误");
+            Log.error(Thread.currentThread(), e);
         }
     }
 
@@ -148,7 +144,7 @@ public class VipDao {
      *
      * @param vip 修改后的vip
      */
-    public void updateVip(Vip vip) throws WrongDataException {
+    public void updateVip(Vip vip) {
         try (
                 Connection connection = DaoUtil.getConnection();
                 PreparedStatement statement = connection.prepareStatement("UPDATE vip SET name = ?,sex=?,phone=?,address=?,postcode=?WHERE id = ?")
@@ -161,8 +157,7 @@ public class VipDao {
             statement.setString(6, vip.getId());
             statement.executeUpdate();
         } catch (SQLException e) {
-            LogUtil.error(e);
-            throw new WrongDataException("数据库错误");
+            Log.error(Thread.currentThread(), e);
         }
     }
 }

@@ -4,6 +4,7 @@ import qianlei.entity.Good;
 import qianlei.exception.WrongDataException;
 import qianlei.utils.DateUtil;
 import qianlei.utils.StringUtil;
+import qianlei.view.panel.linedetail.component.BaseComponentPanel;
 import qianlei.view.panel.linedetail.component.ComboPanelBase;
 import qianlei.view.panel.linedetail.component.DateChoosePanelBase;
 import qianlei.view.panel.linedetail.component.InputPanelBase;
@@ -14,6 +15,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 输入商品信息界面
@@ -79,6 +81,10 @@ public class InputGoodPanel extends BaseInputPanel {
             panelMap.get(REMARK).setItem(good.getRemarks());
             panelMap.get(CREATE_TIME).setItem(DateUtil.transferToString(good.getCreateTime()));
             panelMap.get(DISCOUNT).setItem(String.valueOf(good.getDiscount()));
+        } else {
+            for (Map.Entry<Integer, BaseComponentPanel> entry : panelMap.entrySet()) {
+                entry.getValue().setItem(null);
+            }
         }
         removeAll();
         setLayout(new GridLayout(19, 1));
@@ -91,9 +97,9 @@ public class InputGoodPanel extends BaseInputPanel {
      * 获取填写的商品
      *
      * @return 填写的商品
-     * @throws WrongDataException 错误的填写数据
+     * @ 错误的填写数据
      */
-    public Good getGood() throws WrongDataException {
+    public Good getGood() {
         Good good = new Good();
         setId(good);
         setName(good);
@@ -117,7 +123,7 @@ public class InputGoodPanel extends BaseInputPanel {
         good.setIntroduction(introduction);
     }
 
-    private void setRemain(Good good) throws WrongDataException {
+    private void setRemain(Good good) {
         String remain = get(InputGoodPanel.REMAIN);
         if (!StringUtil.isBigInteger(remain)) {
             throw new WrongDataException("库存" + remain + "格式错误");
@@ -130,7 +136,7 @@ public class InputGoodPanel extends BaseInputPanel {
         good.setDiscount(Double.parseDouble(discount));
     }
 
-    private void setPrice(Good good) throws WrongDataException {
+    private void setPrice(Good good) {
         String price = get(InputGoodPanel.PRICE);
         if (!StringUtil.isBigDecimal(price)) {
             throw new WrongDataException("价格：" + price + "格式错误");
@@ -138,7 +144,7 @@ public class InputGoodPanel extends BaseInputPanel {
         good.setPrice(new BigDecimal(price));
     }
 
-    private void setCreateTime(Good good) throws WrongDataException {
+    private void setCreateTime(Good good) {
         String createTime = get(InputGoodPanel.CREATE_TIME);
         Date time;
         try {
@@ -154,7 +160,7 @@ public class InputGoodPanel extends BaseInputPanel {
         good.setMaker(maker);
     }
 
-    private void setName(Good good) throws WrongDataException {
+    private void setName(Good good) {
         String name = get(InputGoodPanel.NAME);
         if ("".equals(name.trim())) {
             throw new WrongDataException("name不能为空");
@@ -162,7 +168,7 @@ public class InputGoodPanel extends BaseInputPanel {
         good.setName(name);
     }
 
-    private void setId(Good good) throws WrongDataException {
+    private void setId(Good good) {
         String id = get(InputGoodPanel.ID);
         if (StringUtil.containsBlank(id)) {
             throw new WrongDataException("id" + id + "不能包含空格");

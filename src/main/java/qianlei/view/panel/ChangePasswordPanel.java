@@ -19,7 +19,6 @@ public class ChangePasswordPanel extends AbstractCanInitPanel implements CanSubm
     private UserService userService = new UserService();
     private InputChangeUserPanel inputChangeUserPanel = new InputChangeUserPanel();
     private WebButton check = new WebButton("确认");
-    private JLabel titleLabel = new JLabel("密码修改", JLabel.CENTER);
     private JPanel button = new JPanel(new FlowLayout());
 
     ChangePasswordPanel() {
@@ -57,8 +56,6 @@ public class ChangePasswordPanel extends AbstractCanInitPanel implements CanSubm
             return new Result(true, "添加成功");
         } catch (WrongDataException e) {
             return new Result(false, e.getMessage());
-        } catch (Exception e) {
-            return new Result(false, "未知错误" + e.getMessage());
         }
     }
 
@@ -70,7 +67,6 @@ public class ChangePasswordPanel extends AbstractCanInitPanel implements CanSubm
         inputChangeUserPanel.init(userService.getCurUser().getUsername());
         button.add(check);
         setLayout(new BorderLayout());
-        add(titleLabel, BorderLayout.NORTH);
         add(inputChangeUserPanel);
         add(button, BorderLayout.SOUTH);
     }

@@ -54,6 +54,8 @@ public class InputPanelBase extends BaseComponentPanel {
     public void setItem(String s) {
         if (s != null) {
             field.setText(s);
+        } else {
+            field.setText("");
         }
     }
 
