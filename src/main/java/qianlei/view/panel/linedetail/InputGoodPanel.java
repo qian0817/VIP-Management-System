@@ -99,7 +99,7 @@ public class InputGoodPanel extends BaseInputPanel {
      * @return 填写的商品
      * @ 错误的填写数据
      */
-    public Good getGood() {
+    public Good getGood() throws WrongDataException {
         Good good = new Good();
         setId(good);
         setName(good);
@@ -123,7 +123,7 @@ public class InputGoodPanel extends BaseInputPanel {
         good.setIntroduction(introduction);
     }
 
-    private void setRemain(Good good) {
+    private void setRemain(Good good) throws WrongDataException {
         String remain = get(InputGoodPanel.REMAIN);
         if (!StringUtil.isBigInteger(remain)) {
             throw new WrongDataException("库存" + remain + "格式错误");
@@ -136,7 +136,7 @@ public class InputGoodPanel extends BaseInputPanel {
         good.setDiscount(Double.parseDouble(discount));
     }
 
-    private void setPrice(Good good) {
+    private void setPrice(Good good) throws WrongDataException {
         String price = get(InputGoodPanel.PRICE);
         if (!StringUtil.isBigDecimal(price)) {
             throw new WrongDataException("价格：" + price + "格式错误");
@@ -144,7 +144,7 @@ public class InputGoodPanel extends BaseInputPanel {
         good.setPrice(new BigDecimal(price));
     }
 
-    private void setCreateTime(Good good) {
+    private void setCreateTime(Good good) throws WrongDataException {
         String createTime = get(InputGoodPanel.CREATE_TIME);
         Date time;
         try {
@@ -160,7 +160,7 @@ public class InputGoodPanel extends BaseInputPanel {
         good.setMaker(maker);
     }
 
-    private void setName(Good good) {
+    private void setName(Good good) throws WrongDataException {
         String name = get(InputGoodPanel.NAME);
         if ("".equals(name.trim())) {
             throw new WrongDataException("name不能为空");
@@ -168,7 +168,7 @@ public class InputGoodPanel extends BaseInputPanel {
         good.setName(name);
     }
 
-    private void setId(Good good) {
+    private void setId(Good good) throws WrongDataException {
         String id = get(InputGoodPanel.ID);
         if (StringUtil.containsBlank(id)) {
             throw new WrongDataException("id" + id + "不能包含空格");

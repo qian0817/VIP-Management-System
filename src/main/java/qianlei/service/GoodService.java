@@ -20,7 +20,7 @@ public class GoodService {
      *
      * @param good 商品
      */
-    public void addGood(Good good) {
+    public void addGood(Good good) throws WrongDataException {
         if (goodDao.selectGoodById(good.getId()) != null) {
             throw new WrongDataException("id" + good.getId() + "已被注册");
         }

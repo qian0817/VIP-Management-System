@@ -62,7 +62,7 @@ public class InputVipPanel extends BaseInputPanel {
         setVisible(true);
     }
 
-    public Vip getVip() {
+    public Vip getVip() throws WrongDataException {
         Vip vip = new Vip();
         setId(vip);
         setName(vip);
@@ -73,7 +73,7 @@ public class InputVipPanel extends BaseInputPanel {
         return vip;
     }
 
-    private void setPostcode() {
+    private void setPostcode() throws WrongDataException {
         String postcode = get(InputVipPanel.POSTCODE);
         if (!StringUtil.isBigInteger(postcode) || postcode.length() != Vip.POSTCODE_LENGTH) {
             throw new WrongDataException("邮编" + postcode + "只能包含数字且只有6位");
@@ -85,7 +85,7 @@ public class InputVipPanel extends BaseInputPanel {
         vip.setAddress(address);
     }
 
-    private void setPhone(Vip vip) {
+    private void setPhone(Vip vip) throws WrongDataException {
         String phone = get(InputVipPanel.PHONE);
         if (!StringUtil.isBigInteger(phone)) {
             throw new WrongDataException("电话号码" + phone + "只能包含数字");
@@ -103,7 +103,7 @@ public class InputVipPanel extends BaseInputPanel {
         vip.setName(name);
     }
 
-    private void setId(Vip vip) {
+    private void setId(Vip vip) throws WrongDataException {
         String id = get(InputVipPanel.ID);
         if (StringUtil.containsBlank(id)) {
             throw new WrongDataException("id" + id + "不能包含空格");

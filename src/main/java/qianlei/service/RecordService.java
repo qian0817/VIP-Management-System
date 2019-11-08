@@ -37,7 +37,7 @@ public class RecordService {
      * @param goodId 消费的商品
      * @param vipId  消费的vip
      */
-    public void addRecord(String goodId, String vipId) {
+    public void addRecord(String goodId, String vipId) throws WrongDataException {
         if (goodId == null) {
             throw new WrongDataException("请选择商品");
         }

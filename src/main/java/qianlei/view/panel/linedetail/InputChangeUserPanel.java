@@ -66,7 +66,7 @@ public class InputChangeUserPanel extends BaseInputPanel {
      * @return 填写的用户信息
      * @ 填写的信息错误
      */
-    public User getUser() {
+    public User getUser() throws WrongDataException {
         if (verifyCodePanel.isVerifyCodeWrong()) {
             throw new WrongDataException("验证码错误");
         }
@@ -76,7 +76,7 @@ public class InputChangeUserPanel extends BaseInputPanel {
         return user;
     }
 
-    private void setPassword(User user) {
+    private void setPassword(User user) throws WrongDataException {
         String password = get(InputChangeUserPanel.PASSWORD);
         String remarkPassword = get(InputChangeUserPanel.CHECK_PASSWORD);
         if (!StringUtil.isPassword(password)) {
@@ -88,7 +88,7 @@ public class InputChangeUserPanel extends BaseInputPanel {
         user.setPassword(password);
     }
 
-    private void setName(User user) {
+    private void setName(User user) throws WrongDataException {
         String name = get(InputChangeUserPanel.USERNAME);
         if (StringUtil.containsBlank(name)) {
             throw new WrongDataException("用户名中不能有空格");

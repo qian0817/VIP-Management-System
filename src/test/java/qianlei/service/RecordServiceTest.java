@@ -18,7 +18,7 @@ class RecordServiceTest {
     private RecordService recordService = new RecordService();
 
     @BeforeAll
-    static void start() {
+    static void start() throws WrongDataException {
         DaoUtil.init("test.db");
         GoodService goodService = new GoodService();
         VipService vipService = new VipService();

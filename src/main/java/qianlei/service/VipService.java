@@ -21,7 +21,7 @@ public class VipService {
      *
      * @param vip 需要添加的vip
      */
-    public void addVip(Vip vip) {
+    public void addVip(Vip vip) throws WrongDataException {
         if (vipDao.selectVipById(vip.getId()) != null) {
             throw new WrongDataException("id" + vip.getId() + "已经被注册");
         }

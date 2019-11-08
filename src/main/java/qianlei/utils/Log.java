@@ -1,7 +1,6 @@
 package qianlei.utils;
 
-import com.alee.managers.notification.NotificationManager;
-
+import javax.swing.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -58,7 +57,7 @@ public final class Log {
             } else {
                 type = "未知错误";
             }
-            NotificationManager.showNotification("发生" + type + ",已记录到日志中");
+            JOptionPane.showMessageDialog(null, "发生" + type + ",已记录到日志中");
         }).start();
     }
 

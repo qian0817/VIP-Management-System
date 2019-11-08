@@ -22,7 +22,7 @@ public class UserService {
      *
      * @param user 需要登录的用户
      */
-    public void login(User user) {
+    public void login(User user) throws WrongDataException {
         User existUser = userDao.getUserByName(user.getUsername());
         if (existUser == null || !existUser.getPassword().equals(user.getPassword())) {
             throw new WrongDataException("用户名或密码错误");
@@ -35,7 +35,7 @@ public class UserService {
      *
      * @param user 需要注册的用户
      */
-    public void register(User user) {
+    public void register(User user) throws WrongDataException {
         if (userDao.getUserByName(user.getUsername()) != null) {
             throw new WrongDataException("该用户名已被注册");
         }
