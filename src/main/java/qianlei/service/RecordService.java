@@ -44,12 +44,17 @@ public class RecordService {
         if (vipId == null) {
             throw new WrongDataException("请选择vip");
         }
+        Good good = goodDao.selectGoodById(goodId);
+        if (good.getRemain() <= 0) {
+            throw new WrongDataException("无剩余库存");
+        }
         Record record = new Record();
         record.setVipId(vipId);
         record.setGoodId(goodId);
         record.setCreateTime(new Date());
-        Good good = goodDao.selectGoodById(goodId);
         record.setPrice(new BigDecimal(String.format("%.2f", good.getDiscount() * good.getPrice().doubleValue())));
+        good.setRemain(good.getRemain() - 1);
+        goodDao.updateGood(good);
         recordDao.addRecord(record);
     }
 }
