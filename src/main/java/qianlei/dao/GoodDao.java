@@ -97,7 +97,7 @@ public class GoodDao {
         try (
                 Connection connection = DaoUtil.getConnection();
                 PreparedStatement statement = connection.prepareStatement("UPDATE good SET name = ?,maker = ?,price=?,discount=? ," +
-                        "remain=?, introduction=?, remarks=?WHERE id = ?")
+                        "remain=?, introduction=?, remarks=?, status=?WHERE id = ?")
         ) {
             statement.setString(1, good.getName());
             statement.setString(2, good.getMaker());
@@ -106,7 +106,8 @@ public class GoodDao {
             statement.setLong(5, good.getRemain());
             statement.setString(6, good.getIntroduction());
             statement.setString(7, good.getRemarks());
-            statement.setString(8, good.getId());
+            statement.setInt(8, good.getStatus().getId());
+            statement.setString(9, good.getId());
             statement.executeUpdate();
         } catch (SQLException e) {
             Log.error(Thread.currentThread(), e);

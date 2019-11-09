@@ -147,14 +147,15 @@ public class VipDao {
     public void updateVip(Vip vip) {
         try (
                 Connection connection = DaoUtil.getConnection();
-                PreparedStatement statement = connection.prepareStatement("UPDATE vip SET name = ?,sex=?,phone=?,address=?,postcode=?WHERE id = ?")
+                PreparedStatement statement = connection.prepareStatement("UPDATE vip SET name = ?,sex=?,phone=?,address=?,postcode=?,status=? WHERE id = ?")
         ) {
             statement.setString(1, vip.getName());
             statement.setString(2, vip.getSex());
             statement.setString(3, vip.getPhone());
             statement.setString(4, vip.getAddress());
             statement.setInt(5, vip.getPostcode());
-            statement.setString(6, vip.getId());
+            statement.setInt(6, vip.getStatus().getId());
+            statement.setString(7, vip.getId());
             statement.executeUpdate();
         } catch (SQLException e) {
             Log.error(Thread.currentThread(), e);

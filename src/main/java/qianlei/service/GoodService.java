@@ -5,6 +5,7 @@ import qianlei.entity.Good;
 import qianlei.enums.StatusEnum;
 import qianlei.exception.WrongDataException;
 
+import javax.swing.*;
 import java.util.List;
 
 /**
@@ -21,11 +22,27 @@ public class GoodService {
      * @param good 商品
      */
     public void addGood(Good good) throws WrongDataException {
-        if (goodDao.selectGoodById(good.getId()) != null) {
-            throw new WrongDataException("id" + good.getId() + "已被注册");
+        boolean isAdd = true;
+        Good existGood = goodDao.selectGoodById(good.getId());
+        if (existGood != null) {
+            if (existGood.getStatus() == StatusEnum.NORMAL) {
+                throw new WrongDataException("id 为" + good.getId() + "的商品已经录入");
+            } else {
+                int choose = JOptionPane.showConfirmDialog(null, "id 为" + good.getId() +
+                        "的商品已经删除,是否覆盖该被删除数据(注:可能会导致商品消费记录查询到错误的结果)");
+                if (choose != JOptionPane.YES_OPTION) {
+                    throw new WrongDataException("未添加数据");
+                } else {
+                    isAdd = false;
+                }
+            }
         }
         good.setStatus(StatusEnum.NORMAL);
-        goodDao.addGood(good);
+        if (isAdd) {
+            goodDao.addGood(good);
+        } else {
+            goodDao.updateGood(good);
+        }
     }
 
     /**

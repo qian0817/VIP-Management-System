@@ -5,6 +5,7 @@ import qianlei.entity.Vip;
 import qianlei.enums.StatusEnum;
 import qianlei.exception.WrongDataException;
 
+import javax.swing.*;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,12 +23,28 @@ public class VipService {
      * @param vip 需要添加的vip
      */
     public void addVip(Vip vip) throws WrongDataException {
-        if (vipDao.selectVipById(vip.getId()) != null) {
-            throw new WrongDataException("id" + vip.getId() + "已经被注册");
+        boolean isAdd = true;
+        Vip existVip = vipDao.selectVipById(vip.getId());
+        if (existVip != null) {
+            if (existVip.getStatus() == StatusEnum.NORMAL) {
+                throw new WrongDataException("id 为" + vip.getId() + "的 VIP 已经录入");
+            } else {
+                int choose = JOptionPane.showConfirmDialog(null, "id 为" + vip.getId() +
+                        "的 VIP 已经删除,是否覆盖该被删除数据(注:可能会导致商品消费记录查询到错误的结果)");
+                if (choose != JOptionPane.YES_OPTION) {
+                    throw new WrongDataException("未添加数据");
+                } else {
+                    isAdd = false;
+                }
+            }
         }
         vip.setStatus(StatusEnum.NORMAL);
         vip.setCreateTime(new Date());
-        vipDao.addVip(vip);
+        if (isAdd) {
+            vipDao.addVip(vip);
+        } else {
+            vipDao.updateVip(vip);
+        }
     }
 
     /**
@@ -69,6 +86,7 @@ public class VipService {
      * @param vip 修改后的vip
      */
     public void updateVip(Vip vip) {
+        vip.setStatus(StatusEnum.NORMAL);
         vipDao.updateVip(vip);
     }
 }
