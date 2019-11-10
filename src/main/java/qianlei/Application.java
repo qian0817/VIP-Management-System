@@ -30,7 +30,7 @@ public class Application {
         System.out.println(properties.get("java.version"));
         String javaVersion = properties.getProperty("java.version");
         if (!javaVersion.contains("1.8.")) {
-            JOptionPane.showMessageDialog(null, "请使用JAVA1.8版本运行", "JAVA版本错误", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "请使用 JAVA 8 版本运行", "JAVA 版本错误", JOptionPane.ERROR_MESSAGE);
             System.exit(0);
         }
     }
