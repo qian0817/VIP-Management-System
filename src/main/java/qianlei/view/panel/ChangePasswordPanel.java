@@ -63,7 +63,7 @@ public class ChangePasswordPanel extends AbstractCanInitPanel implements CanSubm
      * 添加组件
      */
     private void addComponent() {
-        inputChangeUserPanel.setEditable(InputChangeUserPanel.USERNAME, false);
+        inputChangeUserPanel.setEditable(InputChangeUserPanel.PanelEnum.USERNAME.getId(), false);
         inputChangeUserPanel.init(userService.getCurUser().getUsername());
         button.add(check);
         setLayout(new BorderLayout());

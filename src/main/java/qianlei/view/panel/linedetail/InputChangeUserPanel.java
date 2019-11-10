@@ -3,6 +3,7 @@ package qianlei.view.panel.linedetail;
 import qianlei.entity.User;
 import qianlei.exception.WrongDataException;
 import qianlei.utils.StringUtil;
+import qianlei.view.panel.linedetail.component.BaseComponentPanel;
 import qianlei.view.panel.linedetail.component.InputPanelBase;
 import qianlei.view.panel.linedetail.component.PasswordPanelBase;
 import qianlei.view.panel.linedetail.component.VerifyCodePanel;
@@ -11,22 +12,15 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * 填写注册界面
+ * 填写注册界面 用于用户注册和修改密码界面
  *
  * @author qianlei
  */
 public class InputChangeUserPanel extends BaseInputPanel {
-    public static final int USERNAME = 1;
-    @SuppressWarnings("WeakerAccess")
-    public static final int PASSWORD = 2;
-    @SuppressWarnings("WeakerAccess")
-    public static final int CHECK_PASSWORD = 3;
     private final VerifyCodePanel verifyCodePanel = new VerifyCodePanel();
 
     public InputChangeUserPanel() {
-        panelMap.put(USERNAME, new InputPanelBase("用户名", "请输入商品编号"));
-        panelMap.put(PASSWORD, new PasswordPanelBase("密码", "请输入密码"));
-        panelMap.put(CHECK_PASSWORD, new PasswordPanelBase("确认密码", "请重复密码"));
+        PanelEnum.addToPanelMap(this);
         init();
     }
 
@@ -47,12 +41,12 @@ public class InputChangeUserPanel extends BaseInputPanel {
      * @param username 用户名
      */
     public void init(String username) {
-        panelMap.get(USERNAME).setItem(username);
-        panelMap.get(PASSWORD).setItem(null);
-        panelMap.get(CHECK_PASSWORD).setItem(null);
+        panelMap.get(PanelEnum.USERNAME.getId()).setItem(username);
+        panelMap.get(PanelEnum.PASSWORD.getId()).setItem(null);
+        panelMap.get(PanelEnum.CHECK_PASSWORD.getId()).setItem(null);
         verifyCodePanel.setText("");
         removeAll();
-        setLayout(new GridLayout(9, 1));
+        setLayout(new GridLayout(PanelEnum.values().length * 2 + 3, 1));
         addToView();
         add(verifyCodePanel);
         add(new JLabel());
@@ -77,8 +71,8 @@ public class InputChangeUserPanel extends BaseInputPanel {
     }
 
     private void setPassword(User user) throws WrongDataException {
-        String password = get(InputChangeUserPanel.PASSWORD);
-        String remarkPassword = get(InputChangeUserPanel.CHECK_PASSWORD);
+        String password = get(PanelEnum.PASSWORD.getId());
+        String remarkPassword = get(PanelEnum.CHECK_PASSWORD.getId());
         if (!StringUtil.isPassword(password)) {
             throw new WrongDataException("密码格式错误，只能由字母数字和下划线构成,长度为6-16位");
         }
@@ -89,10 +83,42 @@ public class InputChangeUserPanel extends BaseInputPanel {
     }
 
     private void setName(User user) throws WrongDataException {
-        String name = get(InputChangeUserPanel.USERNAME);
+        String name = get(PanelEnum.USERNAME.getId());
         if (StringUtil.containsBlank(name)) {
             throw new WrongDataException("用户名中不能有空格");
         }
         user.setUsername(name);
+    }
+
+    /**
+     * 为每个输入框分配对应的id 将按照id大小从上到下添加到界面
+     */
+    public enum PanelEnum {
+        USERNAME(1, new InputPanelBase("用户名", "请输入商品编号")),
+        PASSWORD(2, new PasswordPanelBase("密码", "请输入密码")),
+        CHECK_PASSWORD(3, new PasswordPanelBase("确认密码", "请重复密码"));
+        private int id;
+        private BaseComponentPanel panel;
+
+        PanelEnum(int id, BaseComponentPanel panel) {
+            this.id = id;
+            this.panel = panel;
+        }
+
+        /**
+         * 将所有的panel添加到panelMap中
+         *
+         * @param panel 需要添加的panel
+         */
+        private static void addToPanelMap(InputChangeUserPanel panel) {
+            for (PanelEnum panelEnum : values()) {
+                panelEnum.panel.setEditable(true);
+                panel.panelMap.put(panelEnum.id, panelEnum.panel);
+            }
+        }
+
+        public int getId() {
+            return id;
+        }
     }
 }

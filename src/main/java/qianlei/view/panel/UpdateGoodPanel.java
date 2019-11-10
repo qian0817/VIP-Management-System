@@ -37,7 +37,7 @@ class UpdateGoodPanel extends JPanel implements CanSubmitPanel {
     private void initInputGoodPanel(String id) {
         Good good = goodService.getGoodById(id);
         inputGoodPanel.init(good);
-        inputGoodPanel.setEditable(InputGoodPanel.ID, false);
+        inputGoodPanel.setEditable(InputGoodPanel.PanelEnum.ID.getId(), false);
     }
 
     /**

@@ -50,7 +50,7 @@ class UpdateVipPanel extends JPanel implements CanSubmitPanel {
     private void initInputVipPanel(String id) {
         Vip vip = vipService.getVipById(id);
         inputVipPanel.init(vip);
-        inputVipPanel.setEditable(InputVipPanel.ID, false);
+        inputVipPanel.setEditable(InputVipPanel.PanelEnum.ID.getId(), false);
     }
 
     /**

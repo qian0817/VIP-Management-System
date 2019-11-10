@@ -16,25 +16,8 @@ import java.util.Map;
  * @author qianlei
  */
 public class InputVipPanel extends BaseInputPanel {
-    @SuppressWarnings("WeakerAccess")
-    public static final int NAME = 1;
-    public static final int ID = 2;
-    @SuppressWarnings("WeakerAccess")
-    public static final int SEX = 3;
-    @SuppressWarnings("WeakerAccess")
-    public static final int PHONE = 4;
-    @SuppressWarnings("WeakerAccess")
-    public static final int ADDRESS = 5;
-    @SuppressWarnings("WeakerAccess")
-    public static final int POSTCODE = 6;
-
     public InputVipPanel() {
-        panelMap.put(NAME, new InputPanelBase("姓名", "请输入商品姓名"));
-        panelMap.put(ID, new InputPanelBase("证件号", "请输入证件号"));
-        panelMap.put(SEX, new SexChoosePanelBase());
-        panelMap.put(PHONE, new InputPanelBase("电话号码", "请输入电话号码"));
-        panelMap.put(ADDRESS, new InputPanelBase("联系地址", "请输入联系地址"));
-        panelMap.put(POSTCODE, new InputPanelBase("邮编", "请输入邮编"));
+        PanelEnum.addToPanelMap(this);
         init();
     }
 
@@ -44,19 +27,19 @@ public class InputVipPanel extends BaseInputPanel {
 
     public void init(Vip vip) {
         if (vip != null) {
-            panelMap.get(NAME).setItem(vip.getName());
-            panelMap.get(ID).setItem(vip.getId());
-            panelMap.get(SEX).setItem(vip.getSex());
-            panelMap.get(PHONE).setItem(vip.getPhone());
-            panelMap.get(ADDRESS).setItem(vip.getAddress());
-            panelMap.get(POSTCODE).setItem(String.valueOf(vip.getPostcode()));
+            panelMap.get(PanelEnum.NAME.getId()).setItem(vip.getName());
+            panelMap.get(PanelEnum.ID.getId()).setItem(vip.getId());
+            panelMap.get(PanelEnum.SEX.getId()).setItem(vip.getSex());
+            panelMap.get(PanelEnum.PHONE.getId()).setItem(vip.getPhone());
+            panelMap.get(PanelEnum.ADDRESS.getId()).setItem(vip.getAddress());
+            panelMap.get(PanelEnum.POSTCODE.getId()).setItem(String.valueOf(vip.getPostcode()));
         } else {
             for (Map.Entry<Integer, BaseComponentPanel> entry : panelMap.entrySet()) {
                 entry.getValue().setItem(null);
             }
         }
         removeAll();
-        setLayout(new GridLayout(13, 1));
+        setLayout(new GridLayout(PanelEnum.values().length * 2 + 1, 1));
         addToView();
         repaint();
         setVisible(true);
@@ -74,19 +57,19 @@ public class InputVipPanel extends BaseInputPanel {
     }
 
     private void setPostcode() throws WrongDataException {
-        String postcode = get(InputVipPanel.POSTCODE);
+        String postcode = get(PanelEnum.POSTCODE.getId());
         if (!StringUtil.isBigInteger(postcode) || postcode.length() != Vip.POSTCODE_LENGTH) {
             throw new WrongDataException("邮编" + postcode + "只能包含数字且只有6位");
         }
     }
 
     private void setAddress(Vip vip) {
-        String address = get(InputVipPanel.ADDRESS);
+        String address = get(PanelEnum.ADDRESS.getId());
         vip.setAddress(address);
     }
 
     private void setPhone(Vip vip) throws WrongDataException {
-        String phone = get(InputVipPanel.PHONE);
+        String phone = get(PanelEnum.PHONE.getId());
         if (!StringUtil.isBigInteger(phone)) {
             throw new WrongDataException("电话号码" + phone + "只能包含数字");
         }
@@ -94,20 +77,50 @@ public class InputVipPanel extends BaseInputPanel {
     }
 
     private void setSex(Vip vip) {
-        String sex = get(InputVipPanel.SEX);
+        String sex = get(PanelEnum.SEX.getId());
         vip.setSex(sex);
     }
 
     private void setName(Vip vip) {
-        String name = get(InputVipPanel.NAME);
+        String name = get(PanelEnum.NAME.getId());
         vip.setName(name);
     }
 
     private void setId(Vip vip) throws WrongDataException {
-        String id = get(InputVipPanel.ID);
+        String id = get(PanelEnum.ID.getId());
         if (StringUtil.containsBlank(id)) {
             throw new WrongDataException("id" + id + "不能包含空格");
         }
         vip.setId(id);
+    }
+
+    /**
+     * 为每个输入框分配对应的id 将按照id大小从上到下添加到界面
+     */
+    public enum PanelEnum {
+        NAME(1, new InputPanelBase("姓名", "请输入商品姓名")),
+        ID(2, new InputPanelBase("证件号", "请输入证件号")),
+        SEX(3, new SexChoosePanelBase()),
+        PHONE(4, new InputPanelBase("电话号码", "请输入电话号码")),
+        ADDRESS(5, new InputPanelBase("联系地址", "请输入联系地址")),
+        POSTCODE(6, new InputPanelBase("邮编", "请输入邮编"));
+        private int id;
+        private BaseComponentPanel panel;
+
+        PanelEnum(int id, BaseComponentPanel panel) {
+            this.id = id;
+            this.panel = panel;
+        }
+
+        private static void addToPanelMap(InputVipPanel panel) {
+            for (PanelEnum panelEnum : values()) {
+                panelEnum.panel.setEditable(true);
+                panel.panelMap.put(panelEnum.id, panelEnum.panel);
+            }
+        }
+
+        public int getId() {
+            return id;
+        }
     }
 }
