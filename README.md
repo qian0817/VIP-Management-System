@@ -1,7 +1,8 @@
 # 商场VIP消费管理系统
 [![Languages](https://img.shields.io/github/languages/top/mgarin/weblaf)](https://github.com/qian0817/VIP-Management-System)
 [![License](https://img.shields.io/github/license/mgarin/weblaf)](https://github.com/qian0817/VIP-Management-System/LICENSE.txt)
-
+##
+JAVA课程设计作业
 ## 开发环境
 JDK1.8 +Maven 3.6.1 + Intellij IDEA 2019.2.4 + Git
 ## 功能
