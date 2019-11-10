@@ -2,9 +2,7 @@
 [![Languages](https://img.shields.io/github/languages/top/mgarin/weblaf)](https://github.com/qian0817/VIP-Management-System)
 [![License](https://img.shields.io/github/license/mgarin/weblaf)](https://github.com/qian0817/VIP-Management-System/LICENSE.txt)
 
-## JAVA运行版本要求
-由于使用的第三方库weblaf的限制只能在java1.8的环境下运行
-##开发环境
+## 开发环境
 JDK1.8 +Maven 3.6.1 + Intellij IDEA 2019.2.4 + Git
 ## 功能
 + `用户管理` 对用户的帐号和密码进行合法性验证，登录成功则进入系统功能界面。
