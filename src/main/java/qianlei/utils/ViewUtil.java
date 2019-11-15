@@ -68,7 +68,7 @@ public final class ViewUtil {
      *
      * @param font 字体
      */
-    private static void changeFont(Font font) {
+    public static void changeFont(Font font) {
         curConfig.setFont(font);
         new Thread(ViewUtil::writeConfig).start();
         setViewFont(curConfig.getFont());
@@ -79,7 +79,7 @@ public final class ViewUtil {
      *
      * @return 支持中文的字体的集合
      */
-    static List<String> getSupportedFont() {
+    public static List<String> getSupportedFont() {
         if (supportFonts != null) {
             return supportFonts;
         }

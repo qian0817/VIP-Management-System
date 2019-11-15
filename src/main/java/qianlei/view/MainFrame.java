@@ -2,6 +2,7 @@ package qianlei.view;
 
 import qianlei.utils.ViewUtil;
 import qianlei.view.panel.AddGoodPanel;
+import qianlei.view.panel.TitlePanel;
 import qianlei.view.panel.ToolBarPanel;
 
 import javax.swing.*;
@@ -15,7 +16,7 @@ import java.awt.*;
 public class MainFrame extends JFrame {
     private final JPanel detailPanel = new JPanel();
     private final ToolBarPanel menuPanel = new ToolBarPanel(this);
-
+    private final TitlePanel titlePanel = new TitlePanel(this);
     public MainFrame() {
         setIconImage(ViewUtil.getSvgIcon("icon/icon.svg", 25, 25).asBufferedImage());
         setTitle("VIP管理系统");
@@ -35,6 +36,7 @@ public class MainFrame extends JFrame {
         changeDetailPanel(new AddGoodPanel());
         container.add(menuPanel, BorderLayout.WEST);
         container.add(detailPanel);
+        container.add(titlePanel, BorderLayout.SOUTH);
         repaint();
         setVisible(true);
     }
