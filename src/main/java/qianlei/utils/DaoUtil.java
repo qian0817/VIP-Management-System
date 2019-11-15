@@ -8,10 +8,10 @@ import java.sql.*;
  * @author qianlei
  */
 public final class DaoUtil {
+    private static String fileName;
+
     private DaoUtil() {
     }
-
-    private static String fileName;
 
     /**
      * 初始化数据库
@@ -28,34 +28,34 @@ public final class DaoUtil {
         try (Connection connection = getConnection();
              Statement statement = connection.createStatement()) {
             statement.execute("CREATE TABLE IF NOT EXISTS user(" +
-                    "username VARCHAR(20) NOT NULL ," +
+                    "username VARCHAR(20) NOT NULL," +
                     "password VARCHAR(20) NOT NULL " +
                     ")");
             statement.execute("CREATE TABLE IF NOT EXISTS vip(" +
                     "id VARCHAR(20) NOT NULL PRIMARY KEY ," +
                     "name VARCHAR(20) NOT NULL ," +
-                    "sex CHAR(1) NOT NULL ," +
-                    "phone VARCHAR(20) NOT NULL ," +
-                    "address VARCHAR(100) NOT NULL ," +
-                    "postcode INT NOT NULL ," +
+                    "sex CHAR(1)  ," +
+                    "phone VARCHAR(20)  ," +
+                    "address VARCHAR(100)  ," +
+                    "email VARCHAR(30)  ," +
                     "createTime DATE NOT NULL ," +
                     "status INT NOT NULL " +
                     ")");
             statement.execute("CREATE TABLE IF NOT EXISTS good(" +
                     "id VARCHAR(20) NOT NULL PRIMARY KEY, " +
                     "name VARCHAR(20) NOT NULL ," +
-                    "maker VARCHAR(20) NOT NULL ," +
-                    "createTime DATE NOT NULL ," +
-                    "price DECIMAL NOT NULL ," +
-                    "discount DOUBLE NOT NULL ," +
-                    "remain LONG NOT NULL ," +
-                    "introduction TEXT NOT NULL ," +
-                    "remarks TEXT NOT NULL ," +
-                    "status INT NOT NULL " +
+                    "maker VARCHAR(20)  ," +
+                    "createTime DATE  ," +
+                    "price DECIMAL ," +
+                    "discount DOUBLE  ," +
+                    "remain LONG  ," +
+                    "introduction TEXT  ," +
+                    "remarks TEXT  ," +
+                    "status INT " +
                     ")");
             statement.execute("CREATE TABLE IF NOT EXISTS record(" +
                     "id INTEGER NOT NULL PRIMARY KEY, " +
-                    "userId VARCHAR(20) NOT NULL ," +
+                    "vipId VARCHAR(20) NOT NULL ," +
                     "goodId VARCHAR(20) NOT NULL ," +
                     "createTime DATE NOT NULL ," +
                     "price DECIMAL NOT NULL " +

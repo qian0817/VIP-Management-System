@@ -27,14 +27,14 @@ class VipServiceTest {
     @Order(1)
     @Test
     void addVip() {
-        assertDoesNotThrow(() -> vipService.addVip(new Vip("test1", "测试VIP1", "男", "12345", "测试地址1", 123456)));
-        assertThrows(WrongDataException.class, () -> vipService.addVip(new Vip("test1", "测试VIP1", "男", "12345", "测试地址1", 123456)));
+        assertDoesNotThrow(() -> vipService.addVip(new Vip("test1", "测试VIP1", "男", "12345", "测试地址1", "123456")));
+        assertThrows(WrongDataException.class, () -> vipService.addVip(new Vip("test1", "测试VIP1", "男", "12345", "测试地址1", "123456")));
     }
 
     @Order(2)
     @Test
     void updateVip() {
-        assertDoesNotThrow(() -> vipService.updateVip(new Vip("test1", "测试VIP2", "男", "12345", "测试地址2", 123456)));
+        assertDoesNotThrow(() -> vipService.updateVip(new Vip("test1", "测试VIP2", "男", "12345", "测试地址2", "123456")));
     }
 
     @Order(3)

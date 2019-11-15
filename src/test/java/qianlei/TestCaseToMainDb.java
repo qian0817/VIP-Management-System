@@ -51,7 +51,7 @@ public class TestCaseToMainDb {
             Random random = new Random();
             for (int i = 1; i <= n; i++) {
                 Vip vip = new Vip(String.valueOf(i), "测试VIP" + i, "男", String.valueOf((long) (Math.random() * 20000000000L)),
-                        "测试地址" + i, random.nextInt(900000) + 100000);
+                        "测试地址" + i, String.valueOf(random.nextInt(900000) + 100000));
                 try {
                     vipService.addVip(vip);
                 } catch (WrongDataException e) {

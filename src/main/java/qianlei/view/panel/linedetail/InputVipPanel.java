@@ -32,7 +32,7 @@ public class InputVipPanel extends BaseInputPanel {
             panelMap.get(PanelEnum.SEX.getId()).setItem(vip.getSex());
             panelMap.get(PanelEnum.PHONE.getId()).setItem(vip.getPhone());
             panelMap.get(PanelEnum.ADDRESS.getId()).setItem(vip.getAddress());
-            panelMap.get(PanelEnum.POSTCODE.getId()).setItem(String.valueOf(vip.getPostcode()));
+            panelMap.get(PanelEnum.POSTCODE.getId()).setItem(vip.getEmail());
         } else {
             for (Map.Entry<Integer, BaseComponentPanel> entry : panelMap.entrySet()) {
                 entry.getValue().setItem(null);
@@ -52,15 +52,16 @@ public class InputVipPanel extends BaseInputPanel {
         setSex(vip);
         setPhone(vip);
         setAddress(vip);
-        setPostcode();
+        setEmail(vip);
         return vip;
     }
 
-    private void setPostcode() throws WrongDataException {
-        String postcode = get(PanelEnum.POSTCODE.getId());
-        if (!StringUtil.isBigInteger(postcode) || postcode.length() != Vip.POSTCODE_LENGTH) {
-            throw new WrongDataException("邮编" + postcode + "只能包含数字且只有6位");
+    private void setEmail(Vip vip) throws WrongDataException {
+        String email = get(PanelEnum.POSTCODE.getId());
+        if (!StringUtil.isEmailAddress(email)) {
+            throw new WrongDataException("邮箱" + email + "格式错误");
         }
+        vip.setEmail(email);
     }
 
     private void setAddress(Vip vip) {
@@ -103,7 +104,7 @@ public class InputVipPanel extends BaseInputPanel {
         SEX(3, new SexChoosePanelBase()),
         PHONE(4, new InputPanelBase("电话号码", "请输入电话号码")),
         ADDRESS(5, new InputPanelBase("联系地址", "请输入联系地址")),
-        POSTCODE(6, new InputPanelBase("邮编", "请输入邮编"));
+        POSTCODE(6, new InputPanelBase("邮箱", "请输入邮箱"));
         private int id;
         private BaseComponentPanel panel;
 

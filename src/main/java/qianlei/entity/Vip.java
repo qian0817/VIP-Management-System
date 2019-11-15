@@ -11,7 +11,6 @@ import java.util.Objects;
  * @author qianlei
  */
 public class Vip {
-    public static final int POSTCODE_LENGTH = 6;
     public static final String MAN = "男";
     public static final String WOMAN = "女";
     private String id;
@@ -19,7 +18,7 @@ public class Vip {
     private String sex;
     private String phone;
     private String address;
-    private int postcode;
+    private String email;
     private Date createTime;
     private StatusEnum status;
 
@@ -29,28 +28,28 @@ public class Vip {
         sex = MAN;
         phone = "";
         address = "";
-        postcode = 100000;
+        email = "";
         createTime = new Date();
     }
 
-    public Vip(String id, String name, String sex, String phone, String address, int postcode, Date createTime, StatusEnum status) {
+    public Vip(String id, String name, String sex, String phone, String address, String email, Date createTime, StatusEnum status) {
         this.id = id;
         this.name = name;
         this.sex = sex;
         this.phone = phone;
         this.address = address;
-        this.postcode = postcode;
+        this.email = email;
         this.createTime = new Date(createTime.getTime());
         this.status = status;
     }
 
-    public Vip(String id, String name, String sex, String phone, String address, int postcode) {
+    public Vip(String id, String name, String sex, String phone, String address, String email) {
         this.id = id;
         this.name = name;
         this.sex = sex;
         this.phone = phone;
         this.address = address;
-        this.postcode = postcode;
+        this.email = email;
     }
 
     public String getId() {
@@ -93,12 +92,12 @@ public class Vip {
         this.address = address;
     }
 
-    public int getPostcode() {
-        return postcode;
+    public String getEmail() {
+        return email;
     }
 
-    public void setPostcode(int postcode) {
-        this.postcode = postcode;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Date getCreateTime() {
@@ -126,7 +125,7 @@ public class Vip {
             return false;
         }
         Vip vip = (Vip) o;
-        return postcode == vip.postcode &&
+        return email.equals(vip.email) &&
                 Objects.equals(id, vip.id) &&
                 Objects.equals(name, vip.name) &&
                 Objects.equals(sex, vip.sex) &&
@@ -138,7 +137,7 @@ public class Vip {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, sex, phone, address, postcode, createTime, status);
+        return Objects.hash(id, name, sex, phone, address, email, createTime, status);
     }
 
     @Override
@@ -149,7 +148,7 @@ public class Vip {
                 ", sex='" + sex + '\'' +
                 ", phone='" + phone + '\'' +
                 ", address='" + address + '\'' +
-                ", postcode=" + postcode +
+                ", email=" + email +
                 ", createTime=" + createTime +
                 ", status=" + status +
                 '}';

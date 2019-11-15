@@ -27,9 +27,9 @@ class VipDaoTest {
     @Test
     void addVip() {
         assertDoesNotThrow(() -> vipDao.addVip(new Vip("test1", "测试VIP1", "男", "123456789"
-                , "测试地址1", 123456, new Date(), StatusEnum.NORMAL)));
+                , "测试地址1", "123456", new Date(), StatusEnum.NORMAL)));
         assertDoesNotThrow(() -> vipDao.addVip(new Vip("test2", "测试VIP2", "女", "123456789"
-                , "测试地址2", 123456, new Date(), StatusEnum.NORMAL)));
+                , "测试地址2", "123456", new Date(), StatusEnum.NORMAL)));
     }
 
     @Order(2)
@@ -42,7 +42,7 @@ class VipDaoTest {
     @Test
     void updateVip() {
         assertDoesNotThrow(() -> vipDao.updateVip(new Vip("test2", "测试VIP3", "女", "123456"
-                , "测试地址2", 123456, new Date(), StatusEnum.NORMAL)));
+                , "测试地址2", "123456", new Date(), StatusEnum.NORMAL)));
     }
 
     @Order(4)

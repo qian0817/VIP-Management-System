@@ -1,9 +1,6 @@
 package qianlei.utils;
 
 import com.alee.extended.svg.SvgIcon;
-import com.alee.managers.style.StyleManager;
-import com.alee.skin.dark.DarkSkin;
-import com.alee.skin.web.WebSkin;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import qianlei.entity.Config;
@@ -21,8 +18,6 @@ import java.util.List;
  * @author qianlei
  */
 public final class ViewUtil {
-    public static final String DARK_SKIN = "暗色模式";
-    public static final String LIGHT_SKIN = "亮色模式";
 
     private static Config curConfig;
     private static List<String> supportFonts;
@@ -44,20 +39,16 @@ public final class ViewUtil {
         try (BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(new File(configPath)))) {
             config = JSON.parseObject(inputStream, Config.class);
         } catch (Exception e) {
-            config = new Config(new Font(getSupportedFont().get(0), Font.PLAIN, 20), "亮色模式");
+            config = new Config(new Font(getSupportedFont().get(0), Font.PLAIN, 20));
         }
         if (config == null) {
-            config = new Config(new Font(getSupportedFont().get(0), Font.PLAIN, 20), "亮色模式");
+            config = new Config(new Font(getSupportedFont().get(0), Font.PLAIN, 20));
         }
         if (config.getFont() == null) {
             config.setFont(new Font(getSupportedFont().get(0), Font.PLAIN, 20));
         }
-        if (config.getSkin() == null) {
-            config.setSkin("亮色模式");
-        }
         curConfig = config;
         changeFont(config.getFont());
-        changeSkin(config.getSkin());
     }
 
     /**
@@ -73,27 +64,11 @@ public final class ViewUtil {
     }
 
     /**
-     * 修改界面主题
-     *
-     * @param skin 皮肤名称
-     */
-    public static void changeSkin(String skin) {
-        if (DARK_SKIN.equals(skin)) {
-            StyleManager.setSkin(new DarkSkin());
-        } else {
-            StyleManager.setSkin(new WebSkin());
-            skin = LIGHT_SKIN;
-        }
-        curConfig.setSkin(skin);
-        new Thread(ViewUtil::writeConfig).start();
-    }
-
-    /**
      * 修改字体
      *
      * @param font 字体
      */
-    public static void changeFont(Font font) {
+    private static void changeFont(Font font) {
         curConfig.setFont(font);
         new Thread(ViewUtil::writeConfig).start();
         setViewFont(curConfig.getFont());
@@ -104,7 +79,7 @@ public final class ViewUtil {
      *
      * @return 支持中文的字体的集合
      */
-    public static List<String> getSupportedFont() {
+    static List<String> getSupportedFont() {
         if (supportFonts != null) {
             return supportFonts;
         }

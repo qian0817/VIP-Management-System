@@ -12,6 +12,7 @@ public final class StringUtil {
     private static final Pattern CONTAINS_BLANK_PATTERN = Pattern.compile("\\S+");
     private static final Pattern PASSWORD_PATTERN = Pattern.compile("^\\w{6,16}$");
     private static final Pattern BIG_INTEGER_PATTERN = Pattern.compile("^\\d+$");
+    private static final Pattern EMAIL_PATTERN = Pattern.compile("^\\w+@\\w+\\.\\w+");
 
     private StringUtil() {
     }
@@ -66,5 +67,12 @@ public final class StringUtil {
             return false;
         }
         return BIG_INTEGER_PATTERN.matcher(s).matches();
+    }
+
+    public static boolean isEmailAddress(String s) {
+        if (s == null) {
+            return false;
+        }
+        return EMAIL_PATTERN.matcher(s).matches();
     }
 }

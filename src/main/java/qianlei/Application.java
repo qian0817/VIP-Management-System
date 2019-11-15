@@ -18,9 +18,8 @@ public class Application {
         Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
         //在高版本会有问题
         checkJavaVersion();
-        Thread t = new Thread(() -> DaoUtil.init("main.db"));
-        t.start();
         WebLookAndFeel.install();
+        DaoUtil.init("main.db");
         ViewUtil.loadFont("config.json");
         new LoginFrame().setVisible(true);
     }

@@ -23,7 +23,7 @@ class RecordServiceTest {
         GoodService goodService = new GoodService();
         VipService vipService = new VipService();
         goodService.addGood(new Good("1", "1", "1", new Date(), new BigDecimal("123"), 123.45, 123, "", "", StatusEnum.NORMAL));
-        vipService.addVip(new Vip("1", "1", "男", "1234567890", "123", 123456));
+        vipService.addVip(new Vip("1", "1", "男", "1234567890", "123", "123456"));
     }
 
     @AfterAll

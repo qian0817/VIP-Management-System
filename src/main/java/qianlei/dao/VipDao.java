@@ -25,14 +25,14 @@ public class VipDao {
         try (
                 Connection connection = DaoUtil.getConnection();
                 PreparedStatement statement = connection.prepareStatement("INSERT INTO vip(id, name, sex, phone, " +
-                        "address, postcode, createTime, status) VALUES (?,?,?,?,?,?,?,?)")
+                        "address, email, createTime, status) VALUES (?,?,?,?,?,?,?,?)")
         ) {
             statement.setString(1, vip.getId());
             statement.setString(2, vip.getName());
             statement.setString(3, vip.getSex());
             statement.setString(4, vip.getPhone());
             statement.setString(5, vip.getAddress());
-            statement.setInt(6, vip.getPostcode());
+            statement.setString(6, vip.getEmail());
             statement.setDate(7, new Date(vip.getCreateTime().getTime()));
             statement.setInt(8, vip.getStatus().getId());
             statement.executeUpdate();
@@ -51,7 +51,7 @@ public class VipDao {
         ResultSet resultSet = null;
         try (
                 Connection connection = DaoUtil.getConnection();
-                PreparedStatement statement = connection.prepareStatement("SELECT id,name, sex, phone, address, postcode, " +
+                PreparedStatement statement = connection.prepareStatement("SELECT id,name, sex, phone, address, email, " +
                         "createtime, status FROM vip WHERE id = ? LIMIT 500")
         ) {
             statement.setString(1, id);
@@ -80,7 +80,7 @@ public class VipDao {
         try (
                 Connection connection = DaoUtil.getConnection();
                 PreparedStatement statement = connection.prepareStatement("SELECT id,name, sex, phone, address, " +
-                        "postcode, createtime, status FROM vip " +
+                        "email, createtime, status FROM vip " +
                         "WHERE id LIKE ? AND name LIKE ? AND phone LIKE ? AND status = ?" +
                         "ORDER BY length(id)" +
                         "LIMIT 500 ")
@@ -116,9 +116,9 @@ public class VipDao {
         Date createTime = resultSet.getDate("createTime");
         String phone = resultSet.getString("phone");
         String address = resultSet.getString("address");
-        int postcode = resultSet.getInt("postcode");
+        String email = resultSet.getString("email");
         StatusEnum status = StatusEnum.getById(resultSet.getInt("status"));
-        return new Vip(id, name, sex, phone, address, postcode, createTime, status);
+        return new Vip(id, name, sex, phone, address, email, createTime, status);
     }
 
     /**
@@ -147,13 +147,13 @@ public class VipDao {
     public void updateVip(Vip vip) {
         try (
                 Connection connection = DaoUtil.getConnection();
-                PreparedStatement statement = connection.prepareStatement("UPDATE vip SET name = ?,sex=?,phone=?,address=?,postcode=?,status=? WHERE id = ?")
+                PreparedStatement statement = connection.prepareStatement("UPDATE vip SET name = ?,sex=?,phone=?,address=?,email=?,status=? WHERE id = ?")
         ) {
             statement.setString(1, vip.getName());
             statement.setString(2, vip.getSex());
             statement.setString(3, vip.getPhone());
             statement.setString(4, vip.getAddress());
-            statement.setInt(5, vip.getPostcode());
+            statement.setString(5, vip.getEmail());
             statement.setInt(6, vip.getStatus().getId());
             statement.setString(7, vip.getId());
             statement.executeUpdate();

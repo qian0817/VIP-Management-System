@@ -36,7 +36,7 @@ class RecordDaoTest {
         goodDao.addGood(new Good("1", "测试商品1", "测试制造商1", new Date(),
                 new BigDecimal(123), 0.65, 123L, "测试1", "测试1", StatusEnum.NORMAL));
         vipDao.addVip(new Vip("1", "测试VIP1", "男", "123456789"
-                , "测试地址1", 123456, new Date(), StatusEnum.NORMAL));
+                , "测试地址1", "123456", new Date(), StatusEnum.NORMAL));
         assertDoesNotThrow(() -> recordDao.addRecord(new Record(1, "1", "1", new Date(), BigDecimal.valueOf(1L))));
     }
 

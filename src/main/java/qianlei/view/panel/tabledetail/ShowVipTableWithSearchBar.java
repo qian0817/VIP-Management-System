@@ -45,10 +45,10 @@ public class ShowVipTableWithSearchBar extends AbstractCanInitPanel {
             data[i][2] = good.getSex();
             data[i][3] = good.getPhone();
             data[i][4] = good.getAddress();
-            data[i][5] = good.getPostcode();
+            data[i][5] = good.getEmail();
             data[i][6] = good.getCreateTime();
         }
-        tablePanel = new TablePanel(data, new String[]{"证件号", "姓名", "性别", "手机号码", "联系地址", "邮编", "创建时间"});
+        tablePanel = new TablePanel(data, new String[]{"证件号", "姓名", "性别", "手机号码", "联系地址", "邮箱", "创建时间"});
         add(tablePanel);
         tablePanel.addMouseListener(mouseListener);
         repaint();
