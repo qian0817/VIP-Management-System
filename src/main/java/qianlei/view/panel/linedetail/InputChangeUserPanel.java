@@ -112,7 +112,7 @@ public class InputChangeUserPanel extends BaseInputPanel {
          */
         private static void addToPanelMap(InputChangeUserPanel panel) {
             for (PanelEnum panelEnum : values()) {
-                panelEnum.panel.setEditable(true);
+                panelEnum.panel.init();
                 panel.panelMap.put(panelEnum.id, panelEnum.panel);
             }
         }

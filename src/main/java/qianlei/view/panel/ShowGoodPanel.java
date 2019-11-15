@@ -22,7 +22,7 @@ class ShowGoodPanel extends ShowGoodTableWithSearchBar {
                 if (e.getClickCount() >= needClickNumber) {
                     String id = getSelectedGoodId();
                     removeAll();
-                    parent.changeTitle("商品信息修改");
+                    parent.setTitle("商品信息修改");
                     //切换修改商品界面
                     add(new UpdateGoodPanel(id, parent));
                     repaint();

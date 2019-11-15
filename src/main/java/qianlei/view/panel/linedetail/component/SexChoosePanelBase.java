@@ -16,6 +16,11 @@ public class SexChoosePanelBase extends BaseComponentPanel {
     private final WebToggleButton manButton = new WebToggleButton("  男  ", true);
     private final WebToggleButton womanButton = new WebToggleButton("  女  ");
 
+    @Override
+    public void init() {
+        manButton.setSelected(true);
+    }
+
     public SexChoosePanelBase() {
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         add(Box.createHorizontalStrut(ViewUtil.getFontSize() * 4));

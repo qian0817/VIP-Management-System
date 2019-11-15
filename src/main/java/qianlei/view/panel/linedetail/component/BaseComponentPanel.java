@@ -28,4 +28,6 @@ public abstract class BaseComponentPanel extends JPanel {
      * @param editable 是否可修改
      */
     public abstract void setEditable(boolean editable);
+
+    public abstract void init();
 }

@@ -51,6 +51,11 @@ public class PasswordPanelBase extends BaseComponentPanel {
 
     @Override
     public void setEditable(boolean editable) {
+        throw new UnsupportedOperationException();
+    }
 
+    @Override
+    public void init() {
+        field.setText("");
     }
 }

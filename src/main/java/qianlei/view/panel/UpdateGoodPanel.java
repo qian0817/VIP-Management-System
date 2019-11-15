@@ -16,8 +16,8 @@ import java.awt.*;
 class UpdateGoodPanel extends JPanel implements CanSubmitPanel {
     private final InputGoodPanel inputGoodPanel = new InputGoodPanel();
     private final JPanel checkPanel = new JPanel(new FlowLayout());
-    private final JButton checkButton = new JButton("确认");
-    private final JButton deleteButton = new JButton("删除");
+    private final JButton checkButton = new JButton("修改");
+    private final JButton deleteButton = new JButton("下架");
     private final GoodService goodService = new GoodService();
     private final MainFrame parent;
 

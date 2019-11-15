@@ -22,7 +22,7 @@ class ShowVipPanel extends ShowVipTableWithSearchBar {
                 if (e.getClickCount() >= needClickNumber) {
                     String id = getSelectedVipId();
                     removeAll();
-                    parent.changeTitle("VIP信息修改");
+                    parent.setTitle("VIP信息修改");
                     //变为修改界面
                     add(new UpdateVipPanel(id, parent));
                     repaint();

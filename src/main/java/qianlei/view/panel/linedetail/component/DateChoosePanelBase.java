@@ -51,6 +51,11 @@ public class DateChoosePanelBase extends BaseComponentPanel {
 
     @Override
     public void setEditable(boolean editable) {
+        throw new UnsupportedOperationException();
+    }
 
+    @Override
+    public void init() {
+        webDateField.setDate(new Date());
     }
 }

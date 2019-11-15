@@ -18,7 +18,7 @@ import java.awt.*;
 class UpdateVipPanel extends JPanel implements CanSubmitPanel {
     private final VipService vipService = new VipService();
     private final InputVipPanel inputVipPanel = new InputVipPanel();
-    private final JButton checkButton = new JButton("确认");
+    private final JButton checkButton = new JButton("修改");
     private final JButton deleteButton = new JButton("删除");
     private final JPanel panel = new JPanel(new FlowLayout());
     private final MainFrame parent;

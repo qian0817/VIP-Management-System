@@ -46,6 +46,12 @@ public class InputPanelBase extends BaseComponentPanel {
     }
 
     @Override
+    public void init() {
+        field.setText("");
+        field.setEditable(true);
+    }
+
+    @Override
     public String getItem() {
         return field.getText();
     }

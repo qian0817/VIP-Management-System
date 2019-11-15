@@ -12,6 +12,12 @@ import java.util.List;
 public class ComboPanelBase extends BaseComponentPanel {
     private final WebComboBox webComboBox;
 
+    @Override
+    public void init() {
+        webComboBox.setEditable(false);
+        webComboBox.setSelectedIndex(0);
+    }
+
     public ComboPanelBase(String title, List<String> items) {
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         //右对齐，根据字体大小调节
