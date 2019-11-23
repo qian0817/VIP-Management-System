@@ -13,6 +13,7 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 添加测试用例
@@ -21,54 +22,51 @@ import java.util.Random;
  * @author qianlei
  */
 public class TestCaseToMainDb {
-    private volatile static int j = 0;
-    public static void main(String[] args) throws InterruptedException {
+    private volatile static AtomicInteger j = new AtomicInteger(0);
+
+    public static void main(String[] args) {
         if (new File("main.db").exists()) {
             return;
         }
-        int n = 100000;
+        int n = 1000;
+        Random random = new Random();
         GoodService goodService = new GoodService();
         RecordService recordService = new RecordService();
         VipService vipService = new VipService();
-        DaoUtil.init("main.db");
+        DaoUtil.init("main");
         Thread t1 = new Thread(() -> {
-            Random random = new Random();
-            for (int i = 1; i <= n; i++) {
-                Good good = new Good(String.valueOf(i), "测试商品" + i, "测试制造商" + i,
-                        new Date((long) (Math.random() * System.currentTimeMillis())),
-                        BigDecimal.valueOf(random.nextInt(10000)), (int) (Math.random() * 100) * 1.0 / 100,
-                        random.nextInt(100000), "", "", StatusEnum.NORMAL);
+            while (j.get() != n * 3) {
                 try {
-                    goodService.addGood(good);
-                } catch (WrongDataException e) {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                j++;
+                System.out.println(j.get() * 100.0 / n / 3 + "%");
             }
         });
         t1.start();
-        Thread t2 = new Thread(() -> {
-            Random random = new Random();
-            for (int i = 1; i <= n; i++) {
-                Vip vip = new Vip(String.valueOf(i), "测试VIP" + i, "男", String.valueOf((long) (Math.random() * 20000000000L)),
-                        "测试地址" + i, String.valueOf(random.nextInt(900000) + 100000));
-                try {
-                    vipService.addVip(vip);
-                } catch (WrongDataException e) {
-                    e.printStackTrace();
-                }
-                j++;
+        for (int i = 1; i <= n; i++) {
+            Good good = new Good(String.valueOf(i), "测试商品" + i, "测试制造商" + i,
+                    new Date((long) (Math.random() * System.currentTimeMillis())),
+                    BigDecimal.valueOf(random.nextInt(10000)), (int) (Math.random() * 100) * 1.0 / 100,
+                    random.nextInt(100000), "", "", StatusEnum.NORMAL);
+            try {
+                goodService.addGood(good);
+            } catch (WrongDataException e) {
+                e.printStackTrace();
             }
-        });
-        t2.start();
-        while (j != n * 2) {
-            Thread.sleep(2000);
-            System.out.println(j * 100.0 / n / 2);
+            j.incrementAndGet();
         }
-        t1.join();
-        t2.join();
-        Random random = new Random();
-        j = 0;
+        for (int i = 1; i <= n; i++) {
+            Vip vip = new Vip(String.valueOf(i), "测试VIP" + i, "男", String.valueOf((long) (Math.random() * 20000000000L)),
+                    "测试地址" + i, String.valueOf(random.nextInt(900000) + 100000));
+            try {
+                vipService.addVip(vip);
+            } catch (WrongDataException e) {
+                e.printStackTrace();
+            }
+            j.incrementAndGet();
+        }
         new Thread(() -> {
             for (int i = 1; i <= n; i++) {
                 try {
@@ -76,12 +74,8 @@ public class TestCaseToMainDb {
                 } catch (WrongDataException e) {
                     e.printStackTrace();
                 }
-                j++;
+                j.incrementAndGet();
             }
         }).start();
-        while (j != n) {
-            Thread.sleep(2000);
-            System.out.println(j * 100.0 / n);
-        }
     }
 }
