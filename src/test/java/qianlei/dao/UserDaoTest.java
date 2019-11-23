@@ -14,7 +14,7 @@ class UserDaoTest {
 
     @BeforeAll
     static void start() {
-        DaoUtil.init("test.db");
+        DaoUtil.init("test");
     }
 
     @AfterAll

@@ -19,7 +19,7 @@ public class Application {
         //在高版本会有问题
         checkJavaVersion();
         WebLookAndFeel.install();
-        DaoUtil.init("main.db");
+        DaoUtil.init("main");
         ViewUtil.loadFont("config.json");
         new LoginFrame().setVisible(true);
     }

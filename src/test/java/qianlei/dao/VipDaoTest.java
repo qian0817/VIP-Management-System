@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class VipDaoTest {
     static {
         TestHelper.deleteTestDb();
-        DaoUtil.init("test.db");
+        DaoUtil.init("test");
     }
 
     private VipDao vipDao = new VipDao();

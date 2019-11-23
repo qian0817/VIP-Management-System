@@ -1,6 +1,11 @@
 package qianlei.utils;
 
-import java.sql.*;
+import com.mchange.v2.c3p0.ComboPooledDataSource;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  * dao工具类
@@ -8,23 +13,16 @@ import java.sql.*;
  * @author qianlei
  */
 public final class DaoUtil {
-    private static String fileName;
-
+    private static ComboPooledDataSource dataSource;
     private DaoUtil() {
     }
 
     /**
      * 初始化数据库
      *
-     * @param fileName 数据库文件名称
      */
-    public static void init(String fileName) {
-        try {
-            Class.forName("org.sqlite.JDBC");
-        } catch (ClassNotFoundException e) {
-            Log.error(Thread.currentThread(), e);
-        }
-        DaoUtil.fileName = fileName;
+    public static void init(String useDataSource) {
+        dataSource = new ComboPooledDataSource(useDataSource);
         try (Connection connection = getConnection();
              Statement statement = connection.createStatement()) {
             statement.execute("CREATE TABLE IF NOT EXISTS user(" +
@@ -72,7 +70,7 @@ public final class DaoUtil {
      * @throws SQLException sql错误
      */
     public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection("jdbc:sqlite:" + fileName);
+        return dataSource.getConnection();
     }
 
 

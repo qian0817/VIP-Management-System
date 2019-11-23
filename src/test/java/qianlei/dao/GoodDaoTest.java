@@ -15,7 +15,7 @@ class GoodDaoTest {
 
     @BeforeAll
     static void start() {
-        DaoUtil.init("test.db");
+        DaoUtil.init("test");
     }
 
     @AfterAll

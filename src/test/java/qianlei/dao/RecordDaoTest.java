@@ -22,7 +22,7 @@ class RecordDaoTest {
 
     @BeforeAll
     static void start() {
-        DaoUtil.init("test.db");
+        DaoUtil.init("test");
     }
 
     @AfterAll
