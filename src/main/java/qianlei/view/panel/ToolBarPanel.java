@@ -41,7 +41,7 @@ public class ToolBarPanel extends JPanel {
      * 打开帮助网页
      */
     private static void openHelpHtml() {
-        new Thread(() -> {
+        SwingUtilities.invokeLater(() -> {
             File file = new File("help.html");
             if (!file.exists()) {
                 try (
@@ -65,7 +65,7 @@ public class ToolBarPanel extends JPanel {
             } catch (IOException | URISyntaxException e) {
                 Log.error(Thread.currentThread(), e);
             }
-        }).start();
+        });
     }
 
     private void changeDetailPanel(MenuButton button, AbstractCanInitPanel panel) {
@@ -94,15 +94,15 @@ public class ToolBarPanel extends JPanel {
      * 添加动作
      */
     private void addAction() {
-        addGoodButton.addActionListener((e) -> changeDetailPanel(addGoodButton, new AddGoodPanel()));
-        showGoodButton.addActionListener((e) -> changeDetailPanel(showGoodButton, new ShowGoodPanel(parent)));
-        addVipButton.addActionListener((e) -> changeDetailPanel(addVipButton, new AddVipPanel()));
-        showVipButton.addActionListener((e) -> changeDetailPanel(showVipButton, new ShowVipPanel(parent)));
-        addRecordButton.addActionListener((e) -> changeDetailPanel(addRecordButton, new AddRecordPanel()));
-        showRecordButton.addActionListener((e) -> changeDetailPanel(showRecordButton, new ShowRecordPanel()));
-        changePasswordButton.addActionListener((e) -> changeDetailPanel(changePasswordButton, new ChangePasswordPanel()));
-        helpButton.addActionListener((e) -> openHelpHtml());
-        quitButton.addActionListener((e) -> {
+        addGoodButton.addActionListener(e -> changeDetailPanel(addGoodButton, new AddGoodPanel()));
+        showGoodButton.addActionListener(e -> changeDetailPanel(showGoodButton, new ShowGoodPanel(parent)));
+        addVipButton.addActionListener(e -> changeDetailPanel(addVipButton, new AddVipPanel()));
+        showVipButton.addActionListener(e -> changeDetailPanel(showVipButton, new ShowVipPanel(parent)));
+        addRecordButton.addActionListener(e -> changeDetailPanel(addRecordButton, new AddRecordPanel()));
+        showRecordButton.addActionListener(e -> changeDetailPanel(showRecordButton, new ShowRecordPanel()));
+        changePasswordButton.addActionListener(e -> changeDetailPanel(changePasswordButton, new ChangePasswordPanel()));
+        helpButton.addActionListener(e -> openHelpHtml());
+        quitButton.addActionListener(e -> {
             parent.dispose();
             new LoginFrame().setVisible(true);
         });

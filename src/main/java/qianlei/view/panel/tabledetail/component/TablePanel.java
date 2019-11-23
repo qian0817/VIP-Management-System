@@ -31,7 +31,7 @@ public class TablePanel extends JPanel {
      */
     public void init(Object[][] data, Object[] columnNames) {
         removeAll();
-        this.data = data.clone();
+        this.data = data;
         ExtendTableModel model = new ExtendTableModel(data, columnNames);
         table = new WebTable(model);
         table.setRowHeight(ViewUtil.getFontSize() * 2);
@@ -49,7 +49,7 @@ public class TablePanel extends JPanel {
      *
      * @param myTable table
      */
-    private void fitTableColumns(JTable myTable) {               //
+    private void fitTableColumns(JTable myTable) {
         JTableHeader header = myTable.getTableHeader();
         int rowCount = myTable.getRowCount();
         Enumeration columns = myTable.getColumnModel().getColumns();
