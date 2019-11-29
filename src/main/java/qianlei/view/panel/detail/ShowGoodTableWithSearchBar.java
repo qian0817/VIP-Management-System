@@ -1,15 +1,16 @@
-package qianlei.view.panel.tabledetail;
+package qianlei.view.panel.detail;
 
 import qianlei.entity.Good;
 import qianlei.service.GoodService;
 import qianlei.view.panel.AbstractCanInitPanel;
-import qianlei.view.panel.tabledetail.component.SearchBar;
-import qianlei.view.panel.tabledetail.component.TablePanel;
+import qianlei.view.panel.component.SearchBar;
+import qianlei.view.panel.component.TablePanel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseListener;
+import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -21,8 +22,8 @@ import java.util.Map;
 public class ShowGoodTableWithSearchBar extends AbstractCanInitPanel {
     private final SearchBar searchBar = new SearchBar(Arrays.asList("编号", "名称"));
     private final GoodService goodService = new GoodService();
-    private TablePanel tablePanel = new TablePanel(new Object[][]{}, new String[]{"编号", "名称", "制造商", "生产日期", "价格", "折扣率", "库存", "商品简介"});
-    private MouseListener mouseListener;
+    private final String[] columnName = new String[]{"编号", "名称", "原价", "折扣率", "库存", "制造商", "生产日期", "商品简介"};
+    private final TablePanel tablePanel = new TablePanel(new Object[][]{}, columnName);
 
     public ShowGoodTableWithSearchBar() {
         searchBar.addActionListener((e) -> {
@@ -41,20 +42,18 @@ public class ShowGoodTableWithSearchBar extends AbstractCanInitPanel {
                 Good good = goodList.get(i);
                 data[i][0] = good.getId();
                 data[i][1] = good.getName();
-                data[i][2] = good.getMaker();
-                data[i][3] = good.getCreateTime();
-                data[i][4] = good.getPrice();
-                data[i][5] = good.getDiscount();
-                data[i][6] = good.getRemain();
+                data[i][2] = good.getPrice();
+                data[i][3] = good.getDiscount();
+                data[i][4] = good.getRemain();
+                data[i][5] = good.getMaker();
+                data[i][6] = good.getCreateTime();
                 data[i][7] = good.getIntroduction();
             }
-
-            tablePanel = new TablePanel(data, new String[]{"编号", "名称", "制造商", "生产日期", "价格", "折扣率", "库存", "商品简介"});
+            tablePanel.changeData(data, columnName);
             setLayout(new BorderLayout());
             removeAll();
             add(searchBar, BorderLayout.NORTH);
             add(tablePanel);
-            tablePanel.addMouseListener(mouseListener);
             repaint();
             validate();
             setVisible(true);
@@ -66,13 +65,21 @@ public class ShowGoodTableWithSearchBar extends AbstractCanInitPanel {
         init("", "");
     }
 
-    @Override
-    public void addMouseListener(MouseListener mouseListener) {
-        tablePanel.addMouseListener(mouseListener);
-        this.mouseListener = mouseListener;
-    }
-
-    public String getSelectedGoodId() {
-        return (String) tablePanel.getSelectedId();
+    public Good getSelectedGood() {
+        Good good = new Good();
+        Object[] objects = tablePanel.getSelectedObject();
+        if (objects != null) {
+            good.setId((String) objects[0]);
+            good.setName((String) objects[1]);
+            good.setPrice((BigDecimal) objects[2]);
+            good.setDiscount((BigDecimal) objects[3]);
+            good.setRemain((long) objects[4]);
+            good.setMaker((String) objects[5]);
+            good.setCreateTime((Date) objects[6]);
+            good.setIntroduction((String) objects[7]);
+            return good;
+        } else {
+            return null;
+        }
     }
 }

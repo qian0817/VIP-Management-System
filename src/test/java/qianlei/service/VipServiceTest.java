@@ -16,7 +16,8 @@ class VipServiceTest {
 
     @BeforeAll
     static void start() {
-        DaoUtil.init("test.db");
+        TestHelper.deleteTestDb();
+        DaoUtil.init("test");
     }
 
     @AfterAll

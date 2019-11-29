@@ -1,4 +1,4 @@
-package qianlei.view.panel.linedetail.component;
+package qianlei.view.panel.component;
 
 import com.alee.laf.combobox.WebComboBox;
 import qianlei.utils.ViewUtil;
@@ -7,6 +7,8 @@ import javax.swing.*;
 import java.util.List;
 
 /**
+ * 下拉菜单
+ *
  * @author qianlei
  */
 public class ComboPanelBase extends BaseComponentPanel {
@@ -41,7 +43,9 @@ public class ComboPanelBase extends BaseComponentPanel {
         if (s != null) {
             webComboBox.setSelectedItem(s);
         } else {
-            webComboBox.setSelectedIndex(0);
+            if (webComboBox.getItemCount() != 0) {
+                webComboBox.setSelectedIndex(0);
+            }
         }
     }
 

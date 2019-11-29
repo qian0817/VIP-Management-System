@@ -1,4 +1,4 @@
-package qianlei.view.panel.linedetail.component;
+package qianlei.view.panel.component;
 
 import com.alee.laf.text.WebTextField;
 import qianlei.utils.VerifyCodeUtil;
@@ -53,13 +53,15 @@ public class VerifyCodePanel extends JPanel {
      * 修改验证码图片
      */
     public void changeVerifyCode() {
-        verifyCode = VerifyCodeUtil.createVerifyCode(ViewUtil.getFontSize() * 6, 50);
-        VerifyCodePanel.this.remove(imageLabel);
-        verifyCode.getImage().flush();
-        imageLabel.setIcon(verifyCode);
-        VerifyCodePanel.this.add(imageLabel, 5);
-        imageLabel.repaint();
-        VerifyCodePanel.this.updateUI();
+        SwingUtilities.invokeLater(() -> {
+            verifyCode = VerifyCodeUtil.createVerifyCode(ViewUtil.getFontSize() * 6, 50);
+            VerifyCodePanel.this.remove(imageLabel);
+            verifyCode.getImage().flush();
+            imageLabel.setIcon(verifyCode);
+            VerifyCodePanel.this.add(imageLabel, 5);
+            imageLabel.repaint();
+            VerifyCodePanel.this.updateUI();
+        });
     }
 
     public void setText(String s) {

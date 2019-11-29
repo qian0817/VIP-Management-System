@@ -1,4 +1,4 @@
-package qianlei.view.panel.linedetail.component;
+package qianlei.view.panel.component;
 
 import com.alee.extended.date.WebDateField;
 import qianlei.utils.DateUtil;
@@ -15,12 +15,11 @@ import java.util.Date;
  * @author qianlei
  */
 public class DateChoosePanelBase extends BaseComponentPanel {
-    private final WebDateField webDateField = new WebDateField();
+    private final WebDateField webDateField = new WebDateField(new Date());
 
     public DateChoosePanelBase(String title) {
         webDateField.setDateFormat(new SimpleDateFormat("yyyy年MM月dd日"));
         webDateField.setAllowUserInput(false);
-        webDateField.setDate(new Date());
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         add(Box.createHorizontalStrut(ViewUtil.getFontSize() * 4));
         add(Box.createHorizontalStrut(ViewUtil.getFontSize() * (4 - title.length())));

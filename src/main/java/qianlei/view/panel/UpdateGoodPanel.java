@@ -5,7 +5,7 @@ import qianlei.entity.Result;
 import qianlei.exception.WrongDataException;
 import qianlei.service.GoodService;
 import qianlei.view.MainFrame;
-import qianlei.view.panel.linedetail.InputGoodPanel;
+import qianlei.view.panel.detail.InputGoodPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,20 +13,44 @@ import java.awt.*;
 /**
  * @author qianlei
  */
-class UpdateGoodPanel extends JPanel implements CanSubmitPanel {
+class UpdateGoodPanel extends JPanel {
     private final InputGoodPanel inputGoodPanel = new InputGoodPanel();
     private final JPanel checkPanel = new JPanel(new FlowLayout());
     private final JButton checkButton = new JButton("修改");
-    private final JButton deleteButton = new JButton("下架");
     private final GoodService goodService = new GoodService();
     private final MainFrame parent;
 
     UpdateGoodPanel(String id, MainFrame parent) {
         this.parent = parent;
-        setLayout(new BorderLayout());
-        initInputGoodPanel(id);
-        addComponent();
-        addAction(id);
+        SwingUtilities.invokeLater(() -> {
+            setLayout(new BorderLayout());
+            initInputGoodPanel(id);
+            addComponent();
+            checkButton.addActionListener((e) -> updateGood());
+        });
+    }
+
+    /**
+     * 修改商品
+     */
+    private void updateGood() {
+        int a = JOptionPane.showConfirmDialog(UpdateGoodPanel.this, "是否修改该商品");
+        if (a == JOptionPane.YES_OPTION) {
+            Result result;
+            try {
+                Good good = inputGoodPanel.getGood();
+                goodService.updateGood(good);
+                result = new Result(true, "修改成功");
+            } catch (WrongDataException e) {
+                result = new Result(false, e.getMessage());
+            }
+            if (result.isSuccess()) {
+                JOptionPane.showMessageDialog(UpdateGoodPanel.this, result.getMessage(), "修改成功", JOptionPane.INFORMATION_MESSAGE);
+                changeToShowGoodPanel();
+            } else {
+                JOptionPane.showMessageDialog(UpdateGoodPanel.this, result.getMessage(), "修改失败", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
     }
 
     /**
@@ -37,45 +61,7 @@ class UpdateGoodPanel extends JPanel implements CanSubmitPanel {
     private void initInputGoodPanel(String id) {
         Good good = goodService.getGoodById(id);
         inputGoodPanel.init(good);
-        inputGoodPanel.setEditable(InputGoodPanel.PanelEnum.ID.getId(), false);
-    }
-
-    /**
-     * 添加事件
-     *
-     * @param id 当前商品id
-     */
-    private void addAction(String id) {
-        deleteButton.addActionListener((e) -> {
-            int a = JOptionPane.showConfirmDialog(UpdateGoodPanel.this, "是否删除该商品");
-            if (a == JOptionPane.YES_OPTION) {
-                goodService.deleteGoodById(id);
-                changeToShowGoodPanel();
-            }
-        });
-        checkButton.addActionListener((e) -> {
-            int a = JOptionPane.showConfirmDialog(UpdateGoodPanel.this, "是否修改该商品");
-            if (a == JOptionPane.YES_OPTION) {
-                Result result = submit();
-                if (result.isSuccess()) {
-                    JOptionPane.showMessageDialog(UpdateGoodPanel.this, result.getMessage(), "修改成功", JOptionPane.INFORMATION_MESSAGE);
-                    changeToShowGoodPanel();
-                } else {
-                    JOptionPane.showMessageDialog(UpdateGoodPanel.this, result.getMessage(), "修改失败", JOptionPane.INFORMATION_MESSAGE);
-                }
-            }
-        });
-    }
-
-    @Override
-    public Result submit() {
-        try {
-            Good good = inputGoodPanel.getGood();
-            goodService.updateGood(good);
-            return new Result(true, "修改成功");
-        } catch (WrongDataException e) {
-            return new Result(false, e.getMessage());
-        }
+        inputGoodPanel.setEditable(0, false);
     }
 
     /**
@@ -94,7 +80,6 @@ class UpdateGoodPanel extends JPanel implements CanSubmitPanel {
      */
     private void addComponent() {
         checkPanel.add(checkButton);
-        checkPanel.add(deleteButton);
         add(inputGoodPanel);
         add(checkPanel, BorderLayout.SOUTH);
     }

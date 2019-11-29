@@ -1,4 +1,4 @@
-package qianlei.view.panel.tabledetail.component;
+package qianlei.view.panel.component;
 
 import com.alee.laf.table.WebTable;
 import qianlei.utils.ViewUtil;
@@ -15,7 +15,7 @@ import java.util.Enumeration;
  * @author qianlei
  */
 public class TablePanel extends JPanel {
-    private WebTable table;
+    private final WebTable table = new WebTable();
     private Object[][] data;
 
     public TablePanel(Object[][] data, Object[] columnNames) {
@@ -30,15 +30,19 @@ public class TablePanel extends JPanel {
      * @param columnNames 列表名称
      */
     public void init(Object[][] data, Object[] columnNames) {
-        removeAll();
-        this.data = data;
-        ExtendTableModel model = new ExtendTableModel(data, columnNames);
-        table = new WebTable(model);
         table.setRowHeight(ViewUtil.getFontSize() * 2);
-        JScrollPane scrollPane = new JScrollPane(table);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        fitTableColumns(table);
         table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        changeData(data, columnNames);
+    }
+
+    public void changeData(Object[][] data, Object[] columnNames) {
+        removeAll();
+        JScrollPane scrollPane = new JScrollPane(table);
+        this.data = data.clone();
+        ExtendTableModel model = new ExtendTableModel(data, columnNames);
+        table.setModel(model);
+        fitTableColumns(table);
         add(scrollPane);
         repaint();
         setVisible(true);
@@ -74,21 +78,21 @@ public class TablePanel extends JPanel {
      *
      * @return 选择的内容 空返回null
      */
-    public Object getSelectedId() {
+    public Object[] getSelectedObject() {
         if (table.getSelectedRow() == -1) {
             return null;
         }
-        return data[table.getSelectedRow()][0];
-    }
-
-    @Override
-    public void addMouseListener(MouseListener mouseListener) {
-        table.addMouseListener(mouseListener);
+        return data[table.getSelectedRow()];
     }
 
     @Override
     public void removeMouseListener(MouseListener mouseListener) {
         table.removeMouseListener(mouseListener);
+    }
+
+    @Override
+    public synchronized void addMouseListener(MouseListener l) {
+        table.addMouseListener(l);
     }
 
     private static class ExtendTableModel extends DefaultTableModel {

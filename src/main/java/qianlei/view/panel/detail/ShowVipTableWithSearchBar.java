@@ -1,15 +1,16 @@
-package qianlei.view.panel.tabledetail;
+package qianlei.view.panel.detail;
 
 import qianlei.entity.Vip;
 import qianlei.service.VipService;
 import qianlei.view.panel.AbstractCanInitPanel;
-import qianlei.view.panel.tabledetail.component.SearchBar;
-import qianlei.view.panel.tabledetail.component.TablePanel;
+import qianlei.view.panel.component.SearchBar;
+import qianlei.view.panel.component.TablePanel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseListener;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -20,8 +21,9 @@ import java.util.Map;
  */
 public class ShowVipTableWithSearchBar extends AbstractCanInitPanel {
     private final VipService vipService = new VipService();
-    private final SearchBar searchBar = new SearchBar(Arrays.asList("姓名", "证件号", "手机号"));
-    private TablePanel tablePanel = new TablePanel(new Object[][]{}, new String[]{"证件号", "姓名", "性别", "手机号码", "联系地址", "邮箱", "创建时间"});
+    private final SearchBar searchBar = new SearchBar(Arrays.asList("姓名", "卡号", "手机号"));
+    private String[] columnNames = new String[]{"证件号", "姓名", "性别", "手机号码", "联系地址", "邮箱", "创建时间"};
+    private TablePanel tablePanel = new TablePanel(new Object[][]{}, columnNames);
     private MouseListener mouseListener;
 
     public ShowVipTableWithSearchBar() {
@@ -47,7 +49,7 @@ public class ShowVipTableWithSearchBar extends AbstractCanInitPanel {
                 data[i][5] = good.getEmail();
                 data[i][6] = good.getCreateTime();
             }
-            tablePanel = new TablePanel(data, new String[]{"证件号", "姓名", "性别", "手机号码", "联系地址", "邮箱", "创建时间"});
+            tablePanel.changeData(data, columnNames);
             removeAll();
             add(searchBar, BorderLayout.NORTH);
             add(tablePanel);
@@ -65,17 +67,29 @@ public class ShowVipTableWithSearchBar extends AbstractCanInitPanel {
     }
 
     @Override
-    public void addMouseListener(MouseListener mouseListener) {
+    public void addMouseListener(MouseListener l) {
+        mouseListener = l;
         tablePanel.addMouseListener(mouseListener);
-        this.mouseListener = mouseListener;
     }
 
     /**
-     * 获取选中的id
+     * 获取选中的会员
      *
-     * @return 选中的id
+     * @return 选中的会员
      */
-    public String getSelectedVipId() {
-        return (String) tablePanel.getSelectedId();
+    public Vip getSelectedVip() {
+        Object[] objects = tablePanel.getSelectedObject();
+        if (objects == null) {
+            return null;
+        }
+        Vip vip = new Vip();
+        vip.setId((String) objects[0]);
+        vip.setName((String) objects[1]);
+        vip.setSex((String) objects[2]);
+        vip.setPhone((String) objects[3]);
+        vip.setAddress((String) objects[4]);
+        vip.setEmail((String) objects[5]);
+        vip.setCreateTime((Date) objects[6]);
+        return vip;
     }
 }

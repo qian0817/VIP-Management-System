@@ -1,7 +1,7 @@
-package qianlei.view.panel.tabledetail.component;
+package qianlei.view.panel.component;
 
 import com.alee.laf.button.WebButton;
-import qianlei.view.panel.linedetail.component.InputPanelBase;
+import qianlei.utils.ViewUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,7 +17,7 @@ import java.util.Map;
  */
 public class SearchBar extends JPanel {
     private final Map<String, InputPanelBase> map = new HashMap<>();
-    private final WebButton search = new WebButton("搜索");
+    private final WebButton searchButton = new WebButton("搜索", ViewUtil.getSvgIcon("icon/search.svg", ViewUtil.getCurConfig().getFont().getSize(), ViewUtil.getCurConfig().getFont().getSize()));
 
     public SearchBar(List<String> items) {
         for (String item : items) {
@@ -27,9 +27,9 @@ public class SearchBar extends JPanel {
         for (String item : items) {
             add(map.get(item));
         }
-        add(search);
+        add(searchButton);
         //快捷键
-        search.addHotkey(10);
+        searchButton.addHotkey(10);
     }
 
     /**
@@ -51,6 +51,6 @@ public class SearchBar extends JPanel {
      * @param actionListener 事件
      */
     public void addActionListener(ActionListener actionListener) {
-        search.addActionListener(actionListener);
+        searchButton.addActionListener(actionListener);
     }
 }

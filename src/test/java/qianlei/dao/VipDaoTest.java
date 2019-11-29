@@ -1,9 +1,6 @@
 package qianlei.dao;
 
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 import qianlei.TestHelper;
 import qianlei.entity.Vip;
 import qianlei.enums.StatusEnum;
@@ -16,13 +13,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class VipDaoTest {
-    static {
+    private VipDao vipDao = new VipDao();
+
+    @BeforeAll
+    static void start() {
         TestHelper.deleteTestDb();
         DaoUtil.init("test");
     }
 
-    private VipDao vipDao = new VipDao();
-
+    @AfterAll
+    static void end() {
+        TestHelper.deleteTestDb();
+    }
     @Order(1)
     @Test
     void addVip() {
@@ -55,6 +57,6 @@ class VipDaoTest {
     @Order(5)
     @Test
     void selectAllNormalVipByIdAndNameAndPhone() {
-        assertEquals(vipDao.selectAllNormalVipByIdAndNameAndPhone("", "", "").size(), 2);
+        assertEquals(vipDao.selectAllNormalVipByIdAndNameAndPhone("", "", "").size(), 1);
     }
 }

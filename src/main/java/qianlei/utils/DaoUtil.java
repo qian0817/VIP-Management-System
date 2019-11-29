@@ -1,13 +1,9 @@
 package qianlei.utils;
 
-import com.mchange.v2.c3p0.ComboPooledDataSource;
-
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.nio.charset.StandardCharsets;
+import java.sql.*;
 
 /**
  * dao工具类
@@ -15,7 +11,7 @@ import java.sql.Statement;
  * @author qianlei
  */
 public final class DaoUtil {
-    private static ComboPooledDataSource dataSource;
+    private static String url;
 
     private DaoUtil() {
     }
@@ -23,8 +19,8 @@ public final class DaoUtil {
     /**
      * 初始化数据库
      */
-    public static void init(String useDataSource) {
-        dataSource = new ComboPooledDataSource(useDataSource);
+    public static void init(String fileName) {
+        url = "jdbc:sqlite:" + fileName + ".db";
         try (Connection connection = getConnection();
              Statement statement = connection.createStatement();
              InputStream inputStream = DaoUtil.class.getClassLoader().getResourceAsStream("create.sql")
@@ -35,7 +31,7 @@ public final class DaoUtil {
                 //noinspection ResultOfMethodCallIgnored
                 inputStream.read(bytes);
             }
-            String[] s = new String(bytes).split(";");
+            String[] s = new String(bytes, StandardCharsets.UTF_8).split(";");
             for (String sql : s) {
                 statement.execute(sql);
             }
@@ -51,7 +47,7 @@ public final class DaoUtil {
      * @throws SQLException sql错误
      */
     public static Connection getConnection() throws SQLException {
-        return dataSource.getConnection();
+        return DriverManager.getConnection(url);
     }
 
 

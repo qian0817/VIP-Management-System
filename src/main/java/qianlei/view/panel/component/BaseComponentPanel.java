@@ -1,4 +1,4 @@
-package qianlei.view.panel.linedetail.component;
+package qianlei.view.panel.component;
 
 import javax.swing.*;
 
@@ -29,5 +29,8 @@ public abstract class BaseComponentPanel extends JPanel {
      */
     public abstract void setEditable(boolean editable);
 
+    /**
+     * 回复界面初始状态
+     */
     public abstract void init();
 }

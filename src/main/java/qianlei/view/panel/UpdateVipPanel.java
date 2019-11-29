@@ -5,7 +5,7 @@ import qianlei.entity.Vip;
 import qianlei.exception.WrongDataException;
 import qianlei.service.VipService;
 import qianlei.view.MainFrame;
-import qianlei.view.panel.linedetail.InputVipPanel;
+import qianlei.view.panel.detail.InputVipPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,21 +15,46 @@ import java.awt.*;
  *
  * @author qianlei
  */
-class UpdateVipPanel extends JPanel implements CanSubmitPanel {
+class UpdateVipPanel extends JPanel {
     private final VipService vipService = new VipService();
     private final InputVipPanel inputVipPanel = new InputVipPanel();
     private final JButton checkButton = new JButton("修改");
-    private final JButton deleteButton = new JButton("删除");
     private final JPanel panel = new JPanel(new FlowLayout());
     private final MainFrame parent;
 
     UpdateVipPanel(String id, MainFrame parent) {
         this.parent = parent;
         //组件初始化
-        setLayout(new BorderLayout());
-        initInputVipPanel(id);
-        addComponent();
-        addAction(id);
+        SwingUtilities.invokeLater(() -> {
+            setLayout(new BorderLayout());
+            initInputVipPanel(id);
+            addComponent();
+            checkButton.addActionListener((e) -> updateVip());
+        });
+    }
+
+    /**
+     * 修改VIP
+     */
+    private void updateVip() {
+        int a = JOptionPane.showConfirmDialog(UpdateVipPanel.this, "是否修改该VIP");
+        if (a == JOptionPane.YES_OPTION) {
+            Result result;
+            Vip vip;
+            try {
+                vip = inputVipPanel.getVip();
+                vipService.updateVip(vip);
+                result = new Result(true, "修改成功");
+            } catch (WrongDataException e) {
+                result = new Result(true, e.getMessage());
+            }
+            if (result.isSuccess()) {
+                JOptionPane.showMessageDialog(UpdateVipPanel.this, result.getMessage(), "修改成功", JOptionPane.INFORMATION_MESSAGE);
+                changeToShowVipPanel();
+            } else {
+                JOptionPane.showMessageDialog(UpdateVipPanel.this, result.getMessage(), "修改失败", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
     }
 
     /**
@@ -37,7 +62,6 @@ class UpdateVipPanel extends JPanel implements CanSubmitPanel {
      */
     private void addComponent() {
         panel.add(checkButton);
-        panel.add(deleteButton);
         add(inputVipPanel);
         add(panel, BorderLayout.SOUTH);
     }
@@ -50,46 +74,7 @@ class UpdateVipPanel extends JPanel implements CanSubmitPanel {
     private void initInputVipPanel(String id) {
         Vip vip = vipService.getVipById(id);
         inputVipPanel.init(vip);
-        inputVipPanel.setEditable(InputVipPanel.PanelEnum.ID.getId(), false);
-    }
-
-    /**
-     * 添加事件
-     *
-     * @param id vipId
-     */
-    private void addAction(String id) {
-        checkButton.addActionListener((e) -> {
-            int a = JOptionPane.showConfirmDialog(UpdateVipPanel.this, "是否修改该VIP");
-            if (a == JOptionPane.YES_OPTION) {
-                Result result = submit();
-                if (result.isSuccess()) {
-                    JOptionPane.showMessageDialog(UpdateVipPanel.this, result.getMessage(), "修改成功", JOptionPane.INFORMATION_MESSAGE);
-                    changeToShowVipPanel();
-                } else {
-                    JOptionPane.showMessageDialog(UpdateVipPanel.this, result.getMessage(), "修改失败", JOptionPane.INFORMATION_MESSAGE);
-                }
-            }
-        });
-        deleteButton.addActionListener((e) -> {
-            int a = JOptionPane.showConfirmDialog(UpdateVipPanel.this, "是否删除该VIP");
-            if (a == JOptionPane.YES_OPTION) {
-                vipService.deleteVipById(id);
-                changeToShowVipPanel();
-            }
-        });
-    }
-
-    @Override
-    public Result submit() {
-        Vip vip;
-        try {
-            vip = inputVipPanel.getVip();
-            vipService.updateVip(vip);
-            return new Result(true, "修改成功");
-        } catch (WrongDataException e) {
-            return new Result(true, e.getMessage());
-        }
+        inputVipPanel.setEditable(0, false);
     }
 
     /**
@@ -102,6 +87,4 @@ class UpdateVipPanel extends JPanel implements CanSubmitPanel {
         repaint();
         setVisible(true);
     }
-
-
 }

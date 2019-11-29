@@ -10,19 +10,22 @@ import qianlei.utils.DaoUtil;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class RecordServiceTest {
     private RecordService recordService = new RecordService();
-
+    private static Good good = new Good("1", "1", "1", new Date(), new BigDecimal("123"), new BigDecimal("0.1"), 1, "", "", StatusEnum.NORMAL);
     @BeforeAll
     static void start() throws WrongDataException {
-        DaoUtil.init("test.db");
+        TestHelper.deleteTestDb();
+        DaoUtil.init("test");
         GoodService goodService = new GoodService();
         VipService vipService = new VipService();
-        goodService.addGood(new Good("1", "1", "1", new Date(), new BigDecimal("123"), 123.45, 123, "", "", StatusEnum.NORMAL));
+        goodService.addGood(good);
         vipService.addVip(new Vip("1", "1", "男", "1234567890", "123", "123456"));
     }
 
@@ -34,9 +37,12 @@ class RecordServiceTest {
     @Order(1)
     @Test
     void addRecord() {
-        assertDoesNotThrow(() -> recordService.addRecord("1", "1"));
-        assertThrows(WrongDataException.class, () -> recordService.addRecord(null, "2"));
-        assertThrows(WrongDataException.class, () -> recordService.addRecord("1", null));
+        Map<Good, Integer> shopListMap = new HashMap<>();
+        shopListMap.put(good, 2);
+        assertFalse(recordService.addRecord(shopListMap, "1", "1").isSuccess());
+        shopListMap.put(good, 1);
+        assertTrue(recordService.addRecord(shopListMap, "1", "1").isSuccess());
+        assertFalse(recordService.addRecord(shopListMap, "1", "1").isSuccess());
     }
 
     @Order(2)

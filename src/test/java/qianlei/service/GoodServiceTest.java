@@ -18,7 +18,8 @@ class GoodServiceTest {
 
     @BeforeAll
     static void start() {
-        DaoUtil.init("test.db");
+        TestHelper.deleteTestDb();
+        DaoUtil.init("test");
     }
 
     @AfterAll
@@ -30,16 +31,16 @@ class GoodServiceTest {
     @Test
     void addGood() {
         assertDoesNotThrow(() -> goodService.addGood(new Good("1", "测试商品", "测试制造商", new Date(),
-                new BigDecimal("123.45"), 0.94, 1234, "测试简介1", "测试备注1", StatusEnum.NORMAL)));
+                new BigDecimal("123.45"), new BigDecimal(0.94), 1234, "测试简介1", "测试备注1", StatusEnum.NORMAL)));
         assertThrows(WrongDataException.class, () -> goodService.addGood(new Good("1", "测试商品", "测试制造商",
-                new Date(), new BigDecimal("123.45"), 0.94, 1234, "测试简介1", "测试备注1", StatusEnum.NORMAL)));
-        assertDoesNotThrow(() -> goodService.addGood(new Good("2", "测试商品", "测试制造商", new Date(), new BigDecimal("123.45"), 0.94, 1234, "测试简介1", "测试备注1", StatusEnum.NORMAL)));
+                new Date(), new BigDecimal("123.45"), new BigDecimal(0.94), 1234, "测试简介1", "测试备注1", StatusEnum.NORMAL)));
+        assertDoesNotThrow(() -> goodService.addGood(new Good("2", "测试商品", "测试制造商", new Date(), new BigDecimal("123.45"), new BigDecimal(0.94), 1234, "测试简介1", "测试备注1", StatusEnum.NORMAL)));
     }
 
     @Order(2)
     @Test
     void update() {
-        assertDoesNotThrow(() -> goodService.updateGood(new Good("2", "测试商品2", "测试制造商", new Date(), new BigDecimal("123.45"), 0.94, 1234, "测试简介1", "测试备注1", StatusEnum.NORMAL)));
+        assertDoesNotThrow(() -> goodService.updateGood(new Good("2", "测试商品2", "测试制造商", new Date(), new BigDecimal("123.45"), new BigDecimal(0.94), 1234, "测试简介1", "测试备注1", StatusEnum.NORMAL)));
     }
 
     @Order(3)

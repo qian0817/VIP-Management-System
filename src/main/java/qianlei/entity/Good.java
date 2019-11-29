@@ -3,6 +3,7 @@ package qianlei.entity;
 import qianlei.enums.StatusEnum;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 import java.util.Objects;
 
@@ -17,7 +18,7 @@ public class Good {
     private String maker;
     private Date createTime;
     private BigDecimal price;
-    private double discount;
+    private BigDecimal discount;
     private long remain;
     private String introduction;
     private String remarks;
@@ -29,13 +30,13 @@ public class Good {
         maker = "";
         createTime = new Date();
         price = BigDecimal.ZERO;
-        discount = 1.0;
+        discount = BigDecimal.ONE;
         remain = 0;
         introduction = "";
         remarks = "";
     }
 
-    public Good(String id, String name, String maker, Date createTime, BigDecimal price, double discount, long remain, String introduction, String remarks, StatusEnum status) {
+    public Good(String id, String name, String maker, Date createTime, BigDecimal price, BigDecimal discount, long remain, String introduction, String remarks, StatusEnum status) {
         this.id = id;
         this.name = name;
         this.maker = maker;
@@ -84,15 +85,19 @@ public class Good {
         return price;
     }
 
+    public BigDecimal getRealPrice() {
+        return price.multiply(discount).setScale(2, RoundingMode.HALF_UP);
+    }
+
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
-    public double getDiscount() {
+    public BigDecimal getDiscount() {
         return discount;
     }
 
-    public void setDiscount(double discount) {
+    public void setDiscount(BigDecimal discount) {
         this.discount = discount;
     }
 
@@ -137,7 +142,7 @@ public class Good {
             return false;
         }
         Good good = (Good) o;
-        return Double.compare(good.discount, discount) == 0 &&
+        return Objects.equals(discount, good.discount) &&
                 remain == good.remain &&
                 Objects.equals(id, good.id) &&
                 Objects.equals(name, good.name) &&

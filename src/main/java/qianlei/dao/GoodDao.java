@@ -33,7 +33,7 @@ public class GoodDao {
             statement.setString(3, good.getMaker());
             statement.setDate(4, new Date(good.getCreateTime().getTime()));
             statement.setBigDecimal(5, good.getPrice());
-            statement.setDouble(6, good.getDiscount());
+            statement.setBigDecimal(6, good.getDiscount());
             statement.setLong(7, good.getRemain());
             statement.setString(8, good.getIntroduction());
             statement.setString(9, good.getRemarks());
@@ -78,10 +78,9 @@ public class GoodDao {
     public void deleteById(String id) {
         try (
                 Connection connection = DaoUtil.getConnection();
-                PreparedStatement statement = connection.prepareStatement("UPDATE good SET status = ? WHERE id = ?")
+                PreparedStatement statement = connection.prepareStatement("DELETE FROM good WHERE id = ?")
         ) {
-            statement.setInt(1, StatusEnum.DELETED.getId());
-            statement.setString(2, id);
+            statement.setString(1, id);
             statement.executeUpdate();
         } catch (SQLException e) {
             Log.error(Thread.currentThread(), e);
@@ -102,7 +101,7 @@ public class GoodDao {
             statement.setString(1, good.getName());
             statement.setString(2, good.getMaker());
             statement.setBigDecimal(3, good.getPrice());
-            statement.setDouble(4, good.getDiscount());
+            statement.setBigDecimal(4, good.getDiscount());
             statement.setLong(5, good.getRemain());
             statement.setString(6, good.getIntroduction());
             statement.setString(7, good.getRemarks());
@@ -154,7 +153,7 @@ public class GoodDao {
         String maker = resultSet.getString("maker");
         Date createTime = resultSet.getDate("createTime");
         BigDecimal price = resultSet.getBigDecimal("price");
-        double discount = resultSet.getDouble("discount");
+        BigDecimal discount = resultSet.getBigDecimal("discount");
         long remain = resultSet.getLong("remain");
         String introduction = resultSet.getString("introduction");
         String remarks = resultSet.getString("remarks");

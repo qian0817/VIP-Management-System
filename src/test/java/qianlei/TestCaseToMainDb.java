@@ -12,6 +12,8 @@ import qianlei.utils.DaoUtil;
 import java.io.File;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -48,7 +50,7 @@ public class TestCaseToMainDb {
         for (int i = 1; i <= n; i++) {
             Good good = new Good(String.valueOf(i), "测试商品" + i, "测试制造商" + i,
                     new Date((long) (Math.random() * System.currentTimeMillis())),
-                    BigDecimal.valueOf(random.nextInt(10000)), (int) (Math.random() * 100) * 1.0 / 100,
+                    BigDecimal.valueOf(random.nextInt(10000)), BigDecimal.valueOf((Math.random() * 100) * 1.0 / 100),
                     random.nextInt(100000), "", "", StatusEnum.NORMAL);
             try {
                 goodService.addGood(good);
@@ -58,7 +60,7 @@ public class TestCaseToMainDb {
             j.incrementAndGet();
         }
         for (int i = 1; i <= n; i++) {
-            Vip vip = new Vip(String.valueOf(i), "测试VIP" + i, "男", String.valueOf((long) (Math.random() * 20000000000L)),
+            Vip vip = new Vip(String.valueOf(i), "测试会员" + i, "男", String.valueOf((long) (Math.random() * 20000000000L)),
                     "测试地址" + i, String.valueOf(random.nextInt(900000) + 100000));
             try {
                 vipService.addVip(vip);
@@ -67,15 +69,16 @@ public class TestCaseToMainDb {
             }
             j.incrementAndGet();
         }
-        new Thread(() -> {
-            for (int i = 1; i <= n; i++) {
-                try {
-                    recordService.addRecord(String.valueOf(random.nextInt(n) + 1), String.valueOf(random.nextInt(n) + 1));
-                } catch (WrongDataException e) {
-                    e.printStackTrace();
+        for (int i = 1; i <= n; i++) {
+            Map<Good, Integer> map = new HashMap<>();
+            for (int k = 0; k < random.nextInt(10); k++) {
+                Good good = goodService.getGoodById(String.valueOf(random.nextInt(n) + 1));
+                if (good != null) {
+                    map.put(good, random.nextInt(100));
                 }
-                j.incrementAndGet();
             }
-        }).start();
+            recordService.addRecord(map, String.valueOf(random.nextInt(n - 1) + 1), String.valueOf(i));
+            j.incrementAndGet();
+        }
     }
 }

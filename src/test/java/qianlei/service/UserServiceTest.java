@@ -14,7 +14,8 @@ class UserServiceTest {
 
     @BeforeAll
     static void start() {
-        DaoUtil.init("test.db");
+        TestHelper.deleteTestDb();
+        DaoUtil.init("test");
     }
 
     @AfterAll
@@ -28,7 +29,6 @@ class UserServiceTest {
     void register() {
         assertDoesNotThrow(() -> userService.register(new User("test", "123456")));
         assertThrows(WrongDataException.class, () -> userService.register(new User("test", "123456")));
-        assertThrows(WrongDataException.class, () -> userService.register(new User("test1", "123456+-")));
     }
 
     @Order(2)
@@ -41,7 +41,7 @@ class UserServiceTest {
     @Test
     void login() {
         assertDoesNotThrow(() -> userService.login(new User("test", "123456789")));
-        assertThrows(WrongDataException.class, () -> userService.login(new User("test", "123456789")));
+        assertThrows(WrongDataException.class, () -> userService.login(new User("test", "123456")));
         assertThrows(WrongDataException.class, () -> userService.login(new User("test1", "123456789")));
     }
 }

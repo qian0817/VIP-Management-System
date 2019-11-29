@@ -1,4 +1,4 @@
-package qianlei.view.panel.linedetail.component;
+package qianlei.view.panel.component;
 
 import com.alee.laf.button.WebToggleButton;
 import com.alee.laf.grouping.GroupPane;
@@ -21,17 +21,16 @@ public class SexChoosePanelBase extends BaseComponentPanel {
         manButton.setSelected(true);
     }
 
-    public SexChoosePanelBase() {
+    public SexChoosePanelBase(String title) {
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         add(Box.createHorizontalStrut(ViewUtil.getFontSize() * 4));
-        add(Box.createHorizontalStrut(ViewUtil.getFontSize() * 2));
+        add(Box.createHorizontalStrut(ViewUtil.getFontSize() * (4 - title.length())));
         add(Box.createHorizontalBox());
         manButton.setSelected(true);
-        JLabel label = new JLabel("性别");
+        JLabel label = new JLabel(title);
         add(label);
         GroupPane groupPane = new GroupPane(manButton, womanButton);
         add(groupPane);
-
         add(Box.createHorizontalStrut(ViewUtil.getFontSize() * 4));
     }
 

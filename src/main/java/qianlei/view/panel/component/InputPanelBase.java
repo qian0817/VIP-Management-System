@@ -1,4 +1,4 @@
-package qianlei.view.panel.linedetail.component;
+package qianlei.view.panel.component;
 
 import com.alee.laf.text.WebTextField;
 import qianlei.utils.ViewUtil;
@@ -17,7 +17,7 @@ public class InputPanelBase extends BaseComponentPanel {
         this(title, hintText, ViewUtil.getFontSize() * 4);
     }
 
-    public InputPanelBase(String title, String hintText, int margin) {
+    InputPanelBase(String title, String hintText, int margin) {
         //添加提示文字
         field.setInputPrompt(hintText);
         addComponent(title, margin);

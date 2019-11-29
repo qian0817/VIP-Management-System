@@ -11,8 +11,17 @@ import java.util.Random;
  * @author qianlei
  */
 public final class VerifyCodeUtil {
+    /**
+     * 验证码中可以出现的字符
+     */
     private static final String VERIFY_CODES = "23456789abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ";
+    /**
+     * 验证码干扰线条数
+     */
     private static final int NUMBER_OF_INTERFERING_LINE = 30;
+    /**
+     * 验证码长度
+     */
     private static final int NUMBER_OF_CHARS = 4;
 
     private VerifyCodeUtil() {

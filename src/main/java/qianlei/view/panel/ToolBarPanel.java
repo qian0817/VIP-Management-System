@@ -21,20 +21,21 @@ import java.util.Objects;
  */
 public class ToolBarPanel extends JPanel {
     private final MainFrame parent;
-    private final MenuButton addGoodButton = new MenuButton("商品信息录入", "icon/add_good.svg", true);
-    private final MenuButton showGoodButton = new MenuButton("商品信息查询", "icon/show_good.svg", true);
-    private final MenuButton addVipButton = new MenuButton("会员信息录入", "icon/add_vip.svg", true);
-    private final MenuButton showVipButton = new MenuButton("会员信息查询", "icon/show_vip.svg", true);
-    private final MenuButton addRecordButton = new MenuButton("消费记录登记", "icon/add_record.svg", true);
-    private final MenuButton showRecordButton = new MenuButton("消费记录查询", "icon/show_record.svg", true);
-    private final MenuButton changePasswordButton = new MenuButton("修改密码", "icon/password.svg", true);
-    private final MenuButton helpButton = new MenuButton("系统帮助", "icon/help.svg", false);
-    private final MenuButton quitButton = new MenuButton("退出登录", "icon/quit.svg", false);
+    private final MenuButton addGoodButton = new MenuButton("商品信息录入", "icon/add_good.svg");
+    private final MenuButton showGoodButton = new MenuButton("商品信息查询", "icon/show_good.svg");
+    private final MenuButton addVipButton = new MenuButton("会员信息录入", "icon/add_vip.svg");
+    private final MenuButton showVipButton = new MenuButton("会员信息查询", "icon/show_vip.svg");
+    private final MenuButton addRecordButton = new MenuButton("消费记录登记", "icon/add_record.svg");
+    private final MenuButton showRecordButton = new MenuButton("消费记录查询", "icon/show_record.svg");
+    private final MenuButton changePasswordButton = new MenuButton("修改密码", "icon/password.svg");
+    private final MenuButton helpButton = new MenuButton("系统帮助", "icon/help.svg");
+    private final MenuButton quitButton = new MenuButton("退出登录", "icon/quit.svg");
 
     public ToolBarPanel(MainFrame parent) {
         this.parent = parent;
         addComponent();
         addAction();
+        changeDetailPanel(addGoodButton, new AddGoodPanel());
     }
 
     /**
@@ -72,22 +73,26 @@ public class ToolBarPanel extends JPanel {
         parent.setTitle(button.getName());
         panel.initView();
         parent.changeDetailPanel(panel);
+        initButtonStyle();
+        button.setStyleId(StyleId.comboboxUndecorated);
     }
 
     /**
      * 添加组件
      */
     private void addComponent() {
-        setLayout(new GridLayout(9, 1));
-        add(addGoodButton);
-        add(showGoodButton);
-        add(addVipButton);
-        add(showVipButton);
-        add(addRecordButton);
-        add(showRecordButton);
-        add(changePasswordButton);
-        add(helpButton);
-        add(quitButton);
+        SwingUtilities.invokeLater(() -> {
+            setLayout(new GridLayout(9, 1));
+            add(addGoodButton);
+            add(showGoodButton);
+            add(addVipButton);
+            add(showVipButton);
+            add(addRecordButton);
+            add(showRecordButton);
+            add(changePasswordButton);
+            add(helpButton);
+            add(quitButton);
+        });
     }
 
     /**
@@ -120,19 +125,13 @@ public class ToolBarPanel extends JPanel {
         quitButton.setStyleId(StyleId.button);
     }
 
-    private class MenuButton extends WebButton {
+    private static class MenuButton extends WebButton {
         private String name;
 
-        private MenuButton(String name, String icon, boolean needChangeStyleWhenClick) {
+        private MenuButton(String name, String icon) {
             super(StyleId.buttonIcon, name, ViewUtil.getSvgIcon(icon));
             setToolTip(name);
             this.name = name;
-            if (needChangeStyleWhenClick) {
-                addActionListener((e) -> {
-                    ToolBarPanel.this.initButtonStyle();
-                    MenuButton.this.setStyleId(StyleId.comboboxUndecorated);
-                });
-            }
         }
 
         @Override

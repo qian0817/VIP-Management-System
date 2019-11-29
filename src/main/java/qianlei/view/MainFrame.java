@@ -1,8 +1,7 @@
 package qianlei.view;
 
 import qianlei.utils.ViewUtil;
-import qianlei.view.panel.AddGoodPanel;
-import qianlei.view.panel.TitlePanel;
+import qianlei.view.panel.BottomPanel;
 import qianlei.view.panel.ToolBarPanel;
 
 import javax.swing.*;
@@ -16,29 +15,30 @@ import java.awt.*;
 public class MainFrame extends JFrame {
     private final JPanel detailPanel = new JPanel();
     private final ToolBarPanel menuPanel = new ToolBarPanel(this);
-    private final TitlePanel titlePanel = new TitlePanel(this);
+    private final BottomPanel bottomPanel = new BottomPanel(this);
     public MainFrame() {
         setIconImage(ViewUtil.getSvgIcon("icon/icon.svg", 25, 25).asBufferedImage());
-        setTitle("VIP管理系统");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         initView();
+        pack();
         //最大化
-        setSize(Toolkit.getDefaultToolkit().getScreenSize());
+        setExtendedState(Frame.MAXIMIZED_BOTH);
     }
 
     /**
      * 初始化界面
      */
     private void initView() {
-        Container container = getContentPane();
-        container.removeAll();
-        setLayout(new BorderLayout());
-        changeDetailPanel(new AddGoodPanel());
-        container.add(menuPanel, BorderLayout.WEST);
-        container.add(detailPanel);
-        container.add(titlePanel, BorderLayout.SOUTH);
-        repaint();
-        setVisible(true);
+        SwingUtilities.invokeLater(() -> {
+            Container container = getContentPane();
+            container.removeAll();
+            setLayout(new BorderLayout());
+            container.add(menuPanel, BorderLayout.WEST);
+            container.add(detailPanel);
+            container.add(bottomPanel, BorderLayout.SOUTH);
+            repaint();
+            setVisible(true);
+        });
     }
 
     /**

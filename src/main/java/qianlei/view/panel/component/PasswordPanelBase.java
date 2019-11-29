@@ -1,4 +1,4 @@
-package qianlei.view.panel.linedetail.component;
+package qianlei.view.panel.component;
 
 import com.alee.laf.text.WebPasswordField;
 import qianlei.utils.ViewUtil;
