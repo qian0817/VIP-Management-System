@@ -3,7 +3,7 @@ package qianlei.view.panel;
 import com.alee.laf.combobox.WebComboBox;
 import com.alee.managers.style.StyleId;
 import qianlei.utils.ViewUtil;
-import qianlei.view.MainFrame;
+import qianlei.view.frame.MainFrame;
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,10 +32,10 @@ public class BottomPanel extends AbstractCanInitPanel implements ItemListener {
     public void initView() {
         SwingUtilities.invokeLater(() -> {
             setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-            add(new JLabel(ViewUtil.getSvgIcon("icon/text-family.svg", 20, 20)));
+            add(new JLabel(ViewUtil.getSvgIcon("text-family.svg", 20, 20)));
             add(fontFamilyChoosePanel);
             add(Box.createHorizontalStrut(50));
-            add(new JLabel(ViewUtil.getSvgIcon("icon/text-size.svg", 20, 20)));
+            add(new JLabel(ViewUtil.getSvgIcon("text-size.svg", 20, 20)));
             add(fontSizeChoosePanel);
             add(Box.createHorizontalStrut(1000));
         });

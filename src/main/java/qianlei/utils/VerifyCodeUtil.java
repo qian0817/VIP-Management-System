@@ -28,6 +28,7 @@ public final class VerifyCodeUtil {
     }
 
     public static ImageIcon createVerifyCode(int width, int height) {
+
         Random random = new Random();
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         Graphics graphics = image.getGraphics();
@@ -53,6 +54,7 @@ public final class VerifyCodeUtil {
             // 得到随机产生的验证码数字。
             verifyCode.append(c);
             graphics.setColor(new Color(random.nextInt(255), random.nextInt(255), random.nextInt(255)));
+            //TODO 经常在这卡住
             graphics.drawString(String.valueOf(c), i * width / 4, random.nextInt(height / 2) + height / 2);
         }
         return new ImageIcon(image, verifyCode.toString());

@@ -1,15 +1,17 @@
 package qianlei.utils;
 
+import com.alee.api.resource.ClassResource;
 import com.alee.extended.svg.SvgIcon;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import qianlei.Application;
 import qianlei.entity.Config;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,22 +32,16 @@ public final class ViewUtil {
     }
 
     /**
-     * 加载字体配置文件
+     * 加载配置文件
      *
      * @param configPath 字体配置文件路径
      */
     public static void loadFont(String configPath) {
         Config config;
         try (BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(new File(configPath)))) {
-            config = JSON.parseObject(inputStream, Config.class);
-        } catch (Exception e) {
-            config = new Config(new Font(getSupportedFont().get(0), Font.PLAIN, 20));
-        }
-        if (config == null) {
-            config = new Config(new Font(getSupportedFont().get(0), Font.PLAIN, 20));
-        }
-        if (config.getFont() == null) {
-            config.setFont(new Font(getSupportedFont().get(0), Font.PLAIN, 20));
+            config = JSON.parseObject(inputStream, StandardCharsets.UTF_8, Config.class);
+        } catch (Exception ignored) {
+            config = new Config();
         }
         curConfig = config;
         changeFont(config.getFont());
@@ -83,7 +79,7 @@ public final class ViewUtil {
         if (supportFonts != null) {
             return supportFonts;
         }
-        List<String> ret = new LinkedList<>();
+        List<String> ret = new ArrayList<>();
         String[] fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
         for (String s : fonts) {
             Font f = new Font(s, Font.PLAIN, 20);
@@ -134,11 +130,12 @@ public final class ViewUtil {
     }
 
     public static SvgIcon getSvgIcon(String fileName) {
-        return getSvgIcon(fileName, curConfig.getFont().getSize() * 2, curConfig.getFont().getSize() * 2);
+        return getSvgIcon(fileName, curConfig.getFont().getSize(), curConfig.getFont().getSize());
     }
 
     public static SvgIcon getSvgIcon(String fileName, int width, int height) {
-        return new SvgIcon(ViewUtil.class.getClassLoader().getResource(fileName), width, height);
+        ClassResource resource = new ClassResource(Application.class, "/icon/" + fileName);
+        return new SvgIcon(resource, width, height);
     }
 
     public static int getFontSize() {

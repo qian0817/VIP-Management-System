@@ -1,5 +1,6 @@
 package qianlei.view.panel;
 
+import com.alee.managers.notification.NotificationManager;
 import qianlei.entity.Result;
 import qianlei.entity.Vip;
 import qianlei.exception.WrongDataException;
@@ -25,22 +26,16 @@ public class AddVipPanel extends AbstractCanInitPanel {
     }
 
     private void addVip() {
-        int a = JOptionPane.showConfirmDialog(AddVipPanel.this, "是否添加该VIP");
-        if (a == JOptionPane.YES_OPTION) {
-            Result result;
-            try {
-                Vip vip = inputVipPanel.getVip();
-                vipService.addVip(vip);
-                result = new Result(true, "添加成功");
-            } catch (WrongDataException ex) {
-                result = new Result(false, ex.getMessage());
-            }
-            if (result.isSuccess()) {
-                JOptionPane.showMessageDialog(AddVipPanel.this, result.getMessage(), "添加成功", JOptionPane.INFORMATION_MESSAGE);
-                initView();
-            } else {
-                JOptionPane.showMessageDialog(AddVipPanel.this, result.getMessage(), "添加失败", JOptionPane.INFORMATION_MESSAGE);
-            }
+        Result result;
+        try {
+            Vip vip = inputVipPanel.getVip();
+            result = vipService.addVip(vip);
+        } catch (WrongDataException ex) {
+            result = new Result(false, ex.getMessage());
+        }
+        NotificationManager.showInnerNotification(result.getMessage());
+        if (result.isSuccess()) {
+            initView();
         }
     }
 

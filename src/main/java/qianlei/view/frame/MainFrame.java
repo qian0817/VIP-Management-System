@@ -1,5 +1,7 @@
-package qianlei.view;
+package qianlei.view.frame;
 
+import com.alee.laf.window.WebFrame;
+import com.alee.managers.style.StyleId;
 import qianlei.utils.ViewUtil;
 import qianlei.view.panel.BottomPanel;
 import qianlei.view.panel.ToolBarPanel;
@@ -12,16 +14,18 @@ import java.awt.*;
  *
  * @author qianlei
  */
-public class MainFrame extends JFrame {
+public class MainFrame extends WebFrame<MainFrame> {
     private final JPanel detailPanel = new JPanel();
     private final ToolBarPanel menuPanel = new ToolBarPanel(this);
     private final BottomPanel bottomPanel = new BottomPanel(this);
+
     public MainFrame() {
-        setIconImage(ViewUtil.getSvgIcon("icon/icon.svg", 25, 25).asBufferedImage());
+        super(StyleId.frameDecorated);
+        setIconImage(ViewUtil.getSvgIcon("icon.svg", 25, 25).asBufferedImage());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         initView();
-        pack();
         //最大化
+        setSize(Toolkit.getDefaultToolkit().getScreenSize());
         setExtendedState(Frame.MAXIMIZED_BOTH);
     }
 
@@ -29,16 +33,14 @@ public class MainFrame extends JFrame {
      * 初始化界面
      */
     private void initView() {
-        SwingUtilities.invokeLater(() -> {
-            Container container = getContentPane();
-            container.removeAll();
-            setLayout(new BorderLayout());
-            container.add(menuPanel, BorderLayout.WEST);
-            container.add(detailPanel);
-            container.add(bottomPanel, BorderLayout.SOUTH);
-            repaint();
-            setVisible(true);
-        });
+        Container container = getContentPane();
+        container.removeAll();
+        setLayout(new BorderLayout());
+        container.add(menuPanel, BorderLayout.WEST);
+        container.add(detailPanel);
+        container.add(bottomPanel, BorderLayout.SOUTH);
+        repaint();
+        setVisible(true);
     }
 
     /**

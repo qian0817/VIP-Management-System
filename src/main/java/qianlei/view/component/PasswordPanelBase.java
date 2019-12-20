@@ -1,6 +1,8 @@
-package qianlei.view.panel.component;
+package qianlei.view.component;
 
+import com.alee.extended.image.WebImage;
 import com.alee.laf.text.WebPasswordField;
+import org.jetbrains.annotations.Nullable;
 import qianlei.utils.ViewUtil;
 
 import javax.swing.*;
@@ -12,6 +14,11 @@ import javax.swing.*;
  */
 public class PasswordPanelBase extends BaseComponentPanel {
     private final WebPasswordField field;
+
+    public PasswordPanelBase(String title, String hintText, String iconPath) {
+        this(title, hintText);
+        field.setLeadingComponent(new WebImage(ViewUtil.getSvgIcon(iconPath, ViewUtil.getFontSize(), ViewUtil.getFontSize())));
+    }
 
     public PasswordPanelBase(String title, String hintText) {
         this(title, hintText, ViewUtil.getFontSize() * 4);
@@ -41,7 +48,7 @@ public class PasswordPanelBase extends BaseComponentPanel {
     }
 
     @Override
-    public void setItem(String s) {
+    public void setItem(@Nullable String s) {
         if (s != null) {
             field.setText(s);
         } else {

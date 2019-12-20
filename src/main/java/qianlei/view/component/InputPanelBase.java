@@ -1,6 +1,8 @@
-package qianlei.view.panel.component;
+package qianlei.view.component;
 
+import com.alee.extended.image.WebImage;
 import com.alee.laf.text.WebTextField;
+import org.jetbrains.annotations.Nullable;
 import qianlei.utils.ViewUtil;
 
 import javax.swing.*;
@@ -13,11 +15,16 @@ import javax.swing.*;
 public class InputPanelBase extends BaseComponentPanel {
     private final WebTextField field = new WebTextField(20);
 
+    public InputPanelBase(String title, String hintText, String iconPath) {
+        this(title, hintText);
+        field.setLeadingComponent(new WebImage(ViewUtil.getSvgIcon(iconPath, ViewUtil.getFontSize(), ViewUtil.getFontSize())));
+    }
+
     public InputPanelBase(String title, String hintText) {
         this(title, hintText, ViewUtil.getFontSize() * 4);
     }
 
-    InputPanelBase(String title, String hintText, int margin) {
+    public InputPanelBase(String title, String hintText, int margin) {
         //添加提示文字
         field.setInputPrompt(hintText);
         addComponent(title, margin);
@@ -57,7 +64,7 @@ public class InputPanelBase extends BaseComponentPanel {
     }
 
     @Override
-    public void setItem(String s) {
+    public void setItem(@Nullable String s) {
         if (s != null) {
             field.setText(s);
         } else {

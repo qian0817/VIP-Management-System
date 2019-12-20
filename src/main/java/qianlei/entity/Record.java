@@ -10,28 +10,50 @@ import java.util.Objects;
  * @author qianlei
  */
 public class Record {
-    private String id;
+    private Integer id;
+    private Integer userId;
+    private String recordNo;
     private String vipId;
+    private String vipName;
+    private String vipPhone;
     private Date createTime;
-    private Vip vip;
     private BigDecimal price;
 
     public Record() {
     }
 
-    public Record(String id, String vipId, Date createTime, BigDecimal buyPrice) {
-        this.id = id;
+    public Record(Integer userId, String recordNo, String vipId, String vipName, String vipAddress, Date createTime, BigDecimal price) {
+        this.userId = userId;
+        this.recordNo = recordNo;
         this.vipId = vipId;
-        this.createTime = new Date(createTime.getTime());
-        this.price = buyPrice;
+        this.vipName = vipName;
+        this.vipPhone = vipAddress;
+        this.createTime = createTime;
+        this.price = price;
     }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public String getRecordNo() {
+        return recordNo;
+    }
+
+    public void setRecordNo(String recordNo) {
+        this.recordNo = recordNo;
     }
 
     public String getVipId() {
@@ -42,20 +64,28 @@ public class Record {
         this.vipId = vipId;
     }
 
+    public String getVipName() {
+        return vipName;
+    }
+
+    public void setVipName(String vipName) {
+        this.vipName = vipName;
+    }
+
+    public String getVipPhone() {
+        return vipPhone;
+    }
+
+    public void setVipPhone(String vipPhone) {
+        this.vipPhone = vipPhone;
+    }
+
     public Date getCreateTime() {
-        return new Date(createTime.getTime());
+        return createTime;
     }
 
     public void setCreateTime(Date createTime) {
-        this.createTime = new Date(createTime.getTime());
-    }
-
-    public Vip getVip() {
-        return vip;
-    }
-
-    public void setVip(Vip vip) {
-        this.vip = vip;
+        this.createTime = createTime;
     }
 
     public BigDecimal getPrice() {
@@ -75,25 +105,31 @@ public class Record {
             return false;
         }
         Record record = (Record) o;
-        return id.equals(record.id) &&
+        return Objects.equals(id, record.id) &&
+                Objects.equals(userId, record.userId) &&
+                Objects.equals(recordNo, record.recordNo) &&
                 Objects.equals(vipId, record.vipId) &&
+                Objects.equals(vipName, record.vipName) &&
+                Objects.equals(vipPhone, record.vipPhone) &&
                 Objects.equals(createTime, record.createTime) &&
-                Objects.equals(vip, record.vip) &&
                 Objects.equals(price, record.price);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, vipId, createTime, vip, price);
+        return Objects.hash(id, userId, recordNo, vipId, vipName, vipPhone, createTime, price);
     }
 
     @Override
     public String toString() {
         return "Record{" +
                 "id=" + id +
+                ", userId=" + userId +
+                ", recordNo='" + recordNo + '\'' +
                 ", vipId='" + vipId + '\'' +
+                ", vipName='" + vipName + '\'' +
+                ", vipAddress='" + vipPhone + '\'' +
                 ", createTime=" + createTime +
-                ", vip=" + vip +
                 ", price=" + price +
                 '}';
     }

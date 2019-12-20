@@ -1,7 +1,9 @@
-package qianlei.view.panel.component;
+package qianlei.view.component;
 
 import com.alee.laf.button.WebToggleButton;
 import com.alee.laf.grouping.GroupPane;
+import com.alee.managers.style.StyleId;
+import org.jetbrains.annotations.Nullable;
 import qianlei.entity.Vip;
 import qianlei.utils.ViewUtil;
 
@@ -13,8 +15,8 @@ import javax.swing.*;
  * @author qianlei
  */
 public class SexChoosePanelBase extends BaseComponentPanel {
-    private final WebToggleButton manButton = new WebToggleButton("  男  ", true);
-    private final WebToggleButton womanButton = new WebToggleButton("  女  ");
+    private final WebToggleButton manButton = new WebToggleButton(StyleId.togglebuttonHover, "  男  ", true);
+    private final WebToggleButton womanButton = new WebToggleButton(StyleId.togglebuttonHover, "  女  ");
 
     @Override
     public void init() {
@@ -40,7 +42,7 @@ public class SexChoosePanelBase extends BaseComponentPanel {
     }
 
     @Override
-    public void setItem(String s) {
+    public void setItem(@Nullable String s) {
         if (Vip.WOMAN.equals(s)) {
             womanButton.setSelected(true);
         } else {

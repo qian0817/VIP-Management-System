@@ -1,6 +1,7 @@
-package qianlei.view.panel.component;
+package qianlei.view.component;
 
 import com.alee.extended.date.WebDateField;
+import org.jetbrains.annotations.Nullable;
 import qianlei.utils.DateUtil;
 import qianlei.utils.ViewUtil;
 
@@ -36,7 +37,7 @@ public class DateChoosePanelBase extends BaseComponentPanel {
     }
 
     @Override
-    public void setItem(String s) {
+    public void setItem(@Nullable String s) {
         if (s != null) {
             try {
                 webDateField.setDate(DateUtil.transferToDate(s));

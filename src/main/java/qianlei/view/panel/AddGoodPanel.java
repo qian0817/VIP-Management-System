@@ -1,5 +1,6 @@
 package qianlei.view.panel;
 
+import com.alee.managers.notification.NotificationManager;
 import qianlei.entity.Good;
 import qianlei.entity.Result;
 import qianlei.exception.WrongDataException;
@@ -30,22 +31,16 @@ public class AddGoodPanel extends AbstractCanInitPanel {
      * 添加商品
      */
     private void addGood() {
-        int a = JOptionPane.showConfirmDialog(AddGoodPanel.this, "是否添加该商品");
-        if (a == JOptionPane.YES_OPTION) {
-            Result result;
-            try {
-                Good good = inputGoodPanel.getGood();
-                goodService.addGood(good);
-                result = new Result(true, "添加成功");
-            } catch (WrongDataException e) {
-                result = new Result(false, e.getMessage());
-            }
-            if (result.isSuccess()) {
-                JOptionPane.showMessageDialog(AddGoodPanel.this, result.getMessage(), "添加成功", JOptionPane.INFORMATION_MESSAGE);
-                initView();
-            } else {
-                JOptionPane.showMessageDialog(AddGoodPanel.this, result.getMessage(), "添加失败", JOptionPane.INFORMATION_MESSAGE);
-            }
+        Result result;
+        try {
+            Good good = inputGoodPanel.getGood();
+            result = goodService.addGood(good);
+        } catch (WrongDataException e) {
+            result = new Result(false, e.getMessage());
+        }
+        NotificationManager.showInnerNotification(result.getMessage());
+        if (result.isSuccess()) {
+            initView();
         }
     }
 

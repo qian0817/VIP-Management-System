@@ -42,4 +42,12 @@ class StringUtilTest {
         assertFalse(StringUtil.isBigInteger("1w23"));
         assertFalse(StringUtil.isBigInteger("12.3"));
     }
+
+    @Test
+    void isEmailAddress() {
+        assertTrue(StringUtil.isEmailAddress("1@q.c"));
+        assertFalse(StringUtil.isEmailAddress("1q.c"));
+        assertFalse(StringUtil.isEmailAddress("1@qc"));
+        assertFalse(StringUtil.isEmailAddress("@q.c"));
+    }
 }

@@ -1,8 +1,9 @@
 package qianlei.view.panel;
 
+import com.alee.managers.notification.NotificationManager;
 import qianlei.entity.Vip;
 import qianlei.service.VipService;
-import qianlei.view.MainFrame;
+import qianlei.view.frame.MainFrame;
 import qianlei.view.panel.detail.ShowVipTableWithSearchBar;
 
 import javax.swing.*;
@@ -38,13 +39,10 @@ class ShowVipPanel extends AbstractCanInitPanel {
     private void deleteGood() {
         Vip vip = showVipTable.getSelectedVip();
         if (vip != null) {
-            int a = JOptionPane.showConfirmDialog(ShowVipPanel.this, "是否删除该会员");
-            if (a == JOptionPane.YES_OPTION) {
-                vipService.deleteVipById(vip.getId());
-                initView();
-            }
+            vipService.deleteVipById(vip);
+            initView();
         } else {
-            JOptionPane.showMessageDialog(ShowVipPanel.this, "请选择需要删除的会员");
+            NotificationManager.showInnerNotification("请选择需要删除的会员");
         }
     }
 
@@ -54,11 +52,11 @@ class ShowVipPanel extends AbstractCanInitPanel {
             removeAll();
             parent.setTitle("会员信息修改");
             //变为修改界面
-            add(new UpdateVipPanel(vip.getId(), parent));
+            add(new UpdateVipPanel(vip.getVipNo(), parent));
             repaint();
             setVisible(true);
         } else {
-            JOptionPane.showMessageDialog(ShowVipPanel.this, "请选择需要修改的会员");
+            NotificationManager.showInnerNotification("请选择需要修改的会员");
         }
     }
 

@@ -1,10 +1,11 @@
 package qianlei.view.panel;
 
+import com.alee.managers.notification.NotificationManager;
 import qianlei.entity.Good;
 import qianlei.entity.Result;
 import qianlei.exception.WrongDataException;
 import qianlei.service.GoodService;
-import qianlei.view.MainFrame;
+import qianlei.view.frame.MainFrame;
 import qianlei.view.panel.detail.InputGoodPanel;
 
 import javax.swing.*;
@@ -20,11 +21,11 @@ class UpdateGoodPanel extends JPanel {
     private final GoodService goodService = new GoodService();
     private final MainFrame parent;
 
-    UpdateGoodPanel(String id, MainFrame parent) {
+    UpdateGoodPanel(String goodNo, MainFrame parent) {
         this.parent = parent;
         SwingUtilities.invokeLater(() -> {
             setLayout(new BorderLayout());
-            initInputGoodPanel(id);
+            initInputGoodPanel(goodNo);
             addComponent();
             checkButton.addActionListener((e) -> updateGood());
         });
@@ -34,32 +35,26 @@ class UpdateGoodPanel extends JPanel {
      * 修改商品
      */
     private void updateGood() {
-        int a = JOptionPane.showConfirmDialog(UpdateGoodPanel.this, "是否修改该商品");
-        if (a == JOptionPane.YES_OPTION) {
-            Result result;
-            try {
-                Good good = inputGoodPanel.getGood();
-                goodService.updateGood(good);
-                result = new Result(true, "修改成功");
-            } catch (WrongDataException e) {
-                result = new Result(false, e.getMessage());
-            }
-            if (result.isSuccess()) {
-                JOptionPane.showMessageDialog(UpdateGoodPanel.this, result.getMessage(), "修改成功", JOptionPane.INFORMATION_MESSAGE);
-                changeToShowGoodPanel();
-            } else {
-                JOptionPane.showMessageDialog(UpdateGoodPanel.this, result.getMessage(), "修改失败", JOptionPane.INFORMATION_MESSAGE);
-            }
+        Result result;
+        try {
+            Good good = inputGoodPanel.getGood();
+            result = goodService.updateGood(good);
+        } catch (WrongDataException e) {
+            result = new Result(false, e.getMessage());
+        }
+        NotificationManager.showInnerNotification(result.getMessage());
+        if (result.isSuccess()) {
+            changeToShowGoodPanel();
         }
     }
 
     /**
      * 初始化数据
      *
-     * @param id 商品id
+     * @param goodNo 商品编号
      */
-    private void initInputGoodPanel(String id) {
-        Good good = goodService.getGoodById(id);
+    private void initInputGoodPanel(String goodNo) {
+        Good good = goodService.getGoodByGoodNo(goodNo);
         inputGoodPanel.init(good);
         inputGoodPanel.setEditable(0, false);
     }

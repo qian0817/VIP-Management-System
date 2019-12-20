@@ -3,11 +3,10 @@ package qianlei.service;
 import org.junit.jupiter.api.*;
 import qianlei.TestHelper;
 import qianlei.entity.User;
-import qianlei.exception.WrongDataException;
 import qianlei.utils.DaoUtil;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
+
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class UserServiceTest {
     private UserService userService = new UserService();
@@ -27,8 +26,8 @@ class UserServiceTest {
     @Order(1)
     @Test
     void register() {
-        assertDoesNotThrow(() -> userService.register(new User("test", "123456")));
-        assertThrows(WrongDataException.class, () -> userService.register(new User("test", "123456")));
+        assertTrue(userService.register(new User("test", "123456")).isSuccess());
+        assertFalse(userService.register(new User("test", "123456")).isSuccess());
     }
 
     @Order(2)
@@ -40,8 +39,8 @@ class UserServiceTest {
     @Order(3)
     @Test
     void login() {
-        assertDoesNotThrow(() -> userService.login(new User("test", "123456789")));
-        assertThrows(WrongDataException.class, () -> userService.login(new User("test", "123456")));
-        assertThrows(WrongDataException.class, () -> userService.login(new User("test1", "123456789")));
+        assertTrue(userService.login(new User("test", "123456789")).isSuccess());
+        assertFalse(userService.login(new User("test", "123456")).isSuccess());
+        assertFalse(userService.login(new User("test1", "123456789")).isSuccess());
     }
 }

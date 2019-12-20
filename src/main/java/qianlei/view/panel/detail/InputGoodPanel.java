@@ -4,10 +4,10 @@ import qianlei.entity.Good;
 import qianlei.exception.WrongDataException;
 import qianlei.utils.DateUtil;
 import qianlei.utils.StringUtil;
-import qianlei.view.panel.component.BaseComponentPanel;
-import qianlei.view.panel.component.ComboPanelBase;
-import qianlei.view.panel.component.DateChoosePanelBase;
-import qianlei.view.panel.component.InputPanelBase;
+import qianlei.view.component.BaseComponentPanel;
+import qianlei.view.component.ComboPanelBase;
+import qianlei.view.component.DateChoosePanelBase;
+import qianlei.view.component.InputPanelBase;
 
 import java.awt.*;
 import java.math.BigDecimal;
@@ -25,6 +25,7 @@ import java.util.List;
  */
 public class InputGoodPanel extends BaseInputPanel {
     private static final List<String> DISCOUNT_RANGE_LIST = new ArrayList<>(100);
+    private Integer goodId = null;
 
     static {
         BigDecimal range = new BigDecimal("0.01");
@@ -33,15 +34,15 @@ public class InputGoodPanel extends BaseInputPanel {
         }
     }
 
-    private InputPanelBase idInputPanel = new InputPanelBase("商品编号", "请输入商品编号");
-    private InputPanelBase nameInputPanel = new InputPanelBase("商品名称", "请输入商品名称");
-    private InputPanelBase makerInputPanel = new InputPanelBase("制造商", "请输入制造商");
+    private InputPanelBase idInputPanel = new InputPanelBase("商品编号", "请输入商品编号,必填", "id.svg");
+    private InputPanelBase nameInputPanel = new InputPanelBase("商品名称", "请输入商品名称,必填", "good_name.svg");
+    private InputPanelBase makerInputPanel = new InputPanelBase("制造厂商", "请输入制造商", "maker.svg");
     private DateChoosePanelBase createTimeChoosePanel = new DateChoosePanelBase("生产日期");
-    private InputPanelBase priceInputPanel = new InputPanelBase("价格", "请输入价格");
-    private ComboPanelBase discountInputPanel = new ComboPanelBase("折扣", DISCOUNT_RANGE_LIST);
-    private InputPanelBase remainInputPanel = new InputPanelBase("商品库存", "请输入商品库存");
-    private InputPanelBase introductionInputPanel = new InputPanelBase("商品简介", "请输入商品简介");
-    private InputPanelBase remarkInputPanel = new InputPanelBase("备注", "请输入备注");
+    private InputPanelBase priceInputPanel = new InputPanelBase("商品原价", "请输入商品的原价,必填", "price.svg");
+    private ComboPanelBase discountInputPanel = new ComboPanelBase("商品折扣", DISCOUNT_RANGE_LIST);
+    private InputPanelBase remainInputPanel = new InputPanelBase("商品库存", "请输入商品库存", "remain.svg");
+    private InputPanelBase introductionInputPanel = new InputPanelBase("商品简介", "请输入商品简介", "introduction.svg");
+    private InputPanelBase remarkInputPanel = new InputPanelBase("商品备注", "请输入备注", "remark.svg");
 
     public InputGoodPanel() {
         panels.add(idInputPanel);
@@ -67,7 +68,8 @@ public class InputGoodPanel extends BaseInputPanel {
      */
     public void init(Good good) {
         if (good != null) {
-            idInputPanel.setItem(good.getId());
+            goodId = good.getId();
+            idInputPanel.setItem(good.getGoodNo());
             nameInputPanel.setItem(good.getName());
             makerInputPanel.setItem(good.getMaker());
             priceInputPanel.setItem(good.getPrice().toString());
@@ -96,7 +98,8 @@ public class InputGoodPanel extends BaseInputPanel {
      */
     public Good getGood() throws WrongDataException {
         Good good = new Good();
-        setId(good);
+        good.setId(goodId);
+        setGoodNo(good);
         setName(good);
         setMaker(good);
         setCreateTime(good);
@@ -120,6 +123,9 @@ public class InputGoodPanel extends BaseInputPanel {
 
     private void setRemain(Good good) throws WrongDataException {
         String remain = remainInputPanel.getItem();
+        if (remain.trim().length() == 0) {
+            remain = "0";
+        }
         if (!StringUtil.isBigInteger(remain)) {
             throw new WrongDataException("库存" + remain + "格式错误");
         }
@@ -163,12 +169,12 @@ public class InputGoodPanel extends BaseInputPanel {
         good.setName(name);
     }
 
-    private void setId(Good good) throws WrongDataException {
+    private void setGoodNo(Good good) throws WrongDataException {
         String id = idInputPanel.getItem();
         if (StringUtil.containsBlank(id)) {
             throw new WrongDataException("id" + id + "不能包含空格");
         }
-        good.setId(id);
+        good.setGoodNo(id);
     }
 
 }

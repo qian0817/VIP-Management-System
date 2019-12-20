@@ -1,5 +1,6 @@
-package qianlei.view.panel.component;
+package qianlei.view.component;
 
+import com.alee.extended.image.WebImage;
 import com.alee.laf.text.WebTextField;
 import qianlei.utils.VerifyCodeUtil;
 import qianlei.utils.ViewUtil;
@@ -14,11 +15,12 @@ import java.awt.event.MouseEvent;
  * @author qianlei
  */
 public class VerifyCodePanel extends JPanel {
-    private ImageIcon verifyCode;
     private final WebTextField field = new WebTextField(20);
     private final JLabel imageLabel = new JLabel();
+    private ImageIcon verifyCode;
 
     public VerifyCodePanel() {
+        field.setLeadingComponent(new WebImage(ViewUtil.getSvgIcon("verify_code.svg", ViewUtil.getFontSize(), ViewUtil.getFontSize())));
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         JLabel label = new JLabel("验证码");
         field.setInputPrompt("请输入验证码");
@@ -45,8 +47,8 @@ public class VerifyCodePanel extends JPanel {
      *
      * @return 验证码是否正确
      */
-    public boolean isVerifyCodeWrong() {
-        return !field.getText().equalsIgnoreCase(verifyCode.getDescription());
+    public boolean isVerifyCodeTrue() {
+        return field.getText().equalsIgnoreCase(verifyCode.getDescription());
     }
 
     /**

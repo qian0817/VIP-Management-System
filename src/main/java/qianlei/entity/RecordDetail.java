@@ -10,15 +10,28 @@ import java.util.Objects;
  * @author qianlei
  */
 public class RecordDetail {
-    private String recordId;
-    private String goodId;
+    private Integer id;
+    private String recordNo;
+    private Integer userId;
+    private String goodNo;
     private String goodName;
     private BigDecimal price;
     private Integer number;
 
-    public RecordDetail(String recordId, String goodId, String goodName, BigDecimal price, Integer number) {
-        this.recordId = recordId;
-        this.goodId = goodId;
+    public RecordDetail(Integer id, String recordNo, Integer userId, String goodNo, String goodName, BigDecimal price, Integer number) {
+        this.id = id;
+        this.recordNo = recordNo;
+        this.userId = userId;
+        this.goodNo = goodNo;
+        this.goodName = goodName;
+        this.price = price;
+        this.number = number;
+    }
+
+    public RecordDetail(String recordNo, Integer userId, String goodNo, String goodName, BigDecimal price, Integer number) {
+        this.recordNo = recordNo;
+        this.userId = userId;
+        this.goodNo = goodNo;
         this.goodName = goodName;
         this.price = price;
         this.number = number;
@@ -31,20 +44,36 @@ public class RecordDetail {
         return price.multiply(new BigDecimal(number)).setScale(2, RoundingMode.HALF_UP);
     }
 
-    public String getRecordId() {
-        return recordId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setRecordId(String recordId) {
-        this.recordId = recordId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public String getGoodId() {
-        return goodId;
+    public String getRecordNo() {
+        return recordNo;
     }
 
-    public void setGoodId(String goodId) {
-        this.goodId = goodId;
+    public void setRecordNo(String recordNo) {
+        this.recordNo = recordNo;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public String getGoodNo() {
+        return goodNo;
+    }
+
+    public void setGoodNo(String goodNo) {
+        this.goodNo = goodNo;
     }
 
     public String getGoodName() {
@@ -71,6 +100,7 @@ public class RecordDetail {
         this.number = number;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -80,8 +110,10 @@ public class RecordDetail {
             return false;
         }
         RecordDetail that = (RecordDetail) o;
-        return recordId.equals(that.recordId) &&
-                Objects.equals(goodId, that.goodId) &&
+        return Objects.equals(id, that.id) &&
+                Objects.equals(recordNo, that.recordNo) &&
+                Objects.equals(userId, that.userId) &&
+                Objects.equals(goodNo, that.goodNo) &&
                 Objects.equals(goodName, that.goodName) &&
                 Objects.equals(price, that.price) &&
                 Objects.equals(number, that.number);
@@ -89,14 +121,16 @@ public class RecordDetail {
 
     @Override
     public int hashCode() {
-        return Objects.hash(recordId, goodId, goodName, price, number);
+        return Objects.hash(id, recordNo, userId, goodNo, goodName, price, number);
     }
 
     @Override
     public String toString() {
         return "RecordDetail{" +
-                "recordId=" + recordId +
-                ", goodId=" + goodId +
+                "id=" + id +
+                ", recordNo='" + recordNo + '\'' +
+                ", userId=" + userId +
+                ", goodNo='" + goodNo + '\'' +
                 ", goodName='" + goodName + '\'' +
                 ", price=" + price +
                 ", number=" + number +

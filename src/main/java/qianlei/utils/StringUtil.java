@@ -69,6 +69,12 @@ public final class StringUtil {
         return BIG_INTEGER_PATTERN.matcher(s).matches();
     }
 
+    /**
+     * 判断字符串是否为邮箱格式
+     *
+     * @param s 需要判断的字符串
+     * @return 是否符合邮箱格式
+     */
     public static boolean isEmailAddress(String s) {
         if (s == null) {
             return false;

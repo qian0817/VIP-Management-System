@@ -1,10 +1,11 @@
 package qianlei.view.panel;
 
+import com.alee.managers.notification.NotificationManager;
 import qianlei.entity.Result;
 import qianlei.entity.Vip;
 import qianlei.exception.WrongDataException;
 import qianlei.service.VipService;
-import qianlei.view.MainFrame;
+import qianlei.view.frame.MainFrame;
 import qianlei.view.panel.detail.InputVipPanel;
 
 import javax.swing.*;
@@ -37,23 +38,17 @@ class UpdateVipPanel extends JPanel {
      * 修改VIP
      */
     private void updateVip() {
-        int a = JOptionPane.showConfirmDialog(UpdateVipPanel.this, "是否修改该VIP");
-        if (a == JOptionPane.YES_OPTION) {
-            Result result;
-            Vip vip;
-            try {
-                vip = inputVipPanel.getVip();
-                vipService.updateVip(vip);
-                result = new Result(true, "修改成功");
-            } catch (WrongDataException e) {
-                result = new Result(true, e.getMessage());
-            }
-            if (result.isSuccess()) {
-                JOptionPane.showMessageDialog(UpdateVipPanel.this, result.getMessage(), "修改成功", JOptionPane.INFORMATION_MESSAGE);
-                changeToShowVipPanel();
-            } else {
-                JOptionPane.showMessageDialog(UpdateVipPanel.this, result.getMessage(), "修改失败", JOptionPane.INFORMATION_MESSAGE);
-            }
+        Result result;
+        Vip vip;
+        try {
+            vip = inputVipPanel.getVip();
+            result = vipService.updateVip(vip);
+        } catch (WrongDataException e) {
+            result = new Result(false, e.getMessage());
+        }
+        NotificationManager.showInnerNotification(result.getMessage());
+        if (result.isSuccess()) {
+            changeToShowVipPanel();
         }
     }
 

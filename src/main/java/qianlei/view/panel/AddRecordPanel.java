@@ -1,11 +1,14 @@
 package qianlei.view.panel;
 
+import com.alee.api.data.Orientation;
+import com.alee.extended.split.WebMultiSplitPane;
+import com.alee.managers.notification.NotificationManager;
 import qianlei.entity.Good;
 import qianlei.entity.Result;
 import qianlei.entity.Vip;
 import qianlei.service.RecordService;
-import qianlei.view.panel.component.InputPanelBase;
-import qianlei.view.panel.component.TablePanel;
+import qianlei.view.component.InputPanelBase;
+import qianlei.view.component.TablePanel;
 import qianlei.view.panel.detail.ShowGoodTableWithSearchBar;
 import qianlei.view.panel.detail.ShowVipTableWithSearchBar;
 
@@ -29,8 +32,8 @@ public class AddRecordPanel extends AbstractCanInitPanel {
     private final JLabel showChooseVipLabel = new JLabel("请选择会员用户", JLabel.CENTER);
     private final JPanel chooseVipPanel = new JPanel(new BorderLayout());
     private final JPanel chooseGoodPanel = new JPanel(new BorderLayout());
-    private final JPanel main = new JPanel(new GridLayout(1, 2));
-    private final JPanel left = new JPanel(new BorderLayout());
+    private final JPanel mainPanel = new JPanel(new GridLayout(1, 2));
+    private final JPanel shopListPanel = new JPanel(new BorderLayout());
     private final String[] columnNames = new String[]{"商品编号", "商品名称", "数量", "总价"};
     private final JButton check = new JButton("提交");
     private final JButton clear = new JButton("清空");
@@ -39,32 +42,52 @@ public class AddRecordPanel extends AbstractCanInitPanel {
     private final JButton addShop = new JButton("添加到购物车");
     private final TablePanel shopListTable = new TablePanel(new Object[][]{}, columnNames);
     private final JLabel shopListLabel = new JLabel("购物车", JLabel.CENTER);
-    private final InputPanelBase inputRecordIdPanel = new InputPanelBase("订单号", "请输入订单号");
     private final JPanel bottomPanel = new JPanel(new BorderLayout());
+    private final WebMultiSplitPane multiSplitPane = new WebMultiSplitPane(Orientation.vertical);
+    private final JPanel topPanel = new JPanel(new BorderLayout());
+    private final InputPanelBase inputRecordIdPanel = new InputPanelBase("订单号", "请输入订单号", 0);
+    private final JButton createRandomRecordIdButton = new JButton("随机生成订单号");
 
     AddRecordPanel() {
+        multiSplitPane.add(chooseVipPanel, shopListPanel);
         initView();
         check.addActionListener((e) -> addRecord());
         showVipTableWithSearchBar.addMouseListener(new MouseAdapter() {
             @Override
+            public void mouseReleased(MouseEvent e) {
+                showChooseVipLabel.setText("当前选择的会员卡号:" + showVipTableWithSearchBar.getSelectedVip().getVipNo());
+            }
+
+            @Override
             public void mouseClicked(MouseEvent e) {
-                showChooseVipLabel.setText("当前选择的会员卡号:" + showVipTableWithSearchBar.getSelectedVip().getId());
+                showChooseVipLabel.setText("当前选择的会员卡号:" + showVipTableWithSearchBar.getSelectedVip().getVipNo());
             }
         });
         addShop.addActionListener((e) -> addGoodList());
         clear.addActionListener((e) -> clearShopList());
         delete.addActionListener((e) -> deleteSelectGood());
+        createRandomRecordIdButton.addActionListener((e) -> createRandomRecordId());
     }
 
+    private void createRandomRecordId() {
+        String recordId = recordService.createRandomRecordId();
+        inputRecordIdPanel.setItem(recordId);
+    }
+
+    /**
+     * 从购物车中删除选中的商品
+     */
     private void deleteSelectGood() {
         Object[] objects = shopListTable.getSelectedObject();
-        for (Map.Entry<Good, Integer> entry : shopMap.entrySet()) {
-            if (entry.getKey().getId().equals(objects[0])) {
-                shopMap.remove(entry.getKey());
-                break;
+        if (objects != null) {
+            for (Map.Entry<Good, Integer> entry : shopMap.entrySet()) {
+                if (entry.getKey().getGoodNo().equals(objects[0])) {
+                    shopMap.remove(entry.getKey());
+                    break;
+                }
             }
+            changeShopList();
         }
-        changeShopList();
     }
 
     /**
@@ -81,20 +104,14 @@ public class AddRecordPanel extends AbstractCanInitPanel {
     private void addRecord() {
         Vip vip = showVipTableWithSearchBar.getSelectedVip();
         if (vip == null) {
-            JOptionPane.showMessageDialog(AddRecordPanel.this, "没有选择会员用户", "添加失败", JOptionPane.INFORMATION_MESSAGE);
+            NotificationManager.showInnerNotification("没有选择会员用户");
             return;
         }
         String recordId = inputRecordIdPanel.getItem();
-
-        int a = JOptionPane.showConfirmDialog(AddRecordPanel.this, "是否添加该记录");
-        if (a == JOptionPane.YES_OPTION) {
-            Result result = recordService.addRecord(shopMap, vip.getId(), recordId);
-            if (result.isSuccess()) {
-                JOptionPane.showMessageDialog(AddRecordPanel.this, result.getMessage(), "添加成功", JOptionPane.INFORMATION_MESSAGE);
-                initView();
-            } else {
-                JOptionPane.showMessageDialog(AddRecordPanel.this, result.getMessage(), "添加失败", JOptionPane.INFORMATION_MESSAGE);
-            }
+        Result result = recordService.addRecord(shopMap, vip.getVipNo(), recordId);
+        NotificationManager.showInnerNotification(result.getMessage());
+        if (result.isSuccess()) {
+            initView();
         }
     }
 
@@ -120,7 +137,7 @@ public class AddRecordPanel extends AbstractCanInitPanel {
         BigDecimal price = BigDecimal.ZERO;
         for (Map.Entry<Good, Integer> entry : shopMap.entrySet()) {
             BigDecimal curPrice = entry.getKey().getRealPrice().multiply(new BigDecimal(entry.getValue()));
-            shopList[i][0] = entry.getKey().getId();
+            shopList[i][0] = entry.getKey().getGoodNo();
             shopList[i][1] = entry.getKey().getName();
             shopList[i][2] = entry.getValue();
             shopList[i][3] = curPrice;
@@ -133,14 +150,12 @@ public class AddRecordPanel extends AbstractCanInitPanel {
 
     @Override
     public void initView() {
-        SwingUtilities.invokeLater(() -> {
-            clearShopList();
-            removeAll();
-            initComponentData();
-            addComponent();
-            repaint();
-            setVisible(true);
-        });
+        clearShopList();
+        removeAll();
+        initComponentData();
+        addComponent();
+        repaint();
+        setVisible(true);
     }
 
     /**
@@ -151,6 +166,7 @@ public class AddRecordPanel extends AbstractCanInitPanel {
         showGoodTableWithSearchBar.initView();
         showChooseVipLabel.setText("请选择会员用户");
         shopListTable.init(new Object[][]{}, columnNames);
+        inputRecordIdPanel.setItem("");
     }
 
     /**
@@ -162,10 +178,9 @@ public class AddRecordPanel extends AbstractCanInitPanel {
         bottomPanel.add(clear, BorderLayout.WEST);
         bottomPanel.add(delete, BorderLayout.EAST);
 
-        left.setLayout(new BorderLayout());
-        left.add(chooseVipPanel, BorderLayout.NORTH);
-        left.add(shopListTable);
-        left.add(bottomPanel, BorderLayout.SOUTH);
+        shopListPanel.add(shopListLabel, BorderLayout.NORTH);
+        shopListPanel.add(shopListTable);
+        shopListPanel.add(bottomPanel, BorderLayout.SOUTH);
 
         chooseGoodPanel.add(showGoodTableWithSearchBar);
         chooseGoodPanel.add(addShop, BorderLayout.SOUTH);
@@ -174,9 +189,12 @@ public class AddRecordPanel extends AbstractCanInitPanel {
         chooseVipPanel.add(showVipTableWithSearchBar);
         chooseVipPanel.add(shopListLabel, BorderLayout.SOUTH);
 
-        main.add(left);
-        main.add(chooseGoodPanel);
-        add(inputRecordIdPanel, BorderLayout.NORTH);
-        add(main);
+        topPanel.add(inputRecordIdPanel);
+        topPanel.add(createRandomRecordIdButton, BorderLayout.EAST);
+
+        mainPanel.add(multiSplitPane);
+        mainPanel.add(chooseGoodPanel);
+        add(topPanel, BorderLayout.NORTH);
+        add(mainPanel);
     }
 }

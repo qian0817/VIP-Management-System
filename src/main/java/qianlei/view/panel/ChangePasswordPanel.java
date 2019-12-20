@@ -1,6 +1,7 @@
 package qianlei.view.panel;
 
 import com.alee.laf.button.WebButton;
+import com.alee.managers.notification.NotificationManager;
 import qianlei.entity.Result;
 import qianlei.entity.User;
 import qianlei.exception.WrongDataException;
@@ -18,13 +19,14 @@ import java.awt.*;
 public class ChangePasswordPanel extends AbstractCanInitPanel {
     private final UserService userService = new UserService();
     private final InputChangeUserPanel inputChangeUserPanel = new InputChangeUserPanel();
-    private final WebButton check = new WebButton("确认");
-    private final JPanel button = new JPanel(new FlowLayout());
 
     ChangePasswordPanel() {
+        final JPanel button = new JPanel(new FlowLayout());
+        final WebButton check = new WebButton("确认");
+
         //添加组件
         inputChangeUserPanel.setEditable(0, false);
-        inputChangeUserPanel.init(userService.getCurUser().getUsername());
+        inputChangeUserPanel.init(UserService.getCurUser().getUsername());
         button.add(check);
         setLayout(new BorderLayout());
         add(inputChangeUserPanel);
@@ -41,16 +43,13 @@ public class ChangePasswordPanel extends AbstractCanInitPanel {
         Result result;
         try {
             User user = inputChangeUserPanel.getUser();
-            userService.changePassword(user);
-            result = new Result(true, "添加成功");
+            result = userService.changePassword(user);
         } catch (WrongDataException e) {
             result = new Result(false, e.getMessage());
         }
+        NotificationManager.showInnerNotification(result.getMessage());
         if (result.isSuccess()) {
-            JOptionPane.showMessageDialog(ChangePasswordPanel.this, "修改密码成功", "修改密码成功", JOptionPane.INFORMATION_MESSAGE);
             initView();
-        } else {
-            JOptionPane.showMessageDialog(ChangePasswordPanel.this, result.getMessage(), "修改密码失败", JOptionPane.INFORMATION_MESSAGE);
         }
         inputChangeUserPanel.changeVerifyCode();
     }
@@ -58,7 +57,7 @@ public class ChangePasswordPanel extends AbstractCanInitPanel {
     @Override
     public void initView() {
         SwingUtilities.invokeLater(() -> {
-            inputChangeUserPanel.init(userService.getCurUser().getUsername());
+            inputChangeUserPanel.init(UserService.getCurUser().getUsername());
             inputChangeUserPanel.setItem(1, "");
             inputChangeUserPanel.setItem(2, "");
         });

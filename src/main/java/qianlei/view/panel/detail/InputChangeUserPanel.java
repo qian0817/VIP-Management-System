@@ -3,9 +3,9 @@ package qianlei.view.panel.detail;
 import qianlei.entity.User;
 import qianlei.exception.WrongDataException;
 import qianlei.utils.StringUtil;
-import qianlei.view.panel.component.InputPanelBase;
-import qianlei.view.panel.component.PasswordPanelBase;
-import qianlei.view.panel.component.VerifyCodePanel;
+import qianlei.view.component.InputPanelBase;
+import qianlei.view.component.PasswordPanelBase;
+import qianlei.view.component.VerifyCodePanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,9 +16,9 @@ import java.awt.*;
  * @author qianlei
  */
 public class InputChangeUserPanel extends BaseInputPanel {
-    private final InputPanelBase usernameInputPanel = new InputPanelBase("用户名", "请输入商品编号");
-    private final PasswordPanelBase passwordInputPanel = new PasswordPanelBase("密码", "请输入密码");
-    private final PasswordPanelBase checkPasswordInputPanel = new PasswordPanelBase("确认密码", "请重复密码");
+    private final InputPanelBase usernameInputPanel = new InputPanelBase("用户名", "请输入用户名", "username.svg");
+    private final PasswordPanelBase passwordInputPanel = new PasswordPanelBase("密码", "密码只能由字母数字和下划线构成,长度为6-16位", "password.svg");
+    private final PasswordPanelBase checkPasswordInputPanel = new PasswordPanelBase("重复密码", "请重复密码", "check_password.svg");
     private final VerifyCodePanel verifyCodePanel = new VerifyCodePanel();
 
     public InputChangeUserPanel() {
@@ -63,32 +63,24 @@ public class InputChangeUserPanel extends BaseInputPanel {
      * @ 填写的信息错误
      */
     public User getUser() throws WrongDataException {
-        if (verifyCodePanel.isVerifyCodeWrong()) {
+        if (!verifyCodePanel.isVerifyCodeTrue()) {
             throw new WrongDataException("验证码错误");
         }
-        User user = new User();
-        setName(user);
-        setPassword(user);
-        return user;
-    }
 
-    private void setPassword(User user) throws WrongDataException {
-        String password = get(1);
-        String remarkPassword = get(2);
+        String name = usernameInputPanel.getItem();
+        if (StringUtil.containsBlank(name)) {
+            throw new WrongDataException("用户名中不能有空格");
+        }
+        String password = passwordInputPanel.getItem();
+        String remarkPassword = checkPasswordInputPanel.getItem();
         if (!StringUtil.isPassword(password)) {
             throw new WrongDataException("密码格式错误，只能由字母数字和下划线构成,长度为6-16位");
         }
         if (password != null && !password.equals(remarkPassword)) {
             throw new WrongDataException("两次输入密码不一致");
         }
-        user.setPassword(password);
-    }
-
-    private void setName(User user) throws WrongDataException {
-        String name = get(0);
-        if (StringUtil.containsBlank(name)) {
-            throw new WrongDataException("用户名中不能有空格");
-        }
+        User user = new User();
         user.setUsername(name);
+        return new User(name, password);
     }
 }

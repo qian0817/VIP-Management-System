@@ -1,4 +1,6 @@
-package qianlei.view.panel.component;
+package qianlei.view.component;
+
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
@@ -20,7 +22,7 @@ public abstract class BaseComponentPanel extends JPanel {
      *
      * @param s 需要设置的值
      */
-    public abstract void setItem(String s);
+    public abstract void setItem(@Nullable String s);
 
     /**
      * 设置是否可修改

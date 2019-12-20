@@ -1,11 +1,10 @@
 package qianlei.service;
 
+import org.jetbrains.annotations.NotNull;
 import qianlei.dao.GoodDao;
 import qianlei.entity.Good;
-import qianlei.enums.StatusEnum;
-import qianlei.exception.WrongDataException;
+import qianlei.entity.Result;
 
-import javax.swing.*;
 import java.util.List;
 
 /**
@@ -20,29 +19,16 @@ public class GoodService {
      * 添加商品
      *
      * @param good 商品
+     * @return 添加商品的结果
      */
-    public void addGood(Good good) throws WrongDataException {
-        boolean isAdd = true;
-        Good existGood = goodDao.selectGoodById(good.getId());
+    public Result addGood(@NotNull Good good) {
+        Good existGood = goodDao.selectGoodByNo(good.getGoodNo(), UserService.getCurUser().getId());
         if (existGood != null) {
-            if (existGood.getStatus() == StatusEnum.NORMAL) {
-                throw new WrongDataException("id 为" + good.getId() + "的商品已经录入");
-            } else {
-                int choose = JOptionPane.showConfirmDialog(null, "id 为" + good.getId() +
-                        "的商品已经删除,是否覆盖该被删除数据(注:可能会导致商品消费记录查询到错误的结果)");
-                if (choose != JOptionPane.YES_OPTION) {
-                    throw new WrongDataException("未添加数据");
-                } else {
-                    isAdd = false;
-                }
-            }
+            return new Result(false, "编号为" + good.getGoodNo() + "的商品已经录入");
         }
-        good.setStatus(StatusEnum.NORMAL);
-        if (isAdd) {
-            goodDao.addGood(good);
-        } else {
-            goodDao.updateGood(good);
-        }
+        good.setUserId(UserService.getCurUser().getId());
+        goodDao.addGood(good);
+        return new Result(true, "添加商品成功");
     }
 
     /**
@@ -52,27 +38,29 @@ public class GoodService {
      * @param name 商品名称
      * @return 符合条件的商品
      */
-    public List<Good> getAllNormalGoodByIdAndName(String id, String name) {
-        return goodDao.selectAllNormalGoodByIdAndName(id, name);
+    public List<Good> selectAllNormalGoodByNoAndName(String id, String name) {
+        return goodDao.selectAllNormalGoodByNoAndName(id, name, UserService.getCurUser().getId());
     }
 
     /**
-     * 根据id选择商品
+     * 根据商品编号选择商品
      *
-     * @param id id
+     * @param goodNo 商品编号
      * @return 该id的商品
      */
-    public Good getGoodById(String id) {
-        return goodDao.selectGoodById(id);
+    public Good getGoodByGoodNo(String goodNo) {
+        return goodDao.selectGoodByGoodNo(goodNo, UserService.getCurUser().getId());
     }
 
     /**
-     * 删除指定id的商品
+     * 删除指定的商品
      *
-     * @param id id
+     * @param good 需要删除的商品
      */
-    public void deleteGoodById(String id) {
-        goodDao.deleteById(id);
+    public Result deleteGood(@NotNull Good good) {
+        good.setUserId(UserService.getCurUser().getId());
+        goodDao.deleteById(good);
+        return new Result(true, "删除商品成功");
     }
 
     /**
@@ -80,8 +68,9 @@ public class GoodService {
      *
      * @param good 需要修改的商品
      */
-    public void updateGood(Good good) {
-        good.setStatus(StatusEnum.NORMAL);
+    public Result updateGood(@NotNull Good good) {
+        good.setUserId(UserService.getCurUser().getId());
         goodDao.updateGood(good);
+        return new Result(true, "修改商品信息成功");
     }
 }

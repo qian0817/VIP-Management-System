@@ -1,6 +1,7 @@
-package qianlei.view.panel.component;
+package qianlei.view.component;
 
 import com.alee.laf.combobox.WebComboBox;
+import org.jetbrains.annotations.Nullable;
 import qianlei.utils.ViewUtil;
 
 import javax.swing.*;
@@ -39,7 +40,7 @@ public class ComboPanelBase extends BaseComponentPanel {
     }
 
     @Override
-    public void setItem(String s) {
+    public void setItem(@Nullable String s) {
         if (s != null) {
             webComboBox.setSelectedItem(s);
         } else {

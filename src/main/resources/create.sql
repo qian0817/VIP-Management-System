@@ -1,48 +1,57 @@
 CREATE TABLE IF NOT EXISTS user
 (
-    username VARCHAR(20) NOT NULL,
-    password VARCHAR(20) NOT NULL
+    id       INTEGER PRIMARY KEY,
+    username VARCHAR(20),
+    password VARCHAR(20)
 );
 
 CREATE TABLE IF NOT EXISTS vip
 (
-    id         VARCHAR(20) NOT NULL PRIMARY KEY,
-    name       VARCHAR(20) NOT NULL,
+    id         INTEGER PRIMARY KEY,
+    userId     INTEGER,
+    vipNo      VARCHAR(20),
+    name       VARCHAR(20),
     sex        CHAR(1),
     phone      VARCHAR(20),
     address    VARCHAR(100),
     email      VARCHAR(30),
-    createTime DATE        NOT NULL,
-    status     INT         NOT NULL DEFAULT 0
+    createTime DATE
 );
 
 CREATE TABLE IF NOT EXISTS good
 (
-    id           VARCHAR(20) NOT NULL PRIMARY KEY,
-    name         VARCHAR(20) NOT NULL,
+    id           INTEGER PRIMARY KEY,
+    userId       INTEGER,
+    goodNo       VARCHAR(20),
+    name         VARCHAR(20),
     maker        VARCHAR(20),
-    createTime   DATE        NOT NULL,
-    price        DECIMAL     NOT NULL,
-    discount     DOUBLE,
-    remain       LONG        NOT NULL DEFAULT 0,
+    createTime   DATE,
+    price        DECIMAL,
+    discount     DECIMAL,
+    remain       LONG,
     introduction TEXT,
-    remarks      TEXT,
-    status       INT         NOT NULL DEFAULT 0
+    remarks      TEXT
 );
 
 CREATE TABLE IF NOT EXISTS record
 (
-    id         VARCHAR(20) NOT NULL PRIMARY KEY,
-    vipId      VARCHAR(20) NOT NULL,
-    createTime DATE        NOT NULL,
-    price      DECIMAL     NOT NULL
+    id         INTEGER PRIMARY KEY,
+    userId     INTEGER,
+    recordNo   VARCHAR(20),
+    vipId      VARCHAR(20),
+    vipName    VARCHAR(20),
+    vipPhone   VARCHAR(20),
+    createTime DATE,
+    price      DECIMAL
 );
 
 CREATE TABLE IF NOT EXISTS record_detail
 (
-    recordId VARCHAR(20) NOT NULL,
-    goodId   VARCHAR(20) NOT NULL,
-    goodName VARCHAR(20) NOT NULL,
-    price    DECIMAL     NOT NULL,
-    number   INTEGER     NOT NULL
+    id       INTEGER PRIMARY KEY,
+    userId   INTEGER,
+    recordNo VARCHAR(20),
+    goodNo   VARCHAR(20),
+    goodName VARCHAR(20),
+    price    DECIMAL,
+    number   INTEGER
 )

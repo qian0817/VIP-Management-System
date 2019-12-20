@@ -1,6 +1,7 @@
-package qianlei.view.panel.component;
+package qianlei.view.component;
 
 import com.alee.laf.table.WebTable;
+import com.alee.managers.style.StyleId;
 import qianlei.utils.ViewUtil;
 
 import javax.swing.*;
@@ -15,7 +16,7 @@ import java.util.Enumeration;
  * @author qianlei
  */
 public class TablePanel extends JPanel {
-    private final WebTable table = new WebTable();
+    private final WebTable table = new WebTable(StyleId.tableNonOpaque);
     private Object[][] data;
 
     public TablePanel(Object[][] data, Object[] columnNames) {
@@ -56,6 +57,7 @@ public class TablePanel extends JPanel {
     private void fitTableColumns(JTable myTable) {
         JTableHeader header = myTable.getTableHeader();
         int rowCount = myTable.getRowCount();
+        @SuppressWarnings("rawtypes")
         Enumeration columns = myTable.getColumnModel().getColumns();
         while (columns.hasMoreElements()) {
             TableColumn column = (TableColumn) columns.nextElement();
@@ -83,6 +85,15 @@ public class TablePanel extends JPanel {
             return null;
         }
         return data[table.getSelectedRow()];
+    }
+
+    /**
+     * 获取选中的行
+     *
+     * @return 选中的行
+     */
+    public int getSelectedRow() {
+        return table.getSelectedRow();
     }
 
     @Override

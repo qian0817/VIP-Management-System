@@ -1,5 +1,7 @@
 package qianlei.utils;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -17,6 +19,7 @@ public final class DateUtil {
         return DATE_FORMAT.parse(s);
     }
 
+    @NotNull
     public static String transferToString(Date date) {
         return DATE_FORMAT.format(date);
     }

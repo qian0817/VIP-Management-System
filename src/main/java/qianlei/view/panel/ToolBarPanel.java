@@ -2,17 +2,13 @@ package qianlei.view.panel;
 
 import com.alee.laf.button.WebButton;
 import com.alee.managers.style.StyleId;
-import qianlei.utils.Log;
+import org.jetbrains.annotations.NotNull;
 import qianlei.utils.ViewUtil;
-import qianlei.view.LoginFrame;
-import qianlei.view.MainFrame;
+import qianlei.view.frame.LoginFrame;
+import qianlei.view.frame.MainFrame;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.*;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Objects;
 
 /**
  * 选择功能界面
@@ -21,15 +17,15 @@ import java.util.Objects;
  */
 public class ToolBarPanel extends JPanel {
     private final MainFrame parent;
-    private final MenuButton addGoodButton = new MenuButton("商品信息录入", "icon/add_good.svg");
-    private final MenuButton showGoodButton = new MenuButton("商品信息查询", "icon/show_good.svg");
-    private final MenuButton addVipButton = new MenuButton("会员信息录入", "icon/add_vip.svg");
-    private final MenuButton showVipButton = new MenuButton("会员信息查询", "icon/show_vip.svg");
-    private final MenuButton addRecordButton = new MenuButton("消费记录登记", "icon/add_record.svg");
-    private final MenuButton showRecordButton = new MenuButton("消费记录查询", "icon/show_record.svg");
-    private final MenuButton changePasswordButton = new MenuButton("修改密码", "icon/password.svg");
-    private final MenuButton helpButton = new MenuButton("系统帮助", "icon/help.svg");
-    private final MenuButton quitButton = new MenuButton("退出登录", "icon/quit.svg");
+    private final MenuButton addGoodButton = new MenuButton("商品信息录入", "add_good.svg");
+    private final MenuButton showGoodButton = new MenuButton("商品信息查询", "show_good.svg");
+    private final MenuButton addVipButton = new MenuButton("会员信息录入", "add_vip.svg");
+    private final MenuButton showVipButton = new MenuButton("会员信息查询", "show_vip.svg");
+    private final MenuButton addRecordButton = new MenuButton("消费记录登记", "add_record.svg");
+    private final MenuButton showRecordButton = new MenuButton("消费记录查询", "show_record.svg");
+    private final MenuButton changePasswordButton = new MenuButton("修改密码", "change_password.svg");
+    private final MenuButton helpButton = new MenuButton("系统帮助", "help.svg");
+    private final MenuButton quitButton = new MenuButton("退出登录", "quit.svg");
 
     public ToolBarPanel(MainFrame parent) {
         this.parent = parent;
@@ -38,38 +34,7 @@ public class ToolBarPanel extends JPanel {
         changeDetailPanel(addGoodButton, new AddGoodPanel());
     }
 
-    /**
-     * 打开帮助网页
-     */
-    private static void openHelpHtml() {
-        SwingUtilities.invokeLater(() -> {
-            File file = new File("help.html");
-            if (!file.exists()) {
-                try (
-                        InputStream html = ViewUtil.class.getClassLoader().getResourceAsStream("help.html");
-                        BufferedInputStream inputStream = new BufferedInputStream(Objects.requireNonNull(html));
-                        BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(file, false))
-                ) {
-                    int onceGetBytes = 1024;
-                    byte[] bytes = new byte[onceGetBytes];
-                    int count;
-                    while ((count = inputStream.read(bytes, 0, onceGetBytes)) != -1) {
-                        outputStream.write(bytes, 0, count);
-                    }
-                } catch (IOException ex) {
-                    Log.error(Thread.currentThread(), ex);
-                }
-            }
-            try {
-                URI uri = new URI("help.html");
-                Desktop.getDesktop().browse(uri);
-            } catch (IOException | URISyntaxException e) {
-                Log.error(Thread.currentThread(), e);
-            }
-        });
-    }
-
-    private void changeDetailPanel(MenuButton button, AbstractCanInitPanel panel) {
+    private void changeDetailPanel(@NotNull MenuButton button, @NotNull AbstractCanInitPanel panel) {
         parent.setTitle(button.getName());
         panel.initView();
         parent.changeDetailPanel(panel);
@@ -106,7 +71,7 @@ public class ToolBarPanel extends JPanel {
         addRecordButton.addActionListener(e -> changeDetailPanel(addRecordButton, new AddRecordPanel()));
         showRecordButton.addActionListener(e -> changeDetailPanel(showRecordButton, new ShowRecordPanel()));
         changePasswordButton.addActionListener(e -> changeDetailPanel(changePasswordButton, new ChangePasswordPanel()));
-        helpButton.addActionListener(e -> openHelpHtml());
+        helpButton.addActionListener(e -> changeDetailPanel(helpButton, new HelpPanel()));
         quitButton.addActionListener(e -> {
             parent.dispose();
             new LoginFrame().setVisible(true);

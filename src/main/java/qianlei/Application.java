@@ -1,9 +1,10 @@
 package qianlei;
 
 import com.alee.laf.WebLookAndFeel;
+import com.alee.skin.light.WebLightSkin;
 import qianlei.utils.DaoUtil;
 import qianlei.utils.ViewUtil;
-import qianlei.view.LoginFrame;
+import qianlei.view.frame.LoginFrame;
 
 import javax.swing.*;
 
@@ -15,13 +16,11 @@ import javax.swing.*;
 public class Application {
     public static void main(String[] args) {
         Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
-        WebLookAndFeel.setForceSingleEventsThread(true);
-        SwingUtilities.invokeLater(() -> {
-            WebLookAndFeel.install();
-            new LoginFrame().setVisible(true);
-        });
         DaoUtil.init("main");
         ViewUtil.loadFont("config.json");
+        SwingUtilities.invokeLater(() -> {
+            WebLookAndFeel.install(WebLightSkin.class);
+            new LoginFrame().setVisible(true);
+        });
     }
-
 }

@@ -11,9 +11,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class UserDaoTest {
     private UserDao userDao = new UserDao();
-
     @BeforeAll
     static void start() {
+        TestHelper.deleteTestDb();
         DaoUtil.init("test");
     }
 

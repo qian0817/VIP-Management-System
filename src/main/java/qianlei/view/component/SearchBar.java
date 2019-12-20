@@ -1,6 +1,7 @@
-package qianlei.view.panel.component;
+package qianlei.view.component;
 
 import com.alee.laf.button.WebButton;
+import org.jetbrains.annotations.NotNull;
 import qianlei.utils.ViewUtil;
 
 import javax.swing.*;
@@ -17,11 +18,11 @@ import java.util.Map;
  */
 public class SearchBar extends JPanel {
     private final Map<String, InputPanelBase> map = new HashMap<>();
-    private final WebButton searchButton = new WebButton("搜索", ViewUtil.getSvgIcon("icon/search.svg", ViewUtil.getCurConfig().getFont().getSize(), ViewUtil.getCurConfig().getFont().getSize()));
+    private final WebButton searchButton = new WebButton("搜索", ViewUtil.getSvgIcon("search.svg", ViewUtil.getCurConfig().getFont().getSize(), ViewUtil.getCurConfig().getFont().getSize()));
 
-    public SearchBar(List<String> items) {
+    public SearchBar(@NotNull List<String> items) {
         for (String item : items) {
-            map.put(item, new InputPanelBase(item, "请输入" + item, 0));
+            map.put(item, new InputPanelBase(item, "", 0));
         }
         setLayout(new GridLayout(1, map.size() + 1));
         for (String item : items) {

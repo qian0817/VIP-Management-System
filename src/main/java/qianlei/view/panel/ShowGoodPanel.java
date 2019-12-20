@@ -1,8 +1,10 @@
 package qianlei.view.panel;
 
+import com.alee.managers.notification.NotificationManager;
 import qianlei.entity.Good;
+import qianlei.entity.Result;
 import qianlei.service.GoodService;
-import qianlei.view.MainFrame;
+import qianlei.view.frame.MainFrame;
 import qianlei.view.panel.detail.ShowGoodTableWithSearchBar;
 
 import javax.swing.*;
@@ -15,12 +17,14 @@ import java.awt.*;
  */
 class ShowGoodPanel extends AbstractCanInitPanel {
     private final ShowGoodTableWithSearchBar showGoodTable = new ShowGoodTableWithSearchBar();
-    private final JPanel bottomPanel = new JPanel();
-    private final JButton updateButton = new JButton("修改");
-    private final JButton deleteButton = new JButton("删除");
     private final GoodService goodService = new GoodService();
     private final MainFrame parent;
+
     ShowGoodPanel(MainFrame parent) {
+        final JPanel bottomPanel = new JPanel();
+        final JButton updateButton = new JButton("修改");
+        final JButton deleteButton = new JButton("删除");
+
         this.parent = parent;
         setLayout(new BorderLayout());
         bottomPanel.add(updateButton);
@@ -41,11 +45,11 @@ class ShowGoodPanel extends AbstractCanInitPanel {
             removeAll();
             parent.setTitle("商品信息修改");
             //切换修改商品界面
-            add(new UpdateGoodPanel(good.getId(), parent));
+            add(new UpdateGoodPanel(good.getGoodNo(), parent));
             repaint();
             setVisible(true);
         } else {
-            JOptionPane.showMessageDialog(ShowGoodPanel.this, "请选择需要修改的商品");
+            NotificationManager.showInnerNotification("请选择需要修改的商品");
         }
     }
 
@@ -56,13 +60,13 @@ class ShowGoodPanel extends AbstractCanInitPanel {
         Good good = showGoodTable.getSelectedGood();
         //判断有无商品选中
         if (good != null) {
-            int a = JOptionPane.showConfirmDialog(ShowGoodPanel.this, "是否删除该商品");
-            if (a == JOptionPane.YES_OPTION) {
-                goodService.deleteGoodById(good.getId());
+            Result result = goodService.deleteGood(good);
+            NotificationManager.showInnerNotification(result.getMessage());
+            if (result.isSuccess()) {
                 showGoodTable.initView();
             }
         } else {
-            JOptionPane.showMessageDialog(ShowGoodPanel.this, "请选择需要删除的商品");
+            NotificationManager.showInnerNotification("请选择需要删除的商品");
         }
     }
 

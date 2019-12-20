@@ -3,8 +3,8 @@ package qianlei.view.panel.detail;
 import qianlei.entity.User;
 import qianlei.exception.WrongDataException;
 import qianlei.utils.StringUtil;
-import qianlei.view.panel.component.InputPanelBase;
-import qianlei.view.panel.component.PasswordPanelBase;
+import qianlei.view.component.InputPanelBase;
+import qianlei.view.component.PasswordPanelBase;
 
 import java.awt.*;
 
@@ -14,8 +14,8 @@ import java.awt.*;
  * @author qianlei
  */
 public class InputUserPanel extends BaseInputPanel {
-    private final InputPanelBase usernameInputPanel = new InputPanelBase("用户名", "请输入用户名");
-    private final PasswordPanelBase passwordInputPanel = new PasswordPanelBase("密码", "请输入密码");
+    private final InputPanelBase usernameInputPanel = new InputPanelBase("用户名", "请输入用户名", "username.svg");
+    private final PasswordPanelBase passwordInputPanel = new PasswordPanelBase("密码", "请输入密码", "password.svg");
 
     public InputUserPanel() {
         panels.add(usernameInputPanel);

@@ -1,6 +1,8 @@
-package qianlei.view;
+package qianlei.view.frame;
 
 import com.alee.laf.button.WebButton;
+import com.alee.laf.window.WebFrame;
+import com.alee.managers.style.StyleId;
 import qianlei.entity.Result;
 import qianlei.entity.User;
 import qianlei.exception.WrongDataException;
@@ -16,15 +18,16 @@ import java.awt.*;
  *
  * @author qianlei
  */
-class RegisterFrame extends JFrame {
+class RegisterFrame extends WebFrame<RegisterFrame> {
     private final UserService userService = new UserService();
     private final InputChangeUserPanel inputChangeUserPanel = new InputChangeUserPanel();
     private final JPanel registerPanel = new JPanel();
     private final WebButton registerButton = new WebButton("注册");
 
     RegisterFrame() {
-        setIconImage(ViewUtil.getSvgIcon("icon/icon.svg").asBufferedImage());
-        setTitle("注册界面");
+        super(StyleId.frameDecorated);
+        setResizable(false);
+        setIconImage(ViewUtil.getSvgIcon("icon.svg").asBufferedImage());
         addAction();
         addComponent();
         pack();
@@ -36,26 +39,21 @@ class RegisterFrame extends JFrame {
      */
     private void addAction() {
         registerButton.addActionListener((e) -> {
-            Result result = submit();
+            Result result;
+            try {
+                User user = inputChangeUserPanel.getUser();
+                result = userService.register(user);
+            } catch (WrongDataException ex) {
+                result = new Result(false, ex.getMessage());
+            }
+            JOptionPane.showMessageDialog(RegisterFrame.this, result.getMessage());
             if (result.isSuccess()) {
-                SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(RegisterFrame.this, "注册成功", "注册成功", JOptionPane.INFORMATION_MESSAGE));
                 RegisterFrame.this.dispose();
             } else {
                 inputChangeUserPanel.changeVerifyCode();
-                JOptionPane.showMessageDialog(RegisterFrame.this, result.getMessage(), "注册失败", JOptionPane.INFORMATION_MESSAGE);
             }
         });
         registerButton.addHotkey(10);
-    }
-
-    private Result submit() {
-        try {
-            User user = inputChangeUserPanel.getUser();
-            userService.register(user);
-            return new Result(true, "登陆成功");
-        } catch (WrongDataException e) {
-            return new Result(false, e.getMessage());
-        }
     }
 
     /**

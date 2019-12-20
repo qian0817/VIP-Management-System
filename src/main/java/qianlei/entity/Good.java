@@ -1,7 +1,5 @@
 package qianlei.entity;
 
-import qianlei.enums.StatusEnum;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Date;
@@ -13,7 +11,9 @@ import java.util.Objects;
  * @author qianlei
  */
 public class Good {
-    private String id;
+    private Integer id;
+    private Integer userId;
+    private String goodNo;
     private String name;
     private String maker;
     private Date createTime;
@@ -22,115 +22,139 @@ public class Good {
     private long remain;
     private String introduction;
     private String remarks;
-    private StatusEnum status;
 
     public Good() {
-        id = "";
-        name = "";
-        maker = "";
-        createTime = new Date();
-        price = BigDecimal.ZERO;
-        discount = BigDecimal.ONE;
-        remain = 0;
-        introduction = "";
-        remarks = "";
+
     }
 
-    public Good(String id, String name, String maker, Date createTime, BigDecimal price, BigDecimal discount, long remain, String introduction, String remarks, StatusEnum status) {
-        this.id = id;
+    public Good(Integer userId, String goodNo, String name, String maker, Date createTime, BigDecimal price, BigDecimal discount, long remain, String introduction, String remarks) {
+        this.userId = userId;
+        this.goodNo = goodNo;
         this.name = name;
         this.maker = maker;
-        this.createTime = new Date(createTime.getTime());
+        this.createTime = createTime;
         this.price = price;
         this.discount = discount;
         this.remain = remain;
         this.introduction = introduction;
         this.remarks = remarks;
-        this.status = status;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
+    public Good(Integer id, Integer userId, String goodNo, String name, String maker, Date createTime, BigDecimal price, BigDecimal discount, long remain, String introduction, String remarks) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
+        this.userId = userId;
+        this.goodNo = goodNo;
         this.name = name;
-    }
-
-    public String getMaker() {
-        return maker;
-    }
-
-    public void setMaker(String maker) {
         this.maker = maker;
-    }
-
-    public Date getCreateTime() {
-        return new Date(createTime.getTime());
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = new Date(createTime.getTime());
-    }
-
-    public BigDecimal getPrice() {
-        return price;
+        this.createTime = createTime;
+        this.price = price;
+        this.discount = discount;
+        this.remain = remain;
+        this.introduction = introduction;
+        this.remarks = remarks;
     }
 
     public BigDecimal getRealPrice() {
         return price.multiply(discount).setScale(2, RoundingMode.HALF_UP);
     }
 
-    public void setPrice(BigDecimal price) {
+    public Integer getId() {
+        return id;
+    }
+
+    public Good setId(Integer id) {
+        this.id = id;
+        return this;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public Good setUserId(Integer userId) {
+        this.userId = userId;
+        return this;
+    }
+
+    public String getGoodNo() {
+        return goodNo;
+    }
+
+    public Good setGoodNo(String goodNo) {
+        this.goodNo = goodNo;
+        return this;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Good setName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public String getMaker() {
+        return maker;
+    }
+
+    public Good setMaker(String maker) {
+        this.maker = maker;
+        return this;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public Good setCreateTime(Date createTime) {
+        this.createTime = createTime;
+        return this;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public Good setPrice(BigDecimal price) {
         this.price = price;
+        return this;
     }
 
     public BigDecimal getDiscount() {
         return discount;
     }
 
-    public void setDiscount(BigDecimal discount) {
+    public Good setDiscount(BigDecimal discount) {
         this.discount = discount;
+        return this;
     }
 
     public long getRemain() {
         return remain;
     }
 
-    public void setRemain(long remain) {
+    public Good setRemain(long remain) {
         this.remain = remain;
+        return this;
     }
 
     public String getIntroduction() {
         return introduction;
     }
 
-    public void setIntroduction(String introduction) {
+    public Good setIntroduction(String introduction) {
         this.introduction = introduction;
+        return this;
     }
 
     public String getRemarks() {
         return remarks;
     }
 
-    public void setRemarks(String remarks) {
+    public Good setRemarks(String remarks) {
         this.remarks = remarks;
-    }
-
-    public StatusEnum getStatus() {
-        return status;
-    }
-
-    public void setStatus(StatusEnum status) {
-        this.status = status;
+        return this;
     }
 
     @Override
@@ -142,27 +166,30 @@ public class Good {
             return false;
         }
         Good good = (Good) o;
-        return Objects.equals(discount, good.discount) &&
-                remain == good.remain &&
+        return remain == good.remain &&
                 Objects.equals(id, good.id) &&
+                Objects.equals(goodNo, good.goodNo) &&
+                Objects.equals(userId, good.userId) &&
                 Objects.equals(name, good.name) &&
                 Objects.equals(maker, good.maker) &&
                 Objects.equals(createTime, good.createTime) &&
                 Objects.equals(price, good.price) &&
+                Objects.equals(discount, good.discount) &&
                 Objects.equals(introduction, good.introduction) &&
-                Objects.equals(remarks, good.remarks) &&
-                status == good.status;
+                Objects.equals(remarks, good.remarks);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, maker, createTime, price, discount, remain, introduction, remarks, status);
+        return Objects.hash(id, goodNo, userId, name, maker, createTime, price, discount, remain, introduction, remarks);
     }
 
     @Override
     public String toString() {
         return "Good{" +
-                "id='" + id + '\'' +
+                "id=" + id +
+                ", goodId='" + goodNo + '\'' +
+                ", userId='" + userId + '\'' +
                 ", name='" + name + '\'' +
                 ", maker='" + maker + '\'' +
                 ", createTime=" + createTime +
@@ -171,7 +198,6 @@ public class Good {
                 ", remain=" + remain +
                 ", introduction='" + introduction + '\'' +
                 ", remarks='" + remarks + '\'' +
-                ", status=" + status +
                 '}';
     }
 }

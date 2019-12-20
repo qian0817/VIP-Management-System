@@ -3,8 +3,7 @@ package qianlei.service;
 import org.junit.jupiter.api.*;
 import qianlei.TestHelper;
 import qianlei.entity.Good;
-import qianlei.enums.StatusEnum;
-import qianlei.exception.WrongDataException;
+import qianlei.entity.User;
 import qianlei.utils.DaoUtil;
 
 import java.math.BigDecimal;
@@ -20,6 +19,7 @@ class GoodServiceTest {
     static void start() {
         TestHelper.deleteTestDb();
         DaoUtil.init("test");
+        UserService.setCurUser(new User(1, "test", "123456"));
     }
 
     @AfterAll
@@ -30,37 +30,42 @@ class GoodServiceTest {
     @Order(1)
     @Test
     void addGood() {
-        assertDoesNotThrow(() -> goodService.addGood(new Good("1", "测试商品", "测试制造商", new Date(),
-                new BigDecimal("123.45"), new BigDecimal(0.94), 1234, "测试简介1", "测试备注1", StatusEnum.NORMAL)));
-        assertThrows(WrongDataException.class, () -> goodService.addGood(new Good("1", "测试商品", "测试制造商",
-                new Date(), new BigDecimal("123.45"), new BigDecimal(0.94), 1234, "测试简介1", "测试备注1", StatusEnum.NORMAL)));
-        assertDoesNotThrow(() -> goodService.addGood(new Good("2", "测试商品", "测试制造商", new Date(), new BigDecimal("123.45"), new BigDecimal(0.94), 1234, "测试简介1", "测试备注1", StatusEnum.NORMAL)));
+        assertTrue(goodService.addGood(new Good(1, 1, "1", "测试商品", "测试制造商", new Date(), new BigDecimal("123.45"),
+                new BigDecimal("0.94"), 1234, "测试简介1", "测试备注1")).isSuccess());
+        assertFalse(goodService.addGood(new Good(1, 1, "1", "测试商品", "测试制造商", new Date(), new BigDecimal("123.45"),
+                new BigDecimal("0.94"), 1234, "测试简介1", "测试备注1")).isSuccess());
+        assertTrue(goodService.addGood(new Good(1, 1, "2", "测试商品", "测试制造商", new Date(), new BigDecimal("123.45"),
+                new BigDecimal("0.94"), 1234, "测试简介1", "测试备注1")).isSuccess());
     }
 
     @Order(2)
     @Test
-    void update() {
-        assertDoesNotThrow(() -> goodService.updateGood(new Good("2", "测试商品2", "测试制造商", new Date(), new BigDecimal("123.45"), new BigDecimal(0.94), 1234, "测试简介1", "测试备注1", StatusEnum.NORMAL)));
+    void updateGood() {
+        assertDoesNotThrow(() -> goodService.updateGood(new Good(1, 1, "1", "测试商品2", "测试制造商", new Date(), new BigDecimal("123.45"),
+                new BigDecimal("0.94"), 1234, "测试简介1", "测试备注1")));
     }
 
     @Order(3)
     @Test
-    void getGoodById() {
-        assertNotNull(goodService.getGoodById("1"));
-        assertNull(goodService.getGoodById("3"));
+    void getGoodByGoodNo() {
+        assertEquals(goodService.getGoodByGoodNo("1").getName(), "测试商品2");
     }
 
     @Order(4)
     @Test
-    void deleteById() {
-        assertDoesNotThrow(() -> goodService.deleteGoodById("1"));
+    void deleteGood() {
+        Good good = new Good();
+        good.setUserId(1);
+        good.setGoodNo("1");
+        assertDoesNotThrow(() -> goodService.deleteGood(new Good(1, 1, "1", "测试商品", "测试制造商", new Date(), new BigDecimal("123.45"),
+                new BigDecimal("0.94"), 1234, "测试简介1", "测试备注1")));
     }
 
     @Order(5)
     @Test
-    void getAllNormalGoodByIdAndName() {
-        assertEquals(1, goodService.getAllNormalGoodByIdAndName("2", "2").size());
-        assertEquals(0, goodService.getAllNormalGoodByIdAndName("2", "1").size());
+    void selectAllNormalGoodByNoAndName() {
+        assertEquals(1, goodService.selectAllNormalGoodByNoAndName("2", "测试商品").size());
+        assertEquals(1, goodService.selectAllNormalGoodByNoAndName("2", "").size());
     }
 
 }
